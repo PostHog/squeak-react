@@ -13,15 +13,16 @@ npm install --save squeak-react
 ## Usage
 
 ```jsx
-import React, { Component } from 'react'
+import { Squeak } from 'squeak-react'
 
-import MyComponent from 'squeak-react'
-import 'squeak-react/dist/index.css'
-
-class Example extends Component {
-  render() {
-    return <MyComponent />
-  }
+const Example = () => {
+  return (
+    <Squeak
+      apiHost='YOUR_API_HOST'
+      apiKey='YOUR_SUPABASE_ANON_KEY'
+      url='YOUR_SUPABASE_URL'
+    />
+  )
 }
 ```
 
