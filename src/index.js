@@ -3,10 +3,10 @@ import React from 'react'
 import App from './components/App'
 import { AuthProvider } from './components/Auth'
 
-export const Squeak = ({ apiKey, url }) => {
+export const Squeak = ({ apiKey, url, apiHost }) => {
   const supabase = createClient(url, apiKey)
   return (
-    <AuthProvider supabase={supabase}>
+    <AuthProvider apiHost={apiHost} supabase={supabase}>
       <App />
     </AuthProvider>
   )

@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react'
 
 const AuthContext = createContext()
 
-export const AuthProvider = ({ children, supabase }) => {
+export const AuthProvider = ({ children, supabase, apiHost }) => {
   const [user, setUser] = useState(supabase.auth.user())
   const [authState, setAuthState] = useState()
 
@@ -29,7 +29,8 @@ export const AuthProvider = ({ children, supabase }) => {
       supabase.auth.api.resetPasswordForEmail(email),
     update: (values) => supabase.auth.update(values),
     user,
-    authState
+    authState,
+    apiHost
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

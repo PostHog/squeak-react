@@ -84,7 +84,7 @@ export default function ({
   setQuestions,
   getQuestions
 }) {
-  const { authState, user, token, supabase, signOut } = useAuth()
+  const { authState, user, token, supabase, signOut, apiHost } = useAuth()
 
   const [formValues, setFormValues] = useState(null)
   const [view, setView] = useState(null)
@@ -98,7 +98,7 @@ export default function ({
   }, [authState])
 
   const insertReply = async ({ body, messageID }) => {
-    return fetch(`http://localhost:3000/api/reply`, {
+    return fetch(`${apiHost}/api/reply`, {
       method: 'POST',
       body: JSON.stringify({
         body,
@@ -109,7 +109,7 @@ export default function ({
   }
 
   const insertMessage = async ({ subject, body, userID }) => {
-    return fetch(`http://localhost:3000/api/question`, {
+    return fetch(`${apiHost}/api/question`, {
       method: 'POST',
       body: JSON.stringify({
         subject,
