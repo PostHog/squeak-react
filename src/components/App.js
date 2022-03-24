@@ -391,10 +391,12 @@ function getBackgroundColor(el) {
   }
 }
 
-export default function App({ apiHost, supabase, authState, user }) {
+export default function App({ apiHost, supabase }) {
   const [questions, setQuestions] = useState([])
   const [loading, setLoading] = useState(true)
   const [darkMode, setDarkMode] = useState(null)
+  const [authState, setAuthState] = useState()
+  const [user, setUser] = useState(supabase.auth.user())
   const containerRef = useRef()
 
   const getQuestions = async () => {
@@ -438,6 +440,19 @@ export default function App({ apiHost, supabase, authState, user }) {
       setQuestions(questions)
       setLoading(false)
     })
+  }, [])
+
+  useEffect(() => {
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (e, session) => {
+        setAuthState(e)
+        setUser(session?.user)
+      }
+    )
+
+    return () => {
+      authListener.unsubscribe()
+    }
   }, [])
 
   return (

@@ -87,9 +87,6 @@ export default function ({
   supabase,
   user
 }) {
-  const token = () => supabase.auth.session()?.access_token
-  const signOut = () => supabase.auth.signOut()
-
   const [formValues, setFormValues] = useState(null)
   const [view, setView] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -107,7 +104,7 @@ export default function ({
       body: JSON.stringify({
         body,
         messageId: messageID,
-        token: token()
+        token: supabase.auth.session()?.access_token
       })
     })
   }
@@ -118,7 +115,7 @@ export default function ({
       body: JSON.stringify({
         subject,
         body,
-        token: token(),
+        token: supabase.auth.session()?.access_token,
         slug: [window.location.pathname]
       })
     })
@@ -186,7 +183,10 @@ export default function ({
         {buttonText}
       </button>
       {formType === 'question' && user && (
-        <button onClick={() => signOut()} className='squeak-logout-button'>
+        <button
+          onClick={() => supabase.auth.signOut()}
+          className='squeak-logout-button'
+        >
           Logout
         </button>
       )}
