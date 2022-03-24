@@ -90,6 +90,7 @@ const GlobalStyles = createGlobalStyle`
     border-radius: 5px;
     display: block;
     width: 100%;
+    background: transparent;
   }
   
   .squeak-authentication-form label {
@@ -150,7 +151,6 @@ const GlobalStyles = createGlobalStyle`
   .squeak-post-preview-container {
     border: 1px solid var(--squeak-primary-color);
     padding: 1.25rem;
-    background: #f0f0f0;
     border-radius: 5px;
     margin-bottom: 2rem;
     box-shadow: 0px 12.5216px 10.0172px rgba(0, 0, 0, 0.035),
@@ -180,7 +180,7 @@ const GlobalStyles = createGlobalStyle`
     border-bottom: 1px solid var(--squeak-primary-color);
   }
   
-  .squeak-questions > li > .squeak-reply:first-of-type {
+  .squeak-questions > li > div > .squeak-reply:first-of-type {
     margin-top: 0;
   }
   
