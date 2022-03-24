@@ -5,11 +5,13 @@ import App from './components/App'
 export const Squeak = ({ apiKey, url, apiHost }) => {
   const supabase = createClient(url, apiKey)
   const [authState, setAuthState] = useState()
+  const [user, setUser] = useState(supabase.auth.user())
 
   useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (e, session) => {
         setAuthState(e)
+        setUser(session?.user)
       }
     )
 
@@ -17,5 +19,13 @@ export const Squeak = ({ apiKey, url, apiHost }) => {
       authListener.unsubscribe()
     }
   }, [])
-  return <App authState={authState} supabase={supabase} apiHost={apiHost} />
+
+  return (
+    <App
+      user={user}
+      authState={authState}
+      supabase={supabase}
+      apiHost={apiHost}
+    />
+  )
 }

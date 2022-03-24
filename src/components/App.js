@@ -391,7 +391,7 @@ function getBackgroundColor(el) {
   }
 }
 
-export default function App({ apiHost, supabase, authState }) {
+export default function App({ apiHost, supabase, authState, user }) {
   const [questions, setQuestions] = useState([])
   const [loading, setLoading] = useState(true)
   const [darkMode, setDarkMode] = useState(null)
@@ -446,6 +446,7 @@ export default function App({ apiHost, supabase, authState }) {
       {!loading && (
         <div className='squeak'>
           <Questions
+            user={user}
             apiHost={apiHost}
             authState={authState}
             supabase={supabase}
@@ -454,6 +455,7 @@ export default function App({ apiHost, supabase, authState }) {
             questions={questions}
           />
           <QuestionForm
+            user={user}
             apiHost={apiHost}
             authState={authState}
             supabase={supabase}

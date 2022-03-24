@@ -9,7 +9,8 @@ export default function Question({
   getQuestions,
   authState,
   apiHost,
-  supabase
+  supabase,
+  user
 }) {
   const [showReply, setShowReply] = useState(false)
   return (
@@ -24,7 +25,7 @@ export default function Question({
         <ul className='squeak-replies'>
           {replies.slice(1).map((reply) => {
             return (
-              <li>
+              <li key={reply.id}>
                 <Reply hideButton={true} key={reply.id} {...reply} />
               </li>
             )
@@ -33,6 +34,7 @@ export default function Question({
       )}
       <div className='squeak-reply-form-container'>
         <QuestionForm
+          user={user}
           authState={authState}
           apiHost={apiHost}
           supabase={supabase}

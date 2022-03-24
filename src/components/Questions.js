@@ -9,7 +9,8 @@ export default function Questions({
   getQuestions,
   supabase,
   authState,
-  apiHost
+  apiHost,
+  user
 }) {
   return (
     questions &&
@@ -20,6 +21,7 @@ export default function Questions({
             return (
               <li key={question.message.id}>
                 <Question
+                  user={user}
                   authState={authState}
                   apiHost={apiHost}
                   supabase={supabase}

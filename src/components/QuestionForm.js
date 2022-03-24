@@ -84,9 +84,9 @@ export default function ({
   getQuestions,
   authState,
   apiHost,
-  supabase
+  supabase,
+  user
 }) {
-  const user = supabase.auth.user()
   const token = () => supabase.auth.session()?.access_token
   const signOut = () => supabase.auth.signOut()
 
@@ -128,15 +128,14 @@ export default function ({
     setLoading(true)
     const userID = supabase.auth.user()?.id
     if (userID) {
-      switch (formType) {
-        case 'question':
-          await insertMessage({
-            subject: values.subject,
-            body: values.question
-          })
-          break
-        case 'reply':
-          await insertReply({ body: values.question, messageID })
+      if (formType === 'question') {
+        await insertMessage({
+          subject: values.subject,
+          body: values.question
+        })
+      }
+      if (formType === 'reply') {
+        await insertReply({ body: values.question, messageID })
       }
 
       await getQuestions().then((questions) => {
