@@ -1,16 +1,16 @@
 import { Field, Form, Formik } from 'formik'
 import getGravatar from 'gravatar'
 import React, { useEffect, useRef, useState } from 'react'
-import { useAuth } from './Auth'
 import Markdown from './Markdown'
 
-const ForgotPassword = ({ setMessage, setParentView }) => {
-  const { resetPasswordForEmail } = useAuth()
+const ForgotPassword = ({ setMessage, setParentView, supabase }) => {
   const [loading, setLoading] = useState(false)
   const [emailSent, setEmailSent] = useState(false)
   const handleSubmit = async (values) => {
     setLoading(true)
-    const { error, data } = await resetPasswordForEmail(values.email)
+    const { error, data } = await supabase.auth.api.resetPasswordForEmail(
+      values.email
+    )
     if (error) {
       setMessage(error.message)
     } else {
@@ -77,12 +77,11 @@ const ForgotPassword = ({ setMessage, setParentView }) => {
   )
 }
 
-const SignIn = ({ setMessage, handleMessageSubmit, formValues }) => {
-  const { signIn } = useAuth()
+const SignIn = ({ setMessage, handleMessageSubmit, formValues, supabase }) => {
   const [loading, setLoading] = useState(false)
   const handleSubmit = async (values) => {
     setLoading(true)
-    const { error } = await signIn(values)
+    const { error } = await supabase.auth.signIn(values)
     if (error) {
       setMessage(error.message)
       setLoading(false)
@@ -141,12 +140,11 @@ const SignIn = ({ setMessage, handleMessageSubmit, formValues }) => {
   )
 }
 
-const SignUp = ({ setMessage, handleMessageSubmit, formValues }) => {
-  const { signUp, supabase } = useAuth()
+const SignUp = ({ setMessage, handleMessageSubmit, formValues, supabase }) => {
   const [loading, setLoading] = useState(false)
   const handleSubmit = async (values) => {
     setLoading(true)
-    const { user, error } = await signUp({
+    const { user, error } = await supabase.auth.signUp({
       email: values.email,
       password: values.password
     })
@@ -246,13 +244,12 @@ const SignUp = ({ setMessage, handleMessageSubmit, formValues }) => {
   )
 }
 
-const ResetPassword = ({ setMessage, setParentView }) => {
-  const { update } = useAuth()
+const ResetPassword = ({ setMessage, setParentView, supabase }) => {
   const [loading, setLoading] = useState(false)
   const resetPassword = useRef()
   const handleSubmit = async (values) => {
     setLoading(true)
-    const { error } = await update({
+    const { error } = await supabase.auth.update({
       password: values.password
     })
     if (error) {
@@ -314,7 +311,8 @@ export default function Authentication({
   handleMessageSubmit,
   formValues,
   setParentView,
-  initialView = 'sign-in'
+  initialView = 'sign-in',
+  supabase
 }) {
   const [view, setView] = useState(initialView)
   const [message, setMessage] = useState(null)
@@ -365,6 +363,7 @@ export default function Authentication({
             {
               'sign-in': (
                 <SignIn
+                  supabase={supabase}
                   formValues={formValues}
                   handleMessageSubmit={handleMessageSubmit}
                   setMessage={setMessage}
@@ -372,6 +371,7 @@ export default function Authentication({
               ),
               'sign-up': (
                 <SignUp
+                  supabase={supabase}
                   formValues={formValues}
                   handleMessageSubmit={handleMessageSubmit}
                   setMessage={setMessage}
@@ -379,12 +379,14 @@ export default function Authentication({
               ),
               'forgot-password': (
                 <ForgotPassword
+                  supabase={supabase}
                   setParentView={setParentView}
                   setMessage={setMessage}
                 />
               ),
               'reset-password': (
                 <ResetPassword
+                  supabase={supabase}
                   setParentView={setParentView}
                   setMessage={setMessage}
                 />

@@ -6,7 +6,10 @@ export default function Questions({
   loading,
   questions,
   setQuestions,
-  getQuestions
+  getQuestions,
+  supabase,
+  authState,
+  apiHost
 }) {
   return (
     questions &&
@@ -17,6 +20,9 @@ export default function Questions({
             return (
               <li key={question.message.id}>
                 <Question
+                  authState={authState}
+                  apiHost={apiHost}
+                  supabase={supabase}
                   getQuestions={getQuestions}
                   setQuestions={setQuestions}
                   loading={loading}

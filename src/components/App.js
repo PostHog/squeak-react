@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { createGlobalStyle } from 'styled-components'
-import { useAuth } from './Auth'
 import QuestionForm from './QuestionForm'
 import Questions from './Questions'
 
@@ -392,8 +391,7 @@ function getBackgroundColor(el) {
   }
 }
 
-export default function App({ apiKey, url }) {
-  const { supabase } = useAuth()
+export default function App({ apiHost, supabase, authState }) {
   const [questions, setQuestions] = useState([])
   const [loading, setLoading] = useState(true)
   const [darkMode, setDarkMode] = useState(null)
@@ -448,11 +446,17 @@ export default function App({ apiKey, url }) {
       {!loading && (
         <div className='squeak'>
           <Questions
+            apiHost={apiHost}
+            authState={authState}
+            supabase={supabase}
             getQuestions={getQuestions}
             setQuestions={setQuestions}
             questions={questions}
           />
           <QuestionForm
+            apiHost={apiHost}
+            authState={authState}
+            supabase={supabase}
             getQuestions={getQuestions}
             setQuestions={setQuestions}
             formType='question'

@@ -1,6 +1,5 @@
 import { Field, Form, Formik } from 'formik'
 import React, { useEffect, useState } from 'react'
-import { useAuth } from './Auth'
 import Authentication from './Authentication'
 import Logo from './Logo'
 import RichText from './RichText'
@@ -82,9 +81,14 @@ export default function ({
   formType = 'question',
   messageID,
   setQuestions,
-  getQuestions
+  getQuestions,
+  authState,
+  apiHost,
+  supabase
 }) {
-  const { authState, user, token, supabase, signOut, apiHost } = useAuth()
+  const user = supabase.auth.user()
+  const token = () => supabase.auth.session()?.access_token
+  const signOut = () => supabase.auth.signOut()
 
   const [formValues, setFormValues] = useState(null)
   const [view, setView] = useState(null)
@@ -161,6 +165,7 @@ export default function ({
       ),
       auth: (
         <Authentication
+          supabase={supabase}
           initialView={
             authState === 'PASSWORD_RECOVERY' ? 'reset-password' : undefined
           }

@@ -6,7 +6,10 @@ export default function Question({
   message,
   replies,
   setQuestions,
-  getQuestions
+  getQuestions,
+  authState,
+  apiHost,
+  supabase
 }) {
   const [showReply, setShowReply] = useState(false)
   return (
@@ -30,6 +33,9 @@ export default function Question({
       )}
       <div className='squeak-reply-form-container'>
         <QuestionForm
+          authState={authState}
+          apiHost={apiHost}
+          supabase={supabase}
           getQuestions={getQuestions}
           setQuestions={setQuestions}
           messageID={message.id}
