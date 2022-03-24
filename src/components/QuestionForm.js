@@ -116,7 +116,7 @@ export default function ({
         subject,
         body,
         token: supabase.auth.session()?.access_token,
-        slug: [window.location.pathname]
+        slug: window.location.pathname
       })
     })
   }
