@@ -453,7 +453,7 @@ export default function App({ apiHost, supabase }) {
     return () => {
       authListener.unsubscribe()
     }
-  }, [])
+  }, [supabase.auth])
 
   return (
     <div ref={containerRef}>
