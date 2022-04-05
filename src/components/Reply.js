@@ -3,7 +3,13 @@ import Avatar from './Avatar'
 import Days from './Days'
 import Markdown from './Markdown'
 
-export default function Reply({ profile, created_at, body, subject, badgeText }) {
+export default function Reply({
+  profile,
+  created_at,
+  body,
+  subject,
+  badgeText
+}) {
   return (
     <div className='squeak-reply'>
       <Avatar image={profile.avatar} />
@@ -13,7 +19,7 @@ export default function Reply({ profile, created_at, body, subject, badgeText })
           <p>
             <Days created={created_at} />
           </p>
-          {badgeText && <p>{badgeText}</p>}
+          {badgeText && <p className='squeak-badge'>{badgeText}</p>}
         </div>
         {subject && <h3>{subject}</h3>}
         <Markdown>{body}</Markdown>
