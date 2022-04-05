@@ -4,20 +4,22 @@ import Days from './Days'
 import Markdown from './Markdown'
 
 export default function Reply({
-  squeak_profiles: user,
+  profile,
   created_at,
   body,
-  subject
+  subject,
+  badgeText
 }) {
   return (
     <div className='squeak-reply'>
-      <Avatar image={user?.avatar} />
+      <Avatar image={profile.avatar} />
       <div>
         <div className='squeak-reply-details'>
-          <p>{user?.first_name || 'Anonymous'}</p>
+          <p>{profile.first_name || 'Anonymous'}</p>
           <p>
             <Days created={created_at} />
           </p>
+          {badgeText && <p className='squeak-badge'>{badgeText}</p>}
         </div>
         {subject && <h3>{subject}</h3>}
         <Markdown>{body}</Markdown>

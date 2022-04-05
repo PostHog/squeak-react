@@ -8,7 +8,7 @@ const ForgotPassword = ({ setMessage, setParentView, supabase }) => {
   const [emailSent, setEmailSent] = useState(false)
   const handleSubmit = async (values) => {
     setLoading(true)
-    const { error, data } = await supabase.auth.api.resetPasswordForEmail(
+    const { error } = await supabase.auth.api.resetPasswordForEmail(
       values.email
     )
     if (error) {
@@ -140,11 +140,18 @@ const SignIn = ({ setMessage, handleMessageSubmit, formValues, supabase }) => {
   )
 }
 
-const SignUp = ({ setMessage, handleMessageSubmit, formValues, supabase }) => {
+const SignUp = ({
+  setMessage,
+  handleMessageSubmit,
+  formValues,
+  supabase,
+  organizationId,
+  apiHost
+}) => {
   const [loading, setLoading] = useState(false)
   const handleSubmit = async (values) => {
     setLoading(true)
-    const { user, error } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.signUp({
       email: values.email,
       password: values.password
     })
@@ -155,14 +162,16 @@ const SignUp = ({ setMessage, handleMessageSubmit, formValues, supabase }) => {
       const avatar = await fetch(`https:${gravatar}?d=404`).then(
         (res) => (res.ok && `https:${gravatar}`) || ''
       )
-      await supabase
-        .from('squeak_profiles')
-        .update({
-          first_name: values.first_name,
-          last_name: values.last_name,
+      await fetch(`${apiHost}/api/register`, {
+        method: 'POST',
+        body: JSON.stringify({
+          token: supabase.auth.session()?.access_token,
+          organizationId,
+          firstName: values.first_name,
+          lastName: values.last_name,
           avatar
         })
-        .match({ id: user.id })
+      })
       await handleMessageSubmit(formValues)
     }
     setLoading(false)
@@ -312,7 +321,9 @@ export default function Authentication({
   formValues,
   setParentView,
   initialView = 'sign-in',
-  supabase
+  supabase,
+  organizationId,
+  apiHost
 }) {
   const [view, setView] = useState(initialView)
   const [message, setMessage] = useState(null)
@@ -375,6 +386,8 @@ export default function Authentication({
                   formValues={formValues}
                   handleMessageSubmit={handleMessageSubmit}
                   setMessage={setMessage}
+                  organizationId={organizationId}
+                  apiHost={apiHost}
                 />
               ),
               'forgot-password': (

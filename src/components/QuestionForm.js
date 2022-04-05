@@ -79,6 +79,7 @@ function QuestionForm({
 
 export default function ({
   formType = 'question',
+  organizationId,
   messageID,
   setQuestions,
   getQuestions,
@@ -103,6 +104,7 @@ export default function ({
       method: 'POST',
       body: JSON.stringify({
         body,
+        organizationId,
         messageId: messageID,
         token: supabase.auth.session()?.access_token
       })
@@ -115,6 +117,7 @@ export default function ({
       body: JSON.stringify({
         subject,
         body,
+        organizationId,
         token: supabase.auth.session()?.access_token,
         slug: window.location.pathname
       })
@@ -168,6 +171,8 @@ export default function ({
           setParentView={setView}
           formValues={formValues}
           handleMessageSubmit={handleMessageSubmit}
+          organizationId={organizationId}
+          apiHost={apiHost}
           loading={loading}
         />
       )
