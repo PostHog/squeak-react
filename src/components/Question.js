@@ -2,8 +2,21 @@ import React, { useState } from 'react'
 import QuestionForm from './QuestionForm'
 import Reply from './Reply'
 
+const getBadge = (questionAuthorId, replyAuthorId, replyAuthorRole) => {
+  if (replyAuthorRole === 'admin' || replyAuthorRole === 'moderator') {
+    return 'Moderator'
+  }
+
+  if (!questionAuthorId || !replyAuthorId) {
+    return null
+  }
+
+  return questionAuthorId === replyAuthorId ? 'Author' : null
+}
+
 export default function Question({
-  message,
+  organizationId,
+  question,
   replies,
   setQuestions,
   getQuestions,
@@ -13,20 +26,36 @@ export default function Question({
   user
 }) {
   const [showReply, setShowReply] = useState(false)
+  const [firstReply] = replies
+  const questionAuthorId = firstReply?.profile?.id
+
   return (
     <div>
       <Reply
         setShowReply={setShowReply}
         hideButton={showReply}
-        subject={message.subject}
-        {...replies[0]}
+        subject={question.subject}
+        {...firstReply}
       />
       {replies && replies.length - 1 > 0 && (
         <ul className='squeak-replies'>
           {replies.slice(1).map((reply) => {
+            const replyAuthorMetadata = reply?.profile?.metadata[0]
+
+            const badgeText = getBadge(
+              questionAuthorId,
+              reply?.profile?.id,
+              replyAuthorMetadata?.role
+            )
+
             return (
               <li key={reply.id}>
-                <Reply hideButton={true} key={reply.id} {...reply} />
+                <Reply
+                  key={reply.id}
+                  {...reply}
+                  badgeText={badgeText}
+                  hideButton
+                />
               </li>
             )
           })}
@@ -40,7 +69,8 @@ export default function Question({
           supabase={supabase}
           getQuestions={getQuestions}
           setQuestions={setQuestions}
-          messageID={message.id}
+          messageID={question.id}
+          organizationId={organizationId}
           formType='reply'
         />
       </div>

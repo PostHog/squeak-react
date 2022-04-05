@@ -2,6 +2,7 @@ import React from 'react'
 import Question from './Question'
 
 export default function Questions({
+  organizationId,
   handleReplySubmit,
   loading,
   questions,
@@ -19,8 +20,9 @@ export default function Questions({
         <ul className='squeak-questions'>
           {questions.map((question) => {
             return (
-              <li key={question.message.id}>
+              <li key={question.question.id}>
                 <Question
+                  organizationId={organizationId}
                   user={user}
                   authState={authState}
                   apiHost={apiHost}
