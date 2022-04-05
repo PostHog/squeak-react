@@ -225,12 +225,12 @@ const GlobalStyles = createGlobalStyle`
     font-size: 13px;
   }
 
-  .squeak-reply-details > p:nth-of-type(3) {
+  .squeak-badge {
     font-weight: light;
     font-size: 12px;
     border-radius: 0.25rem;
     padding: 0.25rem;
-    background-color: #dce0e0;
+    border: 1px solid var(--squeak-primary-color);
   }
 
 
