@@ -1,11 +1,9 @@
 {
   "parser": "babel-eslint",
   "extends": [
-    "standard",
-    "standard-react",
+    "plugin:react/recommended",
     "plugin:prettier/recommended",
-    "prettier/standard",
-    "prettier/react"
+    "plugin:react/jsx-runtime"
   ],
   "env": {
     "node": true
@@ -19,7 +17,7 @@
   },
   "settings": {
     "react": {
-      "version": "16"
+      "version": "17"
     }
   },
   "rules": {
