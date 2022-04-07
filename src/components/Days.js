@@ -1,4 +1,3 @@
-import React from 'react'
 export default function Days({ created }) {
   const today = new Date()
   const posted = new Date(created)

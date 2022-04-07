@@ -1,4 +1,3 @@
-import React from 'react'
 import Avatar from './Avatar'
 import Days from './Days'
 import Markdown from './Markdown'

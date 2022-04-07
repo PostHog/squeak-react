@@ -1,6 +1,6 @@
+import { useEffect, useRef, useState } from 'react'
 import { Field, Form, Formik } from 'formik'
 import getGravatar from 'gravatar'
-import React, { useEffect, useRef, useState } from 'react'
 import Markdown from './Markdown'
 
 const ForgotPassword = ({ setMessage, setParentView, supabase }) => {

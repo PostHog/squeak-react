@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createGlobalStyle } from 'styled-components'
 import QuestionForm from './QuestionForm'
 import Questions from './Questions'

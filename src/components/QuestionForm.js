@@ -1,5 +1,5 @@
 import { Field, Form, Formik } from 'formik'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Authentication from './Authentication'
 import Logo from './Logo'
 import RichText from './RichText'

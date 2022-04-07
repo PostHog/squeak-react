@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import QuestionForm from './QuestionForm'
 import Reply from './Reply'
 
