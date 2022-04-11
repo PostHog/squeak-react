@@ -1,5 +1,6 @@
 import { Field, Form, Formik } from 'formik'
 import React, { useEffect, useState } from 'react'
+import { Approval } from './Approval'
 import Authentication from './Authentication'
 import Logo from './Logo'
 import RichText from './RichText'
@@ -121,18 +122,22 @@ export default function ({
         token: supabase.auth.session()?.access_token,
         slug: window.location.pathname
       })
-    })
+    }).then((res) => res.json())
   }
 
   const handleMessageSubmit = async (values) => {
     setLoading(true)
     const userID = supabase.auth.user()?.id
     if (userID) {
+      let view = null
       if (formType === 'question') {
-        await insertMessage({
+        const { published } = await insertMessage({
           subject: values.subject,
           body: values.question
         })
+        if (!published) {
+          view = 'approval'
+        }
       }
       if (formType === 'reply') {
         await insertReply({ body: values.question, messageID })
@@ -142,7 +147,7 @@ export default function ({
         setQuestions(questions)
       })
       setLoading(false)
-      setView(null)
+      setView(view)
       setFormValues(null)
     } else {
       setFormValues(values)
@@ -175,7 +180,8 @@ export default function ({
           apiHost={apiHost}
           loading={loading}
         />
-      )
+      ),
+      approval: <Approval handleConfirm={() => setView(null)} />
     }[view]
   ) : (
     <div className='squeak-reply-buttons'>
