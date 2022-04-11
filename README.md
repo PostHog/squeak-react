@@ -8,6 +8,10 @@
 
 ```bash
 npm install --save squeak-react
+
+# or
+
+yarn add squeak
 ```
 
 ## Usage
