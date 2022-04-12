@@ -12,10 +12,10 @@ export default function Reply({
 }) {
   return (
     <div className='squeak-reply'>
-      <Avatar image={profile.avatar} />
+      <Avatar image={profile?.avatar} />
       <div>
         <div className='squeak-reply-details'>
-          <p>{profile.first_name || 'Anonymous'}</p>
+          <p>{profile?.first_name || 'Anonymous'}</p>
           <p>
             <Days created={created_at} />
           </p>
