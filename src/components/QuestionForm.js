@@ -66,9 +66,11 @@ function QuestionForm({
                 >
                   {user ? 'Post' : 'Preview post'}
                 </button>
-                <a href='https://posthog.com'>
-                  <Logo />
-                </a>
+                <div class='squeak-by-line'>by
+                  <a href='https://squeak.posthog.com?utm_source=post-form'>
+                    <Logo />
+                  </a>
+                </div>
               </span>
             </Form>
           )

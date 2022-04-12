@@ -288,6 +288,18 @@ const GlobalStyles = createGlobalStyle`
     margin-top: 1.25rem;
   }
 
+  .squeak-by-line {
+    align-items: center;
+    color: var(--squeak-primary-color) !important;
+    display: flex;
+    font-size: .8rem;
+  }
+
+  .squeak-by-line a {
+    display: flex;
+    margin-left: .2rem;
+  }
+
   .squeak-logout-button {
     border: none;
     background: none;
