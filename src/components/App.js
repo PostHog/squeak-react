@@ -233,14 +233,12 @@ const GlobalStyles = createGlobalStyle`
     border: 1px solid var(--squeak-primary-color);
   }
 
-
   .squeak-reply-details p {
     margin: 0;
     display: inline-block;
   }
 
   .squeak-reply-details {
-    margin-bottom: 0.75rem;
     position: relative;
   }
 
@@ -253,9 +251,10 @@ const GlobalStyles = createGlobalStyle`
   }
 
   .squeak-reply h3 {
-    font-size: 15px;
+    font-size: 1.1rem;
     font-weight: bold;
-    margin: 0.75rem 0;
+    margin: 0;
+    padding-bottom: .25rem;
   }
 
   .squeak-reply-form-container,
@@ -264,7 +263,7 @@ const GlobalStyles = createGlobalStyle`
   }
 
   .squeak-reply-form-container {
-    margin-top: 1.25rem;
+    margin-top: .5rem;
   }
 
   .squeak-reply {
@@ -303,7 +302,7 @@ const GlobalStyles = createGlobalStyle`
   }
 
   .squeak-markdown-logo {
-    margin: 0 1rem 0 0;
+    margin: 0 .5rem 0 0;
   }
 
   .squeak-form-richtext-buttons-container {
@@ -311,6 +310,10 @@ const GlobalStyles = createGlobalStyle`
     justify-content: space-between;
     align-items: center;
     padding: 0.25rem 0;
+  }
+
+  .squeak-post-markdown {
+    font-size: 1rem;
   }
 
   .squeak-post-markdown p {
@@ -324,21 +327,21 @@ const GlobalStyles = createGlobalStyle`
 
   .squeak-post-markdown pre {
     border-radius: 5px;
-    max-height: 450px;
+    font-size: 14px;
     margin: 0.75rem 0;
+    max-height: 450px;
     overflow: scroll;
     padding: 1rem;
-    font-size: 14px;
   }
 
   .squeak-form-richtext textarea {
-    width: 100%;
+    background: transparent;
     border: none;
-    resize: none;
+    font-size: 14px;
     height: 200px;
     padding: 0.75rem 1rem;
-    font-size: 14px;
-    background: transparent;
+    resize: none;
+    width: 100%;
   }
 
   .squeak-form-richtext-buttons {
@@ -350,21 +353,23 @@ const GlobalStyles = createGlobalStyle`
   }
 
   .squeak-form-richtext-buttons button {
-    padding: 0;
-    margin: 0;
-    width: 32px;
-    height: 32px;
-    color: var(--squeak-primary-color);
+    align-items: center;
     background: none;
     border: none;
+    color: var(--squeak-primary-color);
     cursor: pointer;
     display: flex;
+    height: 32px;
     justify-content: center;
-    align-items: center;
+    margin: 0;
+    opacity: .5;
+    padding: 0;
+    width: 32px;
   }
 
   .squeak-form-richtext-buttons button:hover {
     color: var(--squeak-primary-color);
+    opacity: .9;
   }
 
   .squeak-forgot-password {
@@ -376,12 +381,12 @@ const GlobalStyles = createGlobalStyle`
   .squeak-return-to-post {
     background: none;
     border: none;
-    padding: 0;
     color: var(--squeak-button-color);
-    font-weight: 600;
-    font-size: inherit;
-    width: auto !important;
     cursor: pointer;
+    font-size: inherit;
+    font-weight: 600;
+    padding: 0;
+    width: auto !important;
   }
 `
 
