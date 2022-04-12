@@ -27,10 +27,20 @@ export default function Question({
 }) {
   const [showReply, setShowReply] = useState(false)
   const [firstReply] = replies
+  const [resolvedBy, setResolvedBy] = useState(question?.resolved_reply_id)
+  const [resolved, setResolved] = useState(question?.resolved)
   const questionAuthorId = firstReply?.profile?.id
+  const handleResolve = async (resolved, replyId = null) => {
+    await supabase
+      .from('squeak_messages')
+      .update({ resolved, resolved_reply_id: replyId })
+      .match({ id: question?.id })
+    setResolved(resolved)
+    setResolvedBy(replyId)
+  }
 
   return (
-    <div>
+    <div className='squeak-question-container'>
       <Reply
         setShowReply={setShowReply}
         hideButton={showReply}
@@ -51,6 +61,11 @@ export default function Question({
             return (
               <li key={reply.id}>
                 <Reply
+                  resolved={resolved}
+                  resolvedBy={resolvedBy}
+                  handleResolve={handleResolve}
+                  isAuthor={user?.profileId === questionAuthorId}
+                  user={user}
                   key={reply.id}
                   {...reply}
                   badgeText={badgeText}
@@ -61,19 +76,25 @@ export default function Question({
           })}
         </ul>
       )}
-      <div className='squeak-reply-form-container'>
-        <QuestionForm
-          user={user}
-          authState={authState}
-          apiHost={apiHost}
-          supabase={supabase}
-          getQuestions={getQuestions}
-          setQuestions={setQuestions}
-          messageID={question.id}
-          organizationId={organizationId}
-          formType='reply'
-        />
-      </div>
+      {resolved ? (
+        <div className='squeak-post-preview-container squeak-locked-message'>
+          <p>This thread has been marked as resolved.</p>
+        </div>
+      ) : (
+        <div className='squeak-reply-form-container'>
+          <QuestionForm
+            user={user}
+            authState={authState}
+            apiHost={apiHost}
+            supabase={supabase}
+            getQuestions={getQuestions}
+            setQuestions={setQuestions}
+            messageID={question.id}
+            organizationId={organizationId}
+            formType='reply'
+          />
+        </div>
+      )}
     </div>
   )
 }
