@@ -178,7 +178,7 @@ const GlobalStyles = createGlobalStyle`
     border-bottom: 1px solid rgba(var(--squeak-primary-color), .3);
   }
 
-  .squeak-questions > li > div > .squeak-reply:first-of-type {
+  .squeak-questions > li > div > .squeak-post:first-of-type {
     margin-top: 0;
   }
 
@@ -186,12 +186,19 @@ const GlobalStyles = createGlobalStyle`
     margin-bottom: 1.5rem;
   }
 
-  .squeak-reply {
+  // affects questions and replies
+  .squeak-post {
     display: flex;
+    flex-direction: column;
   }
 
-  .squeak-reply p {
+  .squeak-post p {
     margin-bottom: 0;
+  }
+
+  .squeak-post-author {
+    align-items: center;
+    display: flex;
   }
 
   .squeak-reply-button {
@@ -201,43 +208,21 @@ const GlobalStyles = createGlobalStyle`
     border: 1px solid var(--squeak-button-color) !important;
   }
 
-  .squeak-reply > div:nth-of-type(1) {
+  .squeak-post > div:nth-of-type(1) {
     flex-shrink: 0;
   }
 
-  .squeak-reply > div:nth-of-type(2) {
+  .squeak-post > div:nth-of-type(2) {
     flex-grow: 1;
     margin-left: 0.75rem;
     overflow: hidden;
   }
 
-  .squeak-reply-details > p:nth-of-type(1) {
-    font-weight: bold;
-    margin-right: 0.25rem;
-    font-size: 15px;
-  }
-
-  .squeak-reply-details > p:nth-of-type(2) {
-    font-weight: light;
-    margin-right: 0.25rem;
-    font-size: 13px;
-  }
-
-  .squeak-badge {
-    font-weight: light;
+  .squeak-author-badge {
     font-size: 12px;
     border-radius: 0.25rem;
     padding: 0.25rem;
     border: 1px solid rgba(var(--squeak-primary-color), .3);
-  }
-
-  .squeak-reply-details p {
-    margin: 0;
-    display: inline-block;
-  }
-
-  .squeak-reply-details {
-    position: relative;
   }
 
   .squeak-author-badge {
@@ -248,24 +233,54 @@ const GlobalStyles = createGlobalStyle`
     background-color: #dce0e0;
   }
 
-  .squeak-reply h3 {
+  .squeak-post h3 {
     font-size: 1.1rem;
     font-weight: bold;
     margin: 0;
     padding-bottom: .25rem;
   }
 
-  .squeak-reply-form-container,
   .squeak-replies {
+    margin-left: 20px;
+  }
+
+  .squeak-replies li {
+    padding: 10px 5px 10px 20px;
+  }
+
+  // replies styling only
+  .squeak-replies li .squeak-post {
+
+  }
+
+  // left border on replies
+  .squeak-replies li:not(:last-child) {
+    border-left: 1px solid rgba(var(--squeak-primary-color), .4);
+  }
+
+  .squeak-replies li:last-child {
+    position: relative;
+  }
+
+  // left border and curved line on last reply
+  .squeak-replies li:last-child:before {
+    border-left: 1px solid rgba(var(--squeak-primary-color), .4);
+    border-bottom: 1px solid rgba(var(--squeak-primary-color), .4);
+    border-radius: 4px;
+    content: '';
+    height: 35px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 20px;
+  }
+
+  .squeak-reply-form-container {
     margin-left: calc(40px + 0.75rem);
   }
 
   .squeak-reply-form-container {
     margin-top: .5rem;
-  }
-
-  .squeak-reply {
-    margin-top: 2rem;
   }
 
   .squeak-ask-button {

@@ -11,16 +11,16 @@ export default function Reply({
   badgeText
 }) {
   return (
-    <div className='squeak-reply'>
-      <Avatar image={profile?.avatar} />
-      <div>
-        <div className='squeak-reply-details'>
-          <p>{profile?.first_name || 'Anonymous'}</p>
-          <p>
-            <Days created={created_at} />
-          </p>
-          {badgeText && <p className='squeak-badge'>{badgeText}</p>}
+    <div className='squeak-post'>
+      <div className='squeak-post-author'>
+        <Avatar image={profile?.avatar} />
+        <div className='squeak-author-name'>
+          {profile?.first_name || 'Anonymous'}
         </div>
+        <Days created={created_at} />
+        {badgeText && <span className='squeak-author-badge'>{badgeText}</span>}
+      </div>
+      <div className='squeak-post-content'>
         {subject && <h3>{subject}</h3>}
         <Markdown>{body}</Markdown>
       </div>
