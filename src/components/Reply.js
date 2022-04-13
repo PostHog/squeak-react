@@ -14,9 +14,9 @@ export default function Reply({
     <div className='squeak-post'>
       <div className='squeak-post-author'>
         <Avatar image={profile?.avatar} />
-        <div className='squeak-author-name'>
+        <strong className='squeak-author-name'>
           {profile?.first_name || 'Anonymous'}
-        </div>
+        </strong>
         <Days created={created_at} />
         {badgeText && <span className='squeak-author-badge'>{badgeText}</span>}
       </div>

@@ -8,7 +8,8 @@ const GlobalStyles = createGlobalStyle`
     --squeak-button-color: #f54e00;
     --squeak-primary-color: ${(props) =>
       props.dark ? '255 255 255' : '0, 0, 0'};
-  }
+      --squeak-thread-border-style: dashed;
+    }
   .squeak *:not(pre *) {
     color: rgba(var(--squeak-primary-color), 1);
     box-sizing: border-box;
@@ -129,15 +130,24 @@ const GlobalStyles = createGlobalStyle`
   }
 
   .squeak-avatar-container {
-    width: 40px;
-    height: 40px;
-    overflow: hidden;
-    border-radius: 100%;
+    flex: 0;
   }
 
-  .squeak-avatar-container img {
-    width: 100%;
-    height: 100%;
+  .squeak-avatar-container img,
+  .squeak-avatar-container svg {
+    border-radius: 100%;
+    height: 40px;
+    width: 40px;
+  }
+
+  .squeak-replies .squeak-avatar-container {
+  }
+
+  .squeak-replies .squeak-avatar-container img,
+  .squeak-replies .squeak-avatar-container svg {
+    border-radius: 100%;
+    height: 25px;
+    width: 25px;
   }
 
   .squeak-post-preview-container h3 {
@@ -201,6 +211,12 @@ const GlobalStyles = createGlobalStyle`
     display: flex;
   }
 
+  // add left margin to all elements that aren't the avatar
+  .squeak-post-author strong,
+  .squeak-post-author span {
+    margin-left: .5rem;
+  }
+
   .squeak-reply-button {
     background: transparent !important;
     color: var(--squeak-button-color) !important;
@@ -208,29 +224,12 @@ const GlobalStyles = createGlobalStyle`
     border: 1px solid var(--squeak-button-color) !important;
   }
 
-  .squeak-post > div:nth-of-type(1) {
-    flex-shrink: 0;
-  }
-
-  .squeak-post > div:nth-of-type(2) {
-    flex-grow: 1;
-    margin-left: 0.75rem;
-    overflow: hidden;
-  }
-
   .squeak-author-badge {
     font-size: 12px;
     border-radius: 0.25rem;
     padding: 0.25rem;
     border: 1px solid rgba(var(--squeak-primary-color), .3);
-  }
-
-  .squeak-author-badge {
-    border-radius: 0.25rem;
-    padding: 0.25rem;
-    margin-left: 0.25rem;
-    font-size: 12px;
-    background-color: #dce0e0;
+    background: rgba(var(--squeak-primary-color), .1);
   }
 
   .squeak-post h3 {
@@ -253,26 +252,69 @@ const GlobalStyles = createGlobalStyle`
 
   }
 
-  // left border on replies
-  .squeak-replies li:not(:last-child) {
-    border-left: 1px solid rgba(var(--squeak-primary-color), .4);
+  .squeak-post-content {
+    margin-left: 20px;
+    border-left: 1px var(--squeak-thread-border-style) rgba(var(--squeak-primary-color), .4);
+    padding-left: calc(25px + .5rem);
   }
 
-  .squeak-replies li:last-child {
+  // overrides for replies
+
+  .squeak-replies li .squeak-post-content {
+    border-left: 0;
+    margin-left: calc(25px + .5rem); // avatar + avatar right margin
+    padding-left: 0;
+  }
+
+  // left border on replies
+  .squeak-replies li:not(:last-child) {
+    border-left: 1px var(--squeak-thread-border-style) rgba(var(--squeak-primary-color), .4);
+  }
+
+  .squeak-replies li {
     position: relative;
   }
 
+  .squeak-replies li:not(:last-child):before {
+    border-left: none;
+  }
+
   // left border and curved line on last reply
-  .squeak-replies li:last-child:before {
-    border-left: 1px solid rgba(var(--squeak-primary-color), .4);
-    border-bottom: 1px solid rgba(var(--squeak-primary-color), .4);
+  .squeak-replies li:before {
+    border-left: 1px var(--squeak-thread-border-style) rgba(var(--squeak-primary-color), .4);
+    border-bottom: 1px var(--squeak-thread-border-style) rgba(var(--squeak-primary-color), .4);
     border-radius: 4px;
     content: '';
-    height: 35px;
+    height: 25px;
     left: 0;
     position: absolute;
     top: 0;
     width: 20px;
+  }
+
+  // post content defaults
+
+  .squeak-post-markdown {
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+
+  .squeak-post-markdown p {
+    margin-top: 0;
+  }
+
+  .squeak-post-markdown a {
+    color: var(--squeak-button-color);
+    text-decoration: none;
+  }
+
+  .squeak-post-markdown pre {
+    border-radius: 5px;
+    font-size: 14px;
+    margin: 0.75rem 0;
+    max-height: 450px;
+    overflow: scroll;
+    padding: 1rem;
   }
 
   .squeak-reply-form-container {
@@ -337,27 +379,7 @@ const GlobalStyles = createGlobalStyle`
     padding: 0.25rem 0;
   }
 
-  .squeak-post-markdown {
-    font-size: 1rem;
-  }
-
-  .squeak-post-markdown p {
-    margin-top: 0;
-  }
-
-  .squeak-post-markdown a {
-    color: var(--squeak-button-color);
-    text-decoration: none;
-  }
-
-  .squeak-post-markdown pre {
-    border-radius: 5px;
-    font-size: 14px;
-    margin: 0.75rem 0;
-    max-height: 450px;
-    overflow: scroll;
-    padding: 1rem;
-  }
+  // UI elements
 
   .squeak-form-richtext textarea {
     background: transparent;
