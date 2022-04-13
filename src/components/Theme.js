@@ -64,7 +64,7 @@ export const Theme = createGlobalStyle`
     }
 
     .squeak-authentication-form {
-        
+        padding: 1.25rem;
     }
 
     .squeak-authentication-form button {
