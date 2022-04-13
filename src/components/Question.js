@@ -53,7 +53,11 @@ export default function Question({
         {...firstReply}
       />
       {replies && replies.length - 1 > 0 && (
-        <ul className='squeak-replies'>
+        <ul
+          className={`squeak-replies ${
+            resolved ? 'squeak-thread-resolved' : ''
+          }`}
+        >
           {replies.slice(1).map((reply) => {
             const replyAuthorMetadata = reply?.profile?.metadata[0]
 
