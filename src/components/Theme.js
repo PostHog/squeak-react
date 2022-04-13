@@ -4,7 +4,7 @@ export const Theme = createGlobalStyle`
 :root {
   --squeak-button-color: #f54e00;
   --squeak-primary-color: ${(props) =>
-    props.dark ? '255 255 255' : '0, 0, 0'};
+    props.dark ? '255, 255, 255' : '0, 0, 0'};
     --squeak-thread-border-style: dashed;
   }
 .squeak {
@@ -354,6 +354,7 @@ export const Theme = createGlobalStyle`
 
     .squeak-reply-form-container {
         margin-left: 20px;
+        padding-right: 20px;
         padding-left: calc(25px + 8px);
         padding-top: 10px;
         position: relative;
