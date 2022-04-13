@@ -284,12 +284,12 @@ export const Theme = createGlobalStyle`
     }
 
     // left border on replies
-    .squeak-replies:not(.thread-resolved) li {
+    .squeak-replies:not(.squeak-thread-resolved) li {
         border-left: 1px var(--squeak-thread-border-style) rgba(var(--squeak-primary-color), .4);
     }
 
     // don't show left border inside, since parent has border
-    .squeak-replies:not(.thread-resolved) li:before {
+    .squeak-replies:not(.squeak-thread-resolved) li:before {
         border-left: none;
     }
 
@@ -307,16 +307,16 @@ export const Theme = createGlobalStyle`
         width: 30px;
     }
 
-    .squeak-replies.thread-resolved li:not(:last-child) {
+    .squeak-replies.squeak-thread-resolved li:not(:last-child) {
         border-left: 1px var(--squeak-thread-border-style) rgba(var(--squeak-primary-color), .4);
     }
 
     // don't show left border inside, since parent has border
-    .squeak-replies:not(.thread-resolved) li:before {
+    .squeak-replies:not(.squeak-thread-resolved) li:before {
         border-left: none;
     }
 
-    .squeak-replies.thread-resolved li:not(:last-child):before {
+    .squeak-replies.squeak-thread-resolved li:not(:last-child):before {
         border-left: none;
     }
 
@@ -513,7 +513,7 @@ export const Theme = createGlobalStyle`
 
     .squeak-locked-message {
         margin-bottom: 0;
-        margin-top: 2rem;
+        margin-top: 1rem;
     }
 
     .squeak-resolved-badge {
