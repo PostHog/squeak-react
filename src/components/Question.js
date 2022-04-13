@@ -26,20 +26,38 @@ export default function Question({
   supabase,
   user
 }) {
-  const [showReply, setShowReply] = useState(false)
   const [firstReply] = replies
+  const [resolvedBy, setResolvedBy] = useState(question?.resolved_reply_id)
+  const [resolved, setResolved] = useState(question?.resolved)
   const questionAuthorId = firstReply?.profile?.id
+  const handleResolve = async (resolved, replyId = null) => {
+    await fetch(`${apiHost}/api/question/resolve`, {
+      method: 'POST',
+      body: JSON.stringify({
+        token: supabase.auth?.session()?.access_token,
+        messageId: question?.id,
+        replyId,
+        organizationId,
+        resolved
+      })
+    })
+    setResolved(resolved)
+    setResolvedBy(replyId)
+  }
 
   return (
-    <div>
+    <div className='squeak-question-container'>
       <Reply
-        setShowReply={setShowReply}
-        hideButton={showReply}
+        className='squeak-post'
         subject={question.subject}
         {...firstReply}
       />
       {replies && replies.length - 1 > 0 && (
-        <ul className='squeak-replies'>
+        <ul
+          className={`squeak-replies ${
+            resolved ? 'squeak-thread-resolved' : ''
+          }`}
+        >
           {replies.slice(1).map((reply) => {
             const replyAuthorMetadata = reply?.profile?.metadata[0]
 
@@ -52,19 +70,28 @@ export default function Question({
             return (
               <li key={reply.id}>
                 <Reply
+                  className='squeak-post-reply'
+                  resolved={resolved}
+                  resolvedBy={resolvedBy}
+                  handleResolve={handleResolve}
+                  isAuthor={user?.profile?.id === questionAuthorId}
+                  user={user}
                   key={reply.id}
                   {...reply}
                   badgeText={badgeText}
-                  hideButton
                 />
               </li>
             )
           })}
         </ul>
       )}
-      <div className='squeak-reply-form-container'>
-        <div className='squeak-reply-frame'>
-          <Avatar />
+      {resolved ? (
+        <div className='squeak-post-preview-container squeak-locked-message'>
+          <p>This thread has been marked as resolved.</p>
+        </div>
+      ) : (
+        <div className='squeak-reply-form-container'>
+          <Avatar image={user?.profile?.avatar} />
           <QuestionForm
             user={user}
             authState={authState}
@@ -77,7 +104,7 @@ export default function Question({
             formType='reply'
           />
         </div>
-      </div>
+      )}
     </div>
   )
 }

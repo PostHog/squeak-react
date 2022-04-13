@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import { Approval } from './Approval'
 import Authentication from './Authentication'
 import Logo from './Logo'
-import Avatar from './Avatar'
 import RichText from './RichText'
 
 function QuestionForm({
@@ -67,7 +66,8 @@ function QuestionForm({
                 >
                   {user ? 'Post' : 'Preview post'}
                 </button>
-                <div className='squeak-by-line'>by
+                <div className='squeak-by-line'>
+                  by
                   <a href='https://squeak.posthog.com?utm_source=post-form'>
                     <Logo />
                   </a>
@@ -188,17 +188,16 @@ export default function ({
     }[view]
   ) : (
     <div className='squeak-reply-buttons'>
-
-      <div className='squeak-reply-frame'>
-        <button
-          className={
-            formType === 'reply' ? 'squeak-reply-skeleton' : 'squeak-ask-button'
-          }
-          onClick={() => setView('question-form')}
-        >
-          <span>{buttonText}</span> to question
-        </button>
-      </div>
+      <button
+        className={
+          formType === 'reply' ? 'squeak-reply-skeleton' : 'squeak-ask-button'
+        }
+        onClick={() => setView('question-form')}
+      >
+        <span>
+          {buttonText} {formType === 'reply' && 'to question'}
+        </span>
+      </button>
       {formType === 'question' && user && (
         <button
           onClick={() => supabase.auth.signOut()}

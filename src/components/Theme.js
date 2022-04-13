@@ -208,6 +208,9 @@ export const Theme = createGlobalStyle`
     .squeak-post-author {
         align-items: center;
         display: flex;
+        > span:last-of-type {
+            display: flex;
+        }
     }
 
     // add left margin to all elements that aren't the avatar
@@ -217,21 +220,7 @@ export const Theme = createGlobalStyle`
     .squeak-post-author span {
         margin-left: .5rem;
     }
-
-    .squeak-reply-frame {
-        display: flex;
-        width: 100%;
-    }
-
-    .squeak-reply-frame .squeak-avatar-container {
-        flex: 0 0 25px;
-        margin-right: 8px;
-    }
-
-    .squeak-reply-frame .squeak-avatar-container svg {
-        height: 25px;
-        width: 25px;
-    }
+    
 
     button.squeak-reply-skeleton {
         padding: 15px;
@@ -295,12 +284,12 @@ export const Theme = createGlobalStyle`
     }
 
     // left border on replies
-    .squeak-replies:not(.thread-resolved) li {
+    .squeak-replies:not(.squeak-thread-resolved) li {
         border-left: 1px var(--squeak-thread-border-style) rgba(var(--squeak-primary-color), .4);
     }
 
     // don't show left border inside, since parent has border
-    .squeak-replies:not(.thread-resolved) li:before {
+    .squeak-replies:not(.squeak-thread-resolved) li:before {
         border-left: none;
     }
 
@@ -318,16 +307,16 @@ export const Theme = createGlobalStyle`
         width: 30px;
     }
 
-    .squeak-replies.thread-resolved li:not(:last-child) {
+    .squeak-replies.squeak-thread-resolved li:not(:last-child) {
         border-left: 1px var(--squeak-thread-border-style) rgba(var(--squeak-primary-color), .4);
     }
 
     // don't show left border inside, since parent has border
-    .squeak-replies:not(.thread-resolved) li:before {
+    .squeak-replies:not(.squeak-thread-resolved) li:before {
         border-left: none;
     }
 
-    .squeak-replies.thread-resolved li:not(:last-child):before {
+    .squeak-replies.squeak-thread-resolved li:not(:last-child):before {
         border-left: none;
     }
 
@@ -368,6 +357,24 @@ export const Theme = createGlobalStyle`
         padding-left: calc(25px + 8px);
         padding-top: 10px;
         position: relative;
+        display: flex;
+        width: 100%;
+
+        .squeak-avatar-container {
+            flex: 0 0 25px;
+            margin-right: 8px;
+        }
+
+        .squeak-avatar-container { 
+            svg, img {
+                height: 25px;
+                width: 25px;
+            }
+        }
+
+        > div:nth-of-type(2) {
+            flex-grow: 1;
+        }
     }
 
     .squeak-ask-button {
@@ -482,6 +489,39 @@ export const Theme = createGlobalStyle`
         font-weight: 600;
         padding: 0;
         width: auto !important;
+    }
+
+    .squeak-resolve-button, .squeak-undo-resolved {
+        background: none;
+        border: none;
+        padding: 0;
+        color: var(--squeak-button-color);
+        cursor: pointer;
+    }
+    .squeak-resolve-button {
+        margin-top: 1rem;
+    }
+    .squeak-undo-resolved {
+        margin-left: .5rem;
+        font-weight: 600;
+    }
+    .squeak-resolve-button, .squeak-unresolve-button, .squeak-resolve-text {
+        font-size: 14px;
+        font-weight: 600;
+        z-index: 1;
+    }
+
+    .squeak-locked-message {
+        margin-bottom: 0;
+        margin-top: 1rem;
+    }
+
+    .squeak-resolved-badge {
+        font-size: 12px;
+        border-radius: 0.25rem;
+        padding: 0.25rem;
+        border: 1px solid rgba(0, 130, 0, .8);
+        color: rgba(0, 130, 0, .8);
     }
 }
 `
