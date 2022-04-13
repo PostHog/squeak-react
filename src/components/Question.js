@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Avatar from './Avatar'
 import QuestionForm from './QuestionForm'
 import Reply from './Reply'
 
@@ -62,17 +63,20 @@ export default function Question({
         </ul>
       )}
       <div className='squeak-reply-form-container'>
-        <QuestionForm
-          user={user}
-          authState={authState}
-          apiHost={apiHost}
-          supabase={supabase}
-          getQuestions={getQuestions}
-          setQuestions={setQuestions}
-          messageID={question.id}
-          organizationId={organizationId}
-          formType='reply'
-        />
+        <div className='squeak-reply-frame'>
+          <Avatar />
+          <QuestionForm
+            user={user}
+            authState={authState}
+            apiHost={apiHost}
+            supabase={supabase}
+            getQuestions={getQuestions}
+            setQuestions={setQuestions}
+            messageID={question.id}
+            organizationId={organizationId}
+            formType='reply'
+          />
+        </div>
       </div>
     </div>
   )

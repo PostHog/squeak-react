@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Approval } from './Approval'
 import Authentication from './Authentication'
 import Logo from './Logo'
+import Avatar from './Avatar'
 import RichText from './RichText'
 
 function QuestionForm({
@@ -17,7 +18,7 @@ function QuestionForm({
     onSubmit && (await onSubmit(values))
   }
   return (
-    <div>
+    <div className='squeak-form-frame'>
       {title && <h2>{title}</h2>}
       <Formik
         initialValues={{
@@ -66,7 +67,7 @@ function QuestionForm({
                 >
                   {user ? 'Post' : 'Preview post'}
                 </button>
-                <div class='squeak-by-line'>by
+                <div className='squeak-by-line'>by
                   <a href='https://squeak.posthog.com?utm_source=post-form'>
                     <Logo />
                   </a>
@@ -187,14 +188,17 @@ export default function ({
     }[view]
   ) : (
     <div className='squeak-reply-buttons'>
-      <button
-        className={
-          formType === 'reply' ? 'squeak-reply-button' : 'squeak-ask-button'
-        }
-        onClick={() => setView('question-form')}
-      >
-        {buttonText}
-      </button>
+
+      <div className='squeak-reply-frame'>
+        <button
+          className={
+            formType === 'reply' ? 'squeak-reply-skeleton' : 'squeak-ask-button'
+          }
+          onClick={() => setView('question-form')}
+        >
+          <span>{buttonText}</span> to question
+        </button>
+      </div>
       {formType === 'question' && user && (
         <button
           onClick={() => supabase.auth.signOut()}

@@ -13,22 +13,15 @@ const GlobalStyles = createGlobalStyle`
   .squeak *:not(pre *) {
     color: rgba(var(--squeak-primary-color), 1);
     box-sizing: border-box;
-    font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui,
-      helvetica neue, helvetica, Ubuntu, roboto, noto, arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Ubuntu, roboto, noto, arial, sans-serif;
   }
-  .squeak
-    button:not(.squeak-authentication-navigation
-      > button):not(.w-md-editor-toolbar
-      button):not(.squeak-post-preview-container
-      button):not(.squeak-logout-button):not(.squeak-form-richtext
-      button):not(.squeak-return-to-post) {
-    border: none;
-    background: var(--squeak-button-color);
-    color: white;
+
+  .squeak button {
+    background: transparent;
+    border: solid 1.5px rgba(var(--squeak-primary-color), .3);
     padding: 0.75rem 1.25rem;
     border-radius: 5px;
     font-weight: 600;
-    margin-top: 1.25rem;
     cursor: pointer;
   }
 
@@ -131,6 +124,7 @@ const GlobalStyles = createGlobalStyle`
 
   .squeak-avatar-container {
     flex: 0;
+    line-height: 0;
   }
 
   .squeak-avatar-container svg path:first-child {
@@ -223,11 +217,33 @@ const GlobalStyles = createGlobalStyle`
     margin-left: .5rem;
   }
 
-  .squeak-reply-button {
-    background: transparent !important;
-    color: var(--squeak-button-color) !important;
-    margin-top: 0 !important;
-    border: 1px solid var(--squeak-button-color) !important;
+  .squeak-reply-frame {
+    display: flex;
+    width: 100%;
+  }
+
+  .squeak-reply-frame .squeak-avatar-container {
+    flex: 0 0 25px;
+    margin-right: 8px;
+  }
+
+  .squeak-reply-frame .squeak-avatar-container svg {
+    height: 25px;
+    width: 25px;
+  }
+
+  button.squeak-reply-skeleton {
+    padding: 15px;
+    flex: 1;
+    text-align: left;
+  }
+
+  .squeak-reply-skeleton span {
+    text-decoration: underline;
+  }
+
+  .squeak-form-frame {
+    flex: 1;
   }
 
   .squeak-post-timestamp {
@@ -239,7 +255,6 @@ const GlobalStyles = createGlobalStyle`
     border-radius: 0.25rem;
     padding: 0.25rem;
     border: 1px solid rgba(var(--squeak-primary-color), .3);
-    background: rgba(var(--squeak-primary-color), .1);
   }
 
   .squeak-post h3 {
@@ -270,6 +285,7 @@ const GlobalStyles = createGlobalStyle`
     border-left: 0;
     margin-left: calc(25px + 8px); // avatar + avatar right margin
     padding-left: 0;
+    padding-bottom: .25rem;
   }
 
   // left border on replies
@@ -286,6 +302,7 @@ const GlobalStyles = createGlobalStyle`
   }
 
   // left border and curved line on last reply
+  .squeak-reply-form-container:before,
   .squeak-replies li:before {
     border-left: 1px var(--squeak-thread-border-style) rgba(var(--squeak-primary-color), .4);
     border-bottom: 1px var(--squeak-thread-border-style) rgba(var(--squeak-primary-color), .4);
@@ -304,6 +321,7 @@ const GlobalStyles = createGlobalStyle`
     margin-left: 20px;
     border-left: 1px var(--squeak-thread-border-style) rgba(var(--squeak-primary-color), .4);
     padding-left: calc(25px + 8px);
+    padding-bottom: .5rem;
   }
 
   .squeak-post-markdown {
@@ -330,11 +348,10 @@ const GlobalStyles = createGlobalStyle`
   }
 
   .squeak-reply-form-container {
-    margin-left: calc(40px + 0.75rem);
-  }
-
-  .squeak-reply-form-container {
-    margin-top: .5rem;
+    margin-left: 20px;
+    padding-left: calc(25px + 8px);
+    padding-top: 10px;
+    position: relative;
   }
 
   .squeak-ask-button {
