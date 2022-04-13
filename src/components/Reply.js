@@ -8,10 +8,11 @@ export default function Reply({
   created_at,
   body,
   subject,
-  badgeText
+  badgeText,
+  ...other
 }) {
   return (
-    <div className='squeak-post'>
+    <div {...other}>
       <div className='squeak-post-author'>
         <Avatar image={profile?.avatar} />
         <strong className='squeak-author-name'>

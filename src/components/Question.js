@@ -33,6 +33,7 @@ export default function Question({
   return (
     <div>
       <Reply
+        className='squeak-post'
         setShowReply={setShowReply}
         hideButton={showReply}
         subject={question.subject}
@@ -52,6 +53,7 @@ export default function Question({
             return (
               <li key={reply.id}>
                 <Reply
+                  className='squeak-post-reply'
                   key={reply.id}
                   {...reply}
                   badgeText={badgeText}
