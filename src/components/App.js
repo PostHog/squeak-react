@@ -288,25 +288,26 @@ const GlobalStyles = createGlobalStyle`
     padding-bottom: .25rem;
   }
 
-  // left border on replies
-  .squeak-replies li:not(:last-child) {
-    border-left: 1px var(--squeak-thread-border-style) rgba(var(--squeak-primary-color), .4);
-  }
-
   .squeak-replies li {
     position: relative;
   }
 
-  .squeak-replies li:not(:last-child):before {
-    border-left: none;
+  // left border on replies
+  .squeak-replies:not(.thread-resolved) li {
+    border-left: 1px var(--squeak-thread-border-style) rgba(var(--squeak-primary-color), .4);
   }
 
-  // left border and curved line on last reply
+    // don't show left border inside, since parent has border
+    .squeak-replies:not(.thread-resolved) li:before {
+      border-left: none;
+    }
+
+  // left border and curved line on replies
   .squeak-reply-form-container:before,
   .squeak-replies li:before {
     border-left: 1px var(--squeak-thread-border-style) rgba(var(--squeak-primary-color), .4);
     border-bottom: 1px var(--squeak-thread-border-style) rgba(var(--squeak-primary-color), .4);
-    border-radius: 4px;
+    border-bottom-left-radius: 6px;
     content: '';
     height: 22px;
     left: 0;
@@ -314,6 +315,19 @@ const GlobalStyles = createGlobalStyle`
     top: 0;
     width: 30px;
   }
+
+  .squeak-replies.thread-resolved li:not(:last-child) {
+    border-left: 1px var(--squeak-thread-border-style) rgba(var(--squeak-primary-color), .4);
+  }
+
+    // don't show left border inside, since parent has border
+    .squeak-replies:not(.thread-resolved) li:before {
+      border-left: none;
+    }
+
+    .squeak-replies.thread-resolved li:not(:last-child):before {
+      border-left: none;
+    }
 
   // post content defaults
 
@@ -359,9 +373,10 @@ const GlobalStyles = createGlobalStyle`
   }
 
   .squeak-reply-buttons {
+    align-items: center;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    flex: 1;
   }
 
   .squeak-post-button {
