@@ -56,6 +56,19 @@ export default function App({ apiHost, supabase, organizationId }) {
     return questions
   }
 
+  const getProfile = async () => {
+    const { data } = await supabase
+      .from('squeak_profiles_readonly')
+      .select(
+        'squeak_profiles!profiles_readonly_profile_id_fkey!inner(avatar, first_name, last_name)'
+      )
+      .eq('user_id', user?.id)
+      .single()
+    if (data) {
+      setUser({ ...user, profile: data.squeak_profiles })
+    }
+  }
+
   useEffect(() => {
     if (containerRef.current) {
       const color = getBackgroundColor(containerRef.current)
@@ -79,6 +92,12 @@ export default function App({ apiHost, supabase, organizationId }) {
       authListener.unsubscribe()
     }
   }, [supabase.auth])
+
+  useEffect(() => {
+    if (user && !user.profile) {
+      getProfile()
+    }
+  }, [user])
 
   return (
     <div ref={containerRef}>

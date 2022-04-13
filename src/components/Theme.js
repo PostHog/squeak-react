@@ -218,21 +218,6 @@ export const Theme = createGlobalStyle`
         margin-left: .5rem;
     }
 
-    .squeak-reply-frame {
-        display: flex;
-        width: 100%;
-    }
-
-    .squeak-reply-frame .squeak-avatar-container {
-        flex: 0 0 25px;
-        margin-right: 8px;
-    }
-
-    .squeak-reply-frame .squeak-avatar-container svg {
-        height: 25px;
-        width: 25px;
-    }
-
     button.squeak-reply-skeleton {
         padding: 15px;
         flex: 1;
@@ -368,6 +353,24 @@ export const Theme = createGlobalStyle`
         padding-left: calc(25px + 8px);
         padding-top: 10px;
         position: relative;
+        display: flex;
+        width: 100%;
+
+        .squeak-avatar-container {
+            flex: 0 0 25px;
+            margin-right: 8px;
+        }
+
+        .squeak-avatar-container { 
+            svg, img {
+                height: 25px;
+                width: 25px;
+            }
+        }
+
+        > div:nth-of-type(2) {
+            flex-grow: 1;
+        }
     }
 
     .squeak-ask-button {

@@ -63,20 +63,18 @@ export default function Question({
         </ul>
       )}
       <div className='squeak-reply-form-container'>
-        <div className='squeak-reply-frame'>
-          <Avatar />
-          <QuestionForm
-            user={user}
-            authState={authState}
-            apiHost={apiHost}
-            supabase={supabase}
-            getQuestions={getQuestions}
-            setQuestions={setQuestions}
-            messageID={question.id}
-            organizationId={organizationId}
-            formType='reply'
-          />
-        </div>
+        <Avatar image={user?.profile?.avatar} />
+        <QuestionForm
+          user={user}
+          authState={authState}
+          apiHost={apiHost}
+          supabase={supabase}
+          getQuestions={getQuestions}
+          setQuestions={setQuestions}
+          messageID={question.id}
+          organizationId={organizationId}
+          formType='reply'
+        />
       </div>
     </div>
   )
