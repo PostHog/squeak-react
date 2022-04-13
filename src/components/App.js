@@ -9,18 +9,14 @@ const GlobalStyles = createGlobalStyle`
     --squeak-primary-color: ${(props) =>
       props.dark ? '255 255 255' : '0, 0, 0'};
   }
-  .squeak *:not(pre *) {
+  .squeak *:not(pre *, .squeak-resolve-button, .squeak-resolved-badge, .squeak-undo-resolved) {
     color: rgba(var(--squeak-primary-color), 1);
     box-sizing: border-box;
     font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui,
       helvetica neue, helvetica, Ubuntu, roboto, noto, arial, sans-serif;
   }
   .squeak
-    button:not(.squeak-authentication-navigation
-      > button):not(.w-md-editor-toolbar
-      button):not(.squeak-post-preview-container
-      button):not(.squeak-logout-button):not(.squeak-form-richtext
-      button):not(.squeak-return-to-post) {
+    button:not(.squeak-resolve-button, .squeak-unresolve-button, .squeak-return-to-post, .squeak-form-richtext button, .squeak-logout-button, .squeak-post-preview-container button, .squeak-authentication-navigation > button, .squeak-undo-resolved) {
     border: none;
     background: var(--squeak-button-color);
     color: white;
@@ -223,13 +219,23 @@ const GlobalStyles = createGlobalStyle`
     font-size: 13px;
   }
 
-  .squeak-badge {
+  .squeak-reply-details > p:nth-of-type(3) {
+    margin-right: 0.25rem;
+  }
+
+  .squeak-badge, .squeak-resolved-badge {
     font-weight: light;
     font-size: 12px;
     border-radius: 0.25rem;
     padding: 0.25rem;
     border: 1px solid rgba(var(--squeak-primary-color), .3);
   }
+
+  .squeak-resolved-badge {
+    border-color: #008000b0;
+    color: #008000b0;
+  }
+
 
   .squeak-reply-details p {
     margin: 0;
@@ -256,7 +262,7 @@ const GlobalStyles = createGlobalStyle`
   }
 
   .squeak-reply-form-container,
-  .squeak-replies {
+  .squeak-replies, .squeak-locked-message {
     margin-left: calc(40px + 0.75rem);
   }
 
@@ -400,6 +406,36 @@ const GlobalStyles = createGlobalStyle`
     padding: 0;
     width: auto !important;
   }
+  .squeak-question-container {
+    position: relative;
+  }
+  .squeak-resolve-button, .squeak-undo-resolved {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--squeak-button-color);
+    cursor: pointer;
+  }
+  .squeak-resolve-button {
+    margin-top: 1rem;
+  }
+  .squeak-undo-resolved {
+    margin-left: .25rem;
+    font-weight: 600;
+  }
+  .squeak-resolve-button, .squeak-unresolve-button, .squeak-resolve-text {
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1;
+  }
+
+  .squeak-locked-message {
+    margin-bottom: 0;
+    margin-top: 2rem;
+  }
+
+
+  
 `
 
 function lightOrDark(color) {
@@ -452,7 +488,20 @@ export default function App({ apiHost, supabase, organizationId }) {
     }
 
     const { questions } = await response.json()
+
     return questions
+  }
+
+  const getProfileId = async () => {
+    if (user && !user.profileId) {
+      const { data } = await supabase
+        .from('squeak_profiles_readonly')
+        .select('profile_id')
+        .eq('user_id', user.id)
+        .single()
+      const profileId = data?.profile_id
+      setUser({ ...user, profileId })
+    }
   }
 
   useEffect(() => {
@@ -478,6 +527,10 @@ export default function App({ apiHost, supabase, organizationId }) {
       authListener.unsubscribe()
     }
   }, [supabase.auth])
+
+  useEffect(() => {
+    getProfileId()
+  }, [user])
 
   return (
     <div ref={containerRef}>

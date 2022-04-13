@@ -8,7 +8,12 @@ export default function Reply({
   created_at,
   body,
   subject,
-  badgeText
+  badgeText,
+  isAuthor,
+  handleResolve,
+  resolved,
+  resolvedBy,
+  id
 }) {
   return (
     <div className='squeak-reply'>
@@ -20,9 +25,30 @@ export default function Reply({
             <Days created={created_at} />
           </p>
           {badgeText && <p className='squeak-badge'>{badgeText}</p>}
+          {resolved && resolvedBy === id && (
+            <span>
+              <p className='squeak-resolved-badge'>SOLUTION</p>
+              {isAuthor && (
+                <button
+                  onClick={() => handleResolve(false)}
+                  className='squeak-undo-resolved'
+                >
+                  Undo
+                </button>
+              )}
+            </span>
+          )}
         </div>
         {subject && <h3>{subject}</h3>}
         <Markdown>{body}</Markdown>
+        {!resolved && isAuthor && (
+          <button
+            onClick={() => handleResolve(true, id)}
+            className='squeak-resolve-button'
+          >
+            Mark as solution
+          </button>
+        )}
       </div>
     </div>
   )
