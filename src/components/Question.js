@@ -26,16 +26,29 @@ export default function Question({
   supabase,
   user
 }) {
-  const [showReply, setShowReply] = useState(false)
   const [firstReply] = replies
+  const [resolvedBy, setResolvedBy] = useState(question?.resolved_reply_id)
+  const [resolved, setResolved] = useState(question?.resolved)
   const questionAuthorId = firstReply?.profile?.id
+  const handleResolve = async (resolved, replyId = null) => {
+    await fetch(`${apiHost}/api/question/resolve`, {
+      method: 'POST',
+      body: JSON.stringify({
+        token: supabase.auth?.session()?.access_token,
+        messageId: question?.id,
+        replyId,
+        organizationId,
+        resolved
+      })
+    })
+    setResolved(resolved)
+    setResolvedBy(replyId)
+  }
 
   return (
-    <div>
+    <div className='squeak-question-container'>
       <Reply
         className='squeak-post'
-        setShowReply={setShowReply}
-        hideButton={showReply}
         subject={question.subject}
         {...firstReply}
       />
@@ -54,30 +67,40 @@ export default function Question({
               <li key={reply.id}>
                 <Reply
                   className='squeak-post-reply'
+                  resolved={resolved}
+                  resolvedBy={resolvedBy}
+                  handleResolve={handleResolve}
+                  isAuthor={user?.profile?.id === questionAuthorId}
+                  user={user}
                   key={reply.id}
                   {...reply}
                   badgeText={badgeText}
-                  hideButton
                 />
               </li>
             )
           })}
         </ul>
       )}
-      <div className='squeak-reply-form-container'>
-        <Avatar image={user?.profile?.avatar} />
-        <QuestionForm
-          user={user}
-          authState={authState}
-          apiHost={apiHost}
-          supabase={supabase}
-          getQuestions={getQuestions}
-          setQuestions={setQuestions}
-          messageID={question.id}
-          organizationId={organizationId}
-          formType='reply'
-        />
-      </div>
+      {resolved ? (
+        <div className='squeak-post-preview-container squeak-locked-message'>
+          <p>This thread has been marked as resolved.</p>
+        </div>
+      ) : (
+        <div className='squeak-reply-form-container'>
+          <Avatar image={user?.profile?.avatar} />
+          <QuestionForm
+            user={user}
+            authState={authState}
+            apiHost={apiHost}
+            supabase={supabase}
+            getQuestions={getQuestions}
+            setQuestions={setQuestions}
+            messageID={question.id}
+            organizationId={organizationId}
+            formType='reply'
+          />
+        </div>
+      )}
     </div>
   )
 }

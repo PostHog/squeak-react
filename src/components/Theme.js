@@ -208,6 +208,9 @@ export const Theme = createGlobalStyle`
     .squeak-post-author {
         align-items: center;
         display: flex;
+        > span:last-of-type {
+            display: flex;
+        }
     }
 
     // add left margin to all elements that aren't the avatar
@@ -217,6 +220,7 @@ export const Theme = createGlobalStyle`
     .squeak-post-author span {
         margin-left: .5rem;
     }
+    
 
     button.squeak-reply-skeleton {
         padding: 15px;
@@ -485,6 +489,39 @@ export const Theme = createGlobalStyle`
         font-weight: 600;
         padding: 0;
         width: auto !important;
+    }
+
+    .squeak-resolve-button, .squeak-undo-resolved {
+        background: none;
+        border: none;
+        padding: 0;
+        color: var(--squeak-button-color);
+        cursor: pointer;
+    }
+    .squeak-resolve-button {
+        margin-top: 1rem;
+    }
+    .squeak-undo-resolved {
+        margin-left: .5rem;
+        font-weight: 600;
+    }
+    .squeak-resolve-button, .squeak-unresolve-button, .squeak-resolve-text {
+        font-size: 14px;
+        font-weight: 600;
+        z-index: 1;
+    }
+
+    .squeak-locked-message {
+        margin-bottom: 0;
+        margin-top: 2rem;
+    }
+
+    .squeak-resolved-badge {
+        font-size: 12px;
+        border-radius: 0.25rem;
+        padding: 0.25rem;
+        border: 1px solid rgba(0, 130, 0, .8);
+        color: rgba(0, 130, 0, .8);
     }
 }
 `

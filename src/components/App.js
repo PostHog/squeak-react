@@ -53,6 +53,7 @@ export default function App({ apiHost, supabase, organizationId }) {
     }
 
     const { questions } = await response.json()
+
     return questions
   }
 
@@ -60,7 +61,7 @@ export default function App({ apiHost, supabase, organizationId }) {
     const { data } = await supabase
       .from('squeak_profiles_readonly')
       .select(
-        'squeak_profiles!profiles_readonly_profile_id_fkey!inner(avatar, first_name, last_name)'
+        'squeak_profiles!profiles_readonly_profile_id_fkey!inner(avatar, first_name, last_name, id)'
       )
       .eq('user_id', user?.id)
       .single()
