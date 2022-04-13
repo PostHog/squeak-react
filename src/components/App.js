@@ -19,10 +19,11 @@ const GlobalStyles = createGlobalStyle`
   .squeak button {
     background: transparent;
     border: solid 1.5px rgba(var(--squeak-primary-color), .3);
-    padding: 0.75rem 1.25rem;
     border-radius: 5px;
-    font-weight: 600;
     cursor: pointer;
+    font-size: .933rem;
+    font-weight: 500;
+    padding: 0.75rem 1.25rem;
   }
 
   .squeak-form input {
@@ -247,6 +248,7 @@ const GlobalStyles = createGlobalStyle`
   }
 
   .squeak-post-timestamp {
+    color: rgba(var(--squeak-primary-color), .6);
     font-size: .875rem;
   }
 

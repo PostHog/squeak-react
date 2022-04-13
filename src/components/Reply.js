@@ -17,8 +17,8 @@ export default function Reply({
         <strong className='squeak-author-name'>
           {profile?.first_name || 'Anonymous'}
         </strong>
-        <Days created={created_at} />
         {badgeText && <span className='squeak-author-badge'>{badgeText}</span>}
+        <Days created={created_at} />
       </div>
       <div className='squeak-post-content'>
         {subject && <h3>{subject}</h3>}
