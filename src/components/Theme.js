@@ -124,7 +124,7 @@ export const Theme = createGlobalStyle`
     }
 
     .squeak-avatar-container {
-        flex: 0;
+        flex-shrink: 0;
         line-height: 0;
     }
 
@@ -361,7 +361,6 @@ export const Theme = createGlobalStyle`
         width: 100%;
 
         .squeak-avatar-container {
-            flex: 0 0 25px;
             margin-right: 8px;
         }
 
