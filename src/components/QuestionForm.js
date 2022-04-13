@@ -17,7 +17,7 @@ function QuestionForm({
     onSubmit && (await onSubmit(values))
   }
   return (
-    <div>
+    <div className='squeak-form-frame'>
       {title && <h2>{title}</h2>}
       <Formik
         initialValues={{
@@ -66,7 +66,8 @@ function QuestionForm({
                 >
                   {user ? 'Post' : 'Preview post'}
                 </button>
-                <div class='squeak-by-line'>by
+                <div className='squeak-by-line'>
+                  by
                   <a href='https://squeak.posthog.com?utm_source=post-form'>
                     <Logo />
                   </a>
@@ -189,11 +190,13 @@ export default function ({
     <div className='squeak-reply-buttons'>
       <button
         className={
-          formType === 'reply' ? 'squeak-reply-button' : 'squeak-ask-button'
+          formType === 'reply' ? 'squeak-reply-skeleton' : 'squeak-ask-button'
         }
         onClick={() => setView('question-form')}
       >
-        {buttonText}
+        <span>
+          {buttonText} {formType === 'reply' && 'to question'}
+        </span>
       </button>
       {formType === 'question' && user && (
         <button

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Avatar from './Avatar'
 import QuestionForm from './QuestionForm'
 import Reply from './Reply'
 
@@ -25,7 +26,6 @@ export default function Question({
   supabase,
   user
 }) {
-  const [showReply, setShowReply] = useState(false)
   const [firstReply] = replies
   const [resolvedBy, setResolvedBy] = useState(question?.resolved_reply_id)
   const [resolved, setResolved] = useState(question?.resolved)
@@ -48,13 +48,16 @@ export default function Question({
   return (
     <div className='squeak-question-container'>
       <Reply
-        setShowReply={setShowReply}
-        hideButton={showReply}
+        className='squeak-post'
         subject={question.subject}
         {...firstReply}
       />
       {replies && replies.length - 1 > 0 && (
-        <ul className='squeak-replies'>
+        <ul
+          className={`squeak-replies ${
+            resolved ? 'squeak-thread-resolved' : ''
+          }`}
+        >
           {replies.slice(1).map((reply) => {
             const replyAuthorMetadata = reply?.profile?.metadata[0]
 
@@ -67,15 +70,15 @@ export default function Question({
             return (
               <li key={reply.id}>
                 <Reply
+                  className='squeak-post-reply'
                   resolved={resolved}
                   resolvedBy={resolvedBy}
                   handleResolve={handleResolve}
-                  isAuthor={user?.profileId === questionAuthorId}
+                  isAuthor={user?.profile?.id === questionAuthorId}
                   user={user}
                   key={reply.id}
                   {...reply}
                   badgeText={badgeText}
-                  hideButton
                 />
               </li>
             )
@@ -88,6 +91,7 @@ export default function Question({
         </div>
       ) : (
         <div className='squeak-reply-form-container'>
+          <Avatar image={user?.profile?.avatar} />
           <QuestionForm
             user={user}
             authState={authState}

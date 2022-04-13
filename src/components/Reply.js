@@ -9,36 +9,37 @@ export default function Reply({
   body,
   subject,
   badgeText,
-  isAuthor,
-  handleResolve,
   resolved,
   resolvedBy,
-  id
+  isAuthor,
+  handleResolve,
+  id,
+  ...other
 }) {
   return (
-    <div className='squeak-reply'>
-      <Avatar image={profile?.avatar} />
-      <div>
-        <div className='squeak-reply-details'>
-          <p>{profile?.first_name || 'Anonymous'}</p>
-          <p>
-            <Days created={created_at} />
-          </p>
-          {badgeText && <p className='squeak-badge'>{badgeText}</p>}
-          {resolved && resolvedBy === id && (
-            <span>
-              <p className='squeak-resolved-badge'>SOLUTION</p>
-              {isAuthor && (
-                <button
-                  onClick={() => handleResolve(false)}
-                  className='squeak-undo-resolved'
-                >
-                  Undo
-                </button>
-              )}
-            </span>
-          )}
-        </div>
+    <div {...other}>
+      <div className='squeak-post-author'>
+        <Avatar image={profile?.avatar} />
+        <strong className='squeak-author-name'>
+          {profile?.first_name || 'Anonymous'}
+        </strong>
+        {badgeText && <span className='squeak-author-badge'>{badgeText}</span>}
+        <Days created={created_at} />
+        {resolved && resolvedBy === id && (
+          <span>
+            <p className='squeak-resolved-badge'>SOLUTION</p>
+            {isAuthor && (
+              <button
+                onClick={() => handleResolve(false)}
+                className='squeak-undo-resolved'
+              >
+                Undo
+              </button>
+            )}
+          </span>
+        )}
+      </div>
+      <div className='squeak-post-content'>
         {subject && <h3>{subject}</h3>}
         <Markdown>{body}</Markdown>
         {!resolved && isAuthor && (
