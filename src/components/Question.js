@@ -31,10 +31,16 @@ export default function Question({
   const [resolved, setResolved] = useState(question?.resolved)
   const questionAuthorId = firstReply?.profile?.id
   const handleResolve = async (resolved, replyId = null) => {
-    await supabase
-      .from('squeak_messages')
-      .update({ resolved, resolved_reply_id: replyId })
-      .match({ id: question?.id })
+    await fetch(`${apiHost}/api/question/resolve`, {
+      method: 'POST',
+      body: JSON.stringify({
+        token: supabase.auth?.session()?.access_token,
+        messageId: question?.id,
+        replyId,
+        organizationId,
+        resolved
+      })
+    })
     setResolved(resolved)
     setResolvedBy(replyId)
   }
