@@ -133,6 +133,10 @@ const GlobalStyles = createGlobalStyle`
     flex: 0;
   }
 
+  .squeak-avatar-container svg path:first-child {
+    fill: rgba(var(--squeak-primary-color), .3);
+  }
+
   .squeak-avatar-container img,
   .squeak-avatar-container svg {
     border-radius: 100%;
@@ -212,7 +216,9 @@ const GlobalStyles = createGlobalStyle`
   }
 
   // add left margin to all elements that aren't the avatar
-  .squeak-post-author strong,
+  .squeak-post-author strong {
+    margin-left: calc(8px + 5px);
+  }
   .squeak-post-author span {
     margin-left: .5rem;
   }
@@ -222,6 +228,10 @@ const GlobalStyles = createGlobalStyle`
     color: var(--squeak-button-color) !important;
     margin-top: 0 !important;
     border: 1px solid var(--squeak-button-color) !important;
+  }
+
+  .squeak-post-timestamp {
+    font-size: .875rem;
   }
 
   .squeak-author-badge {
@@ -244,7 +254,7 @@ const GlobalStyles = createGlobalStyle`
   }
 
   .squeak-replies li {
-    padding: 10px 5px 10px 20px;
+    padding: 10px 5px 10px calc(25px + 8px);
   }
 
   // replies styling only
@@ -252,17 +262,13 @@ const GlobalStyles = createGlobalStyle`
 
   }
 
-  .squeak-post-content {
-    margin-left: 20px;
-    border-left: 1px var(--squeak-thread-border-style) rgba(var(--squeak-primary-color), .4);
-    padding-left: calc(25px + .5rem);
+  .squeak-replies li .squeak-post-author strong {
+    margin-left: 8px;
   }
-
-  // overrides for replies
 
   .squeak-replies li .squeak-post-content {
     border-left: 0;
-    margin-left: calc(25px + .5rem); // avatar + avatar right margin
+    margin-left: calc(25px + 8px); // avatar + avatar right margin
     padding-left: 0;
   }
 
@@ -285,14 +291,20 @@ const GlobalStyles = createGlobalStyle`
     border-bottom: 1px var(--squeak-thread-border-style) rgba(var(--squeak-primary-color), .4);
     border-radius: 4px;
     content: '';
-    height: 25px;
+    height: 22px;
     left: 0;
     position: absolute;
     top: 0;
-    width: 20px;
+    width: 30px;
   }
 
   // post content defaults
+
+  .squeak-post-content {
+    margin-left: 20px;
+    border-left: 1px var(--squeak-thread-border-style) rgba(var(--squeak-primary-color), .4);
+    padding-left: calc(25px + 8px);
+  }
 
   .squeak-post-markdown {
     font-size: 1rem;
