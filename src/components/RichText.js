@@ -168,7 +168,9 @@ export default function RichText({ initialValue = '', setFieldValue }) {
           })}
         </ul>
         <div className='squeak-markdown-logo'>
-          <MarkdownLogo />
+          <a href="https://www.markdownguide.org/cheat-sheet/" target="_blank" rel="noopener">
+            <MarkdownLogo />
+          </a>
         </div>
       </div>
     </div>

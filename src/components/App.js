@@ -6,13 +6,11 @@ import Questions from './Questions'
 const GlobalStyles = createGlobalStyle`
   :root {
     --squeak-button-color: #f54e00;
-    --squeak-primary-color: rgb(${(props) =>
-      props.dark ? '255 255 255' : '0 0 0'} / 30%);
-    --squeak-text-color: rgb(${(props) =>
-      props.dark ? '255 255 255' : '0 0 0'});
+    --squeak-primary-color: ${(props) =>
+      props.dark ? '255 255 255' : '0, 0, 0'};
   }
   .squeak *:not(pre *, .squeak-resolve-button, .squeak-resolved-badge, .squeak-undo-resolved) {
-    color: var(--squeak-text-color);
+    color: rgba(var(--squeak-primary-color), 1);
     box-sizing: border-box;
     font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui,
       helvetica neue, helvetica, Ubuntu, roboto, noto, arial, sans-serif;
@@ -36,13 +34,13 @@ const GlobalStyles = createGlobalStyle`
     font-size: 16px;
     font-weight: 900;
     padding: 0.75rem 1rem;
-    border-bottom: 1px solid var(--squeak-primary-color);
+    border-bottom: 1px solid rgba(var(--squeak-primary-color), .3);
     background: transparent;
   }
 
   .squeak-form > div,
   .squeak-authentication-form {
-    border: 1.5px solid var(--squeak-primary-color);
+    border: 1.5px solid rgba(var(--squeak-primary-color), .3);
     border-radius: 5px;
     overflow: hidden;
     position: relative;
@@ -80,7 +78,7 @@ const GlobalStyles = createGlobalStyle`
   }
 
   .squeak-authentication-form input {
-    border: 1px solid var(--squeak-primary-color);
+    border: 1px solid rgba(var(--squeak-primary-color), .3);
     font-size: 14px;
     padding: 0.75rem 1rem;
     border-radius: 5px;
@@ -145,7 +143,7 @@ const GlobalStyles = createGlobalStyle`
   }
 
   .squeak-post-preview-container {
-    border: 1px solid var(--squeak-primary-color);
+    border: 1px solid rgba(var(--squeak-primary-color), .3);
     padding: 1.25rem;
     border-radius: 5px;
     margin-bottom: 2rem;
@@ -173,7 +171,7 @@ const GlobalStyles = createGlobalStyle`
 
   .squeak-questions > li {
     padding: 1.25rem 0;
-    border-bottom: 1px solid var(--squeak-primary-color);
+    border-bottom: 1px solid rgba(var(--squeak-primary-color), .3);
   }
 
   .squeak-questions > li > div > .squeak-reply:first-of-type {
@@ -230,7 +228,7 @@ const GlobalStyles = createGlobalStyle`
     font-size: 12px;
     border-radius: 0.25rem;
     padding: 0.25rem;
-    border: 1px solid var(--squeak-primary-color);
+    border: 1px solid rgba(var(--squeak-primary-color), .3);
   }
 
   .squeak-resolved-badge {
@@ -245,7 +243,6 @@ const GlobalStyles = createGlobalStyle`
   }
 
   .squeak-reply-details {
-    margin-bottom: 0.75rem;
     position: relative;
   }
 
@@ -258,9 +255,10 @@ const GlobalStyles = createGlobalStyle`
   }
 
   .squeak-reply h3 {
-    font-size: 15px;
+    font-size: 1.1rem;
     font-weight: bold;
-    margin: 0.75rem 0;
+    margin: 0;
+    padding-bottom: .25rem;
   }
 
   .squeak-reply-form-container,
@@ -269,7 +267,7 @@ const GlobalStyles = createGlobalStyle`
   }
 
   .squeak-reply-form-container {
-    margin-top: 1.25rem;
+    margin-top: .5rem;
   }
 
   .squeak-reply {
@@ -294,6 +292,18 @@ const GlobalStyles = createGlobalStyle`
     margin-top: 1.25rem;
   }
 
+  .squeak-by-line {
+    align-items: center;
+    color: rgba(var(--squeak-primary-color), .3) !important;
+    display: flex;
+    font-size: .8rem;
+  }
+
+  .squeak-by-line a {
+    display: flex;
+    margin-left: .2rem;
+  }
+
   .squeak-logout-button {
     border: none;
     background: none;
@@ -308,7 +318,7 @@ const GlobalStyles = createGlobalStyle`
   }
 
   .squeak-markdown-logo {
-    margin: 0 1rem 0 0;
+    margin: 0 .5rem 0 0;
   }
 
   .squeak-form-richtext-buttons-container {
@@ -316,6 +326,10 @@ const GlobalStyles = createGlobalStyle`
     justify-content: space-between;
     align-items: center;
     padding: 0.25rem 0;
+  }
+
+  .squeak-post-markdown {
+    font-size: 1rem;
   }
 
   .squeak-post-markdown p {
@@ -329,21 +343,21 @@ const GlobalStyles = createGlobalStyle`
 
   .squeak-post-markdown pre {
     border-radius: 5px;
-    max-height: 450px;
+    font-size: 14px;
     margin: 0.75rem 0;
+    max-height: 450px;
     overflow: scroll;
     padding: 1rem;
-    font-size: 14px;
   }
 
   .squeak-form-richtext textarea {
-    width: 100%;
+    background: transparent;
     border: none;
-    resize: none;
+    font-size: 14px;
     height: 200px;
     padding: 0.75rem 1rem;
-    font-size: 14px;
-    background: transparent;
+    resize: none;
+    width: 100%;
   }
 
   .squeak-form-richtext-buttons {
@@ -355,38 +369,42 @@ const GlobalStyles = createGlobalStyle`
   }
 
   .squeak-form-richtext-buttons button {
-    padding: 0;
-    margin: 0;
-    width: 32px;
-    height: 32px;
-    color: var(--squeak-primary-color);
+    align-items: center;
     background: none;
     border: none;
+    border-radius: 3px;
+    color: rgba(var(--squeak-primary-color), .3);
     cursor: pointer;
     display: flex;
+    height: 32px;
     justify-content: center;
-    align-items: center;
+    margin: 0;
+    opacity: .5;
+    padding: 0;
+    width: 32px;
   }
 
   .squeak-form-richtext-buttons button:hover {
-    color: var(--squeak-primary-color);
+    background: rgba(var(--squeak-primary-color), .1);
+    color: rgba(var(--squeak-primary-color), .3);
+    opacity: .9;
   }
 
   .squeak-forgot-password {
     background: none !important;
-    color: var(--squeak-primary-color) !important;
+    color: rgba(var(--squeak-primary-color), .3) !important;
     margin-top: 0.5rem !important;
   }
 
   .squeak-return-to-post {
     background: none;
     border: none;
-    padding: 0;
     color: var(--squeak-button-color);
-    font-weight: 600;
-    font-size: inherit;
-    width: auto !important;
     cursor: pointer;
+    font-size: inherit;
+    font-weight: 600;
+    padding: 0;
+    width: auto !important;
   }
   .squeak-question-container {
     position: relative;
