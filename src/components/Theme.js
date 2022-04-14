@@ -13,6 +13,7 @@ export const Theme = createGlobalStyle`
   }
 
 .squeak {
+    font-family: -apple-system, BlinkMacSystemFont; // for dev use
     font-size: var(--squeak-base-font-size);
 
     *:not(pre *) {
@@ -557,24 +558,44 @@ export const Theme = createGlobalStyle`
         width: auto !important;
     }
 
-    .squeak-resolve-button, .squeak-undo-resolved {
+    .squeak-resolve-button {
+        margin-bottom: 1rem;
+        position: relative;
+        top: -.5em;
+    }
+
+    .squeak-resolve-button,
+    .squeak-undo-resolved {
         background: none;
         border: none;
         padding: 0;
         color: rgba(var(--squeak-button-color), 1);
         cursor: pointer;
-    }
-    .squeak-resolve-button {
-        margin-top: 1rem;
+
+        &:hover,
+        &:active {
+            border: none;
+        }
     }
     .squeak-undo-resolved {
-        margin-left: .5rem;
+        font-size: .875em;
         font-weight: 600;
+        margin-left: .5rem;
     }
     .squeak-resolve-button, .squeak-unresolve-button, .squeak-resolve-text {
         font-size: .875em;
         font-weight: 600;
         z-index: 1;
+    }
+
+    .squeak-resolved-badge {
+        border-radius: calc(var(--squeak-border-radius) * .75);
+        border: 1px solid rgba(0, 130, 0, .8);
+        color: rgba(0, 130, 0, .8);
+        font-size: .688em;
+        font-weight: 600;
+        padding: .2rem .3rem;
+        text-transform: uppercase;
     }
 
     .squeak-locked-message {
@@ -588,14 +609,6 @@ export const Theme = createGlobalStyle`
             color: rgba(var(--squeak-primary-color), .6);
             font-size: .875em;
         }
-    }
-
-    .squeak-resolved-badge {
-        font-size: .75em;
-        border-radius: var(--squeak-border-radius);
-        padding: 0.25rem;
-        border: 1px solid rgba(0, 130, 0, .8);
-        color: rgba(0, 130, 0, .8);
     }
 }
 `

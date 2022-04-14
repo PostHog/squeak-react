@@ -131,7 +131,7 @@ const SignIn = ({ setMessage, handleMessageSubmit, formValues, supabase }) => {
               style={loading || !isValid ? { opacity: '.5' } : {}}
               type='submit'
             >
-              Login & post question
+              Login & post
             </button>
           </Form>
         )
