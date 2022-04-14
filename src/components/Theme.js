@@ -1,16 +1,14 @@
 import { createGlobalStyle } from 'styled-components'
-import reset from 'styled-reset'
 export const Theme = createGlobalStyle`
-:root {
-  --squeak-button-color: 29, 74, 255;
-  --squeak-primary-color: ${(props) =>
-    props.dark ? '255, 255, 255' : '0, 0, 0'};
+:host {
+    --squeak-button-color: 29, 74, 255;
+    --squeak-primary-color: ${(props) =>
+      props.dark ? '255, 255, 255' : '0, 0, 0'};
     --squeak-thread-border-style: dashed;
-    --squeak-font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Ubuntu, roboto, noto, arial, sans-serif;
+    all: initial;
+    font-family: inherit;
   }
 .squeak {
-    ${reset}
-
     *:not(pre *) {
         box-sizing: border-box;
         font-family: var(--squeak-font-family);
