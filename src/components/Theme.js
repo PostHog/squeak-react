@@ -167,8 +167,8 @@ export const Theme = createGlobalStyle`
 
     .squeak-post-preview-container h3 {
         margin: 0 0 0.5rem 0;
-        font-size: 16px;
-        font-weight: bold;
+        font-size: .933rem;
+        font-weight: 600;
     }
 
     .squeak-post-preview-container {
@@ -211,14 +211,14 @@ export const Theme = createGlobalStyle`
         margin-bottom: 1.5rem;
     }
 
-    // affects questions and replies
+    // affects questions (and FORMERLY replies)
     .squeak-post {
         display: flex;
         flex-direction: column;
-    }
 
-    .squeak-post p {
-        margin-bottom: 0;
+        p {
+            margin-bottom: 0;
+        }
     }
 
     .squeak-post-author {
@@ -228,40 +228,50 @@ export const Theme = createGlobalStyle`
         > span:last-of-type {
             display: flex;
         }
+
+        strong {
+            margin-left: calc(8px + 5px);
+        }
     }
 
     // add left margin to all elements that aren't the avatar
     .squeak-post-author strong {
-        margin-left: calc(8px + 5px);
     }
     .squeak-post-author span {
         margin-left: .5rem;
     }
     
-
     button.squeak-reply-skeleton {
         border: solid 1.5px rgba(var(--squeak-primary-color), .3);
         padding: 15px;
         flex: 1;
         text-align: left;
 
+        span {
+            color: rgba(var(--squeak-primary-color), .6);
+
+            strong {
+                color: rgba(var(--squeak-primary-color), .65);
+                font-weight: bold;
+                text-decoration: underline;
+            }
+        }
+
         &:hover {
             border: solid 1.5px rgba(var(--squeak-primary-color), .5);
-        }
-    }
+            
+            span {
+                color: rgba(var(--squeak-primary-color), .7);
 
-    .squeak-reply-skeleton span {
-        color: rgba(var(--squeak-primary-color), .6);
+                strong {
+                    color: rgba(var(--squeak-primary-color), .75);
+                }
+            }
+        }
     }
 
     button:hover .squeak-reply-skeleton strong {
         color: rgba(var(--squeak-primary-color), .9);
-    }
-
-    .squeak-reply-skeleton strong {
-        color: rgba(var(--squeak-primary-color), .7);
-        font-weight: bold;
-        text-decoration: underline;
     }
 
     .squeak-form-frame {
@@ -281,48 +291,49 @@ export const Theme = createGlobalStyle`
     }
 
     .squeak-post h3 {
-        font-size: 1.1rem;
-        font-weight: bold;
+        font-size: 1rem;
+        font-weight: 600;
         margin: 0;
         padding-bottom: .25rem;
     }
 
+    // replies styling only
+
     .squeak-replies {
         margin-left: 20px;
-    }
 
-    .squeak-replies li {
-        padding: 10px 5px 10px calc(25px + 8px);
-    }
+        li {
+            padding: 10px 5px 10px calc(25px + 8px);
+            position: relative;
 
-    // replies styling only
-    .squeak-replies li .squeak-post {
+            .squeak-post {
 
-    }
+            }
 
-    .squeak-replies li .squeak-post-author strong {
-        margin-left: 8px;
-    }
+            .squeak-post-author {
+                strong {
+                    font-weight: 600;
+                    margin-left: 8px;
+                }
+            }
 
-    .squeak-replies li .squeak-post-content {
-        border-left: 0;
-        margin-left: calc(25px + 8px); // avatar + avatar right margin
-        padding-left: 0;
-        padding-bottom: .25rem;
-    }
+            .squeak-post-content {
+                border-left: 0;
+                margin-left: calc(25px + 8px); // avatar + avatar right margin
+                padding-left: 0;
+                padding-bottom: .25rem;
+            }
+        }
 
-    .squeak-replies li {
-        position: relative;
-    }
+        // left border on replies
+        &:not(.squeak-thread-resolved) li {
+            border-left: 1px var(--squeak-thread-border-style) rgba(var(--squeak-primary-color), .4);
 
-    // left border on replies
-    .squeak-replies:not(.squeak-thread-resolved) li {
-        border-left: 1px var(--squeak-thread-border-style) rgba(var(--squeak-primary-color), .4);
-    }
-
-    // don't show left border inside, since parent has border
-    .squeak-replies:not(.squeak-thread-resolved) li:before {
-        border-left: none;
+            // don't show left border inside, since parent has border
+            &:before {
+                border-left: none;
+            }
+        }
     }
 
     // left border and curved line on replies
@@ -362,26 +373,26 @@ export const Theme = createGlobalStyle`
     }
 
     .squeak-post-markdown {
-        font-size: 1rem;
+        font-size: .933rem;
         line-height: 1.4;
-    }
 
-    .squeak-post-markdown p {
-        margin-top: 0;
-    }
+        p {
+            margin-top: 0;
+        }
 
-    .squeak-post-markdown a {
-        color: rgba(var(--squeak-button-color), 1);
-        text-decoration: none;
-    }
+        a {
+            color: rgba(var(--squeak-button-color), 1);
+            text-decoration: none;
+        }
 
-    .squeak-post-markdown pre {
-        border-radius: 5px;
-        font-size: 14px;
-        margin: 0.75rem 0;
-        max-height: 450px;
-        overflow: scroll;
-        padding: 1rem;
+        pre {
+            border-radius: 5px;
+            font-size: 14px;
+            margin: 0.75rem 0;
+            max-height: 450px;
+            overflow: scroll;
+            padding: 1rem;
+        }
     }
 
     .squeak-reply-form-container {
@@ -425,11 +436,11 @@ export const Theme = createGlobalStyle`
         color: rgba(var(--squeak-primary-color), .3) !important;
         display: flex;
         font-size: .8rem;
-    }
 
-    .squeak-by-line a {
-        display: flex;
-        margin-left: .2rem;
+        a {
+            display: flex;
+            margin-left: .2rem;
+        }
     }
 
     .squeak-logout-button {
@@ -439,14 +450,23 @@ export const Theme = createGlobalStyle`
         opacity: 0.5;
         cursor: pointer;
         transition: opacity 0.2s;
-    }
 
-    .squeak-logout-button:hover {
-        opacity: 1;
+        &:hover {
+            opacity: 1;
+        }
     }
 
     .squeak-markdown-logo {
+        line-height: 0;
         margin: 0 .5rem 0 0;
+
+        a {
+            color: rgba(var(--squeak-primary-color), .3);
+
+            &:hover {
+                color: rgba(var(--squeak-primary-color), .4);
+            }
+        }
     }
 
     .squeak-form-frame {
@@ -478,28 +498,32 @@ export const Theme = createGlobalStyle`
         list-style: none;
         padding: 0;
         margin: 0 0 0 0.5rem;
-    }
+        
+        button {
+            align-items: center;
+            background: none;
+            border: none;
+            border-radius: 3px;
+            color: rgba(var(--squeak-primary-color), .4);
+            cursor: pointer;
+            display: flex;
+            height: 32px;
+            justify-content: center;
+            margin: 0;
+            opacity: 1;
+            padding: 0;
+            width: 32px;
 
-    .squeak-form-richtext-buttons button {
-        align-items: center;
-        background: none;
-        border: none;
-        border-radius: 3px;
-        color: rgba(var(--squeak-primary-color), .3);
-        cursor: pointer;
-        display: flex;
-        height: 32px;
-        justify-content: center;
-        margin: 0;
-        opacity: .5;
-        padding: 0;
-        width: 32px;
-    }
+            &:hover {
+                background: rgba(var(--squeak-primary-color), .1);
+                color: rgba(var(--squeak-primary-color), .75);
+            }
 
-    .squeak-form-richtext-buttons button:hover {
-        background: rgba(var(--squeak-primary-color), .1);
-        color: rgba(var(--squeak-primary-color), .3);
-        opacity: .9;
+            &:active {
+                background: rgba(var(--squeak-primary-color), .2);
+                color: rgba(var(--squeak-primary-color), 1);
+            }
+        }
     }
 
     .squeak-forgot-password {
