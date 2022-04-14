@@ -1,6 +1,7 @@
 import { Field, Form, Formik } from 'formik'
 import getGravatar from 'gravatar'
 import React, { useEffect, useRef, useState } from 'react'
+import Avatar from './Avatar'
 import Markdown from './Markdown'
 
 const ForgotPassword = ({ setMessage, setParentView, supabase }) => {
@@ -335,13 +336,18 @@ export default function Authentication({
 
   return (
     <div>
+      <Avatar />
       {formValues && (
         <div className='squeak-post-preview-container'>
-          {formValues?.subject && <h3>{formValues.subject}</h3>}
-          <Markdown>{formValues.question}</Markdown>
-          <button onClick={() => setParentView('question-form')}>
-            Edit post
-          </button>
+          <div className='squeak-post-preview'>
+            {formValues?.subject && <h3>{formValues.subject}</h3>}
+            <Markdown>{formValues.question}</Markdown>
+          </div>
+          <div className='squeak-button-container'>
+            <button onClick={() => setParentView('question-form')}>
+              Edit post
+            </button>
+          </div>
         </div>
       )}
       <div className='squeak-authentication-form-container'>
