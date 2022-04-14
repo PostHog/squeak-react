@@ -289,10 +289,10 @@ export const Theme = createGlobalStyle`
     }
 
     .squeak-author-badge {
-        font-size: .75em;
-        border-radius: var(--squeak-border-radius);
-        padding: 0.25rem;
         border: 1px solid rgba(var(--squeak-primary-color), .3);
+        border-radius: calc(var(--squeak-border-radius) * .75);
+        font-size: .75em;
+        padding: .2rem .3rem;
     }
 
     .squeak-post h3 {
@@ -590,7 +590,7 @@ export const Theme = createGlobalStyle`
 
     .squeak-resolved-badge {
         border-radius: calc(var(--squeak-border-radius) * .75);
-        border: 1px solid rgba(0, 130, 0, .8);
+        border: 1.5px solid rgba(0, 130, 0, .8);
         color: rgba(0, 130, 0, .8);
         font-size: .688em;
         font-weight: 600;
