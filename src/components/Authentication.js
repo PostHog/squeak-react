@@ -376,51 +376,53 @@ export default function Authentication({
               className={`squeak-authentication-navigation-rail ${view}`}
             />
           </div>
-          {
+          <div className='squeak-authentication-form-wrapper'>
             {
-              'sign-in': (
-                <SignIn
-                  supabase={supabase}
-                  formValues={formValues}
-                  handleMessageSubmit={handleMessageSubmit}
-                  setMessage={setMessage}
-                />
-              ),
-              'sign-up': (
-                <SignUp
-                  supabase={supabase}
-                  formValues={formValues}
-                  handleMessageSubmit={handleMessageSubmit}
-                  setMessage={setMessage}
-                  organizationId={organizationId}
-                  apiHost={apiHost}
-                />
-              ),
-              'forgot-password': (
-                <ForgotPassword
-                  supabase={supabase}
-                  setParentView={setParentView}
-                  setMessage={setMessage}
-                />
-              ),
-              'reset-password': (
-                <ResetPassword
-                  supabase={supabase}
-                  setParentView={setParentView}
-                  setMessage={setMessage}
-                />
-              )
-            }[view]
-          }
-          {view !== 'forgot-password' && view !== 'reset-password' && (
-            <button
-              onClick={handleForgotPassword}
-              className='squeak-forgot-password'
-            >
-              Forgot password
-            </button>
-          )}
-          {message && <p>{message}</p>}
+              {
+                'sign-in': (
+                  <SignIn
+                    supabase={supabase}
+                    formValues={formValues}
+                    handleMessageSubmit={handleMessageSubmit}
+                    setMessage={setMessage}
+                  />
+                ),
+                'sign-up': (
+                  <SignUp
+                    supabase={supabase}
+                    formValues={formValues}
+                    handleMessageSubmit={handleMessageSubmit}
+                    setMessage={setMessage}
+                    organizationId={organizationId}
+                    apiHost={apiHost}
+                  />
+                ),
+                'forgot-password': (
+                  <ForgotPassword
+                    supabase={supabase}
+                    setParentView={setParentView}
+                    setMessage={setMessage}
+                  />
+                ),
+                'reset-password': (
+                  <ResetPassword
+                    supabase={supabase}
+                    setParentView={setParentView}
+                    setMessage={setMessage}
+                  />
+                )
+              }[view]
+            }
+            {view !== 'forgot-password' && view !== 'reset-password' && (
+              <button
+                onClick={handleForgotPassword}
+                className='squeak-forgot-password'
+              >
+                Forgot password
+              </button>
+            )}
+            {message && <p>{message}</p>}
+          </div>
         </div>
       </div>
     </div>
