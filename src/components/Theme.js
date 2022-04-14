@@ -104,14 +104,14 @@ export const Theme = createGlobalStyle`
             }
 
             .squeak-authentication-form-wrapper {
-                padding: 1.5rem;
+                padding: 1.5rem 1.5rem .5rem;
             }
         }
 
         h4 {
-            margin: 0 0 0.75rem 0;
-            font-size: .875em;
-            opacity: 0.4;
+            margin: 0 0 0.75rem;
+            font-size: 1em;
+            text-align: center;
         }
     }
 
@@ -193,10 +193,10 @@ export const Theme = createGlobalStyle`
         display: flex;
         padding: .7rem 1rem;
         border-radius: var(--squeak-border-radius);
-        margin-bottom: 2rem;
+        margin-bottom: 1rem;
 
         .squeak-post-preview {
-            align-items: center;
+            align-items: baseline;
             display: flex;
             flex: 1;
             min-width: 0;
@@ -209,20 +209,22 @@ export const Theme = createGlobalStyle`
         }
 
         h3 {
+            flex: 0 auto;
             font-size: 1em;
             font-weight: 700;
             margin: 0 .5em 0 0;
         }
 
-        p {
-            margin: 0;
-        }
-
         .squeak-post-markdown {
+            flex: 1;
             font-size: .875em;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+
+            p {
+                margin: 0;
+            }
         }
 
         .squeak-button-container {

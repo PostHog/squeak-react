@@ -67,7 +67,10 @@ export default function Question({
             )
 
             return (
-              <li key={reply.id}>
+              <li 
+                key={reply.id}
+                className='squeak-solution'
+              >
                 <Reply
                   className='squeak-post-reply'
                   resolved={resolved}

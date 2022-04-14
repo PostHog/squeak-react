@@ -351,7 +351,7 @@ export default function Authentication({
         </div>
       )}
       <div className='squeak-authentication-form-container'>
-        <h4>Sign in to post</h4>
+        <h4>Please login to post</h4>
         <div className='squeak-authentication-form'>
           <div className='squeak-authentication-navigation'>
             <button
