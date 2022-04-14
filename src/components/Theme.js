@@ -224,23 +224,21 @@ export const Theme = createGlobalStyle`
     .squeak-post-author {
         align-items: center;
         display: flex;
-        padding-bottom: .25rem;
         > span:last-of-type {
             display: flex;
         }
 
         strong {
+            font-weight: 600;
             margin-left: calc(8px + 5px);
+        }
+
+        // add left margin to all elements that aren't the avatar
+        span {
+            margin-left: .5rem;
         }
     }
 
-    // add left margin to all elements that aren't the avatar
-    .squeak-post-author strong {
-    }
-    .squeak-post-author span {
-        margin-left: .5rem;
-    }
-    
     button.squeak-reply-skeleton {
         border: solid 1.5px rgba(var(--squeak-primary-color), .3);
         padding: 15px;
@@ -311,6 +309,8 @@ export const Theme = createGlobalStyle`
             }
 
             .squeak-post-author {
+                padding-bottom: .25rem;
+                
                 strong {
                     font-weight: 600;
                     margin-left: 8px;
