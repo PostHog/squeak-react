@@ -2,28 +2,44 @@ import { createGlobalStyle } from 'styled-components'
 import reset from 'styled-reset'
 export const Theme = createGlobalStyle`
 :root {
-  --squeak-button-color: #f54e00;
+  --squeak-button-color: 29, 74, 255;
   --squeak-primary-color: ${(props) =>
     props.dark ? '255, 255, 255' : '0, 0, 0'};
     --squeak-thread-border-style: dashed;
+    --squeak-font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Ubuntu, roboto, noto, arial, sans-serif;
   }
 .squeak {
     ${reset}
 
     *:not(pre *) {
-        color: rgba(var(--squeak-primary-color), 1);
         box-sizing: border-box;
-        font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Ubuntu, roboto, noto, arial, sans-serif;
+        font-family: var(--squeak-font-family);
     }
     
     button {
         background: transparent;
-        border: solid 1.5px rgba(var(--squeak-primary-color), .3);
+        border: solid 1.5px rgba(var(--squeak-button-color), .85);
         border-radius: 5px;
+        color: rgba(var(--squeak-button-color), .85);
         cursor: pointer;
         font-size: .933rem;
         font-weight: 500;
-        padding: 0.75rem 1.25rem;
+        padding: 0.6rem 1rem;
+
+        &:hover {
+            border: solid 1.5px rgba(var(--squeak-button-color), .9);
+            color: rgba(var(--squeak-button-color), .9);
+        }
+
+        &:active {
+            border: solid 1.5px rgba(var(--squeak-button-color), 1);
+            color: rgba(var(--squeak-button-color), 1);
+        }
+
+        &[disabled] {
+            border: solid 1.5px rgba(var(--squeak-primary-color), .2);
+            color: rgba(var(--squeak-primary-color), .5);
+        }
     }
 
     .squeak-form input {
@@ -31,7 +47,7 @@ export const Theme = createGlobalStyle`
         padding: 0;
         border: none;
         font-size: 16px;
-        font-weight: 900;
+        font-weight: 700;
         padding: 0.75rem 1rem;
         border-bottom: 1px solid rgba(var(--squeak-primary-color), .3);
         background: transparent;
@@ -73,7 +89,7 @@ export const Theme = createGlobalStyle`
     }
 
     .squeak-authentication-form button.active {
-        color: var(--squeak-button-color);
+        color: rgba(var(--squeak-button-color), 1);
     }
 
     .squeak-authentication-form input {
@@ -112,7 +128,7 @@ export const Theme = createGlobalStyle`
         position: absolute;
         height: 3px;
         width: 50%;
-        background: var(--squeak-button-color);
+        background: rgba(var(--squeak-button-color), 1);
         bottom: 0;
         transition: all 0.2s;
         left: 0;
@@ -167,7 +183,7 @@ export const Theme = createGlobalStyle`
     .squeak-post-preview-container button {
         font-size: 14px;
         font-weight: bold;
-        color: var(--squeak-button-color);
+        color: rgba(var(--squeak-button-color), 1);
         background: none;
         border: none;
         padding: 0;
@@ -208,6 +224,7 @@ export const Theme = createGlobalStyle`
     .squeak-post-author {
         align-items: center;
         display: flex;
+        padding-bottom: .25rem;
         > span:last-of-type {
             display: flex;
         }
@@ -223,12 +240,27 @@ export const Theme = createGlobalStyle`
     
 
     button.squeak-reply-skeleton {
+        border: solid 1.5px rgba(var(--squeak-primary-color), .3);
         padding: 15px;
         flex: 1;
         text-align: left;
+
+        &:hover {
+            border: solid 1.5px rgba(var(--squeak-primary-color), .5);
+        }
     }
 
     .squeak-reply-skeleton span {
+        color: rgba(var(--squeak-primary-color), .6);
+    }
+
+    button:hover .squeak-reply-skeleton strong {
+        color: rgba(var(--squeak-primary-color), .9);
+    }
+
+    .squeak-reply-skeleton strong {
+        color: rgba(var(--squeak-primary-color), .7);
+        font-weight: bold;
         text-decoration: underline;
     }
 
@@ -339,7 +371,7 @@ export const Theme = createGlobalStyle`
     }
 
     .squeak-post-markdown a {
-        color: var(--squeak-button-color);
+        color: rgba(var(--squeak-button-color), 1);
         text-decoration: none;
     }
 
@@ -377,10 +409,6 @@ export const Theme = createGlobalStyle`
         }
     }
 
-    .squeak-ask-button {
-        margin: 0 !important;
-    }
-
     .squeak-reply-buttons {
         align-items: center;
         display: flex;
@@ -390,10 +418,6 @@ export const Theme = createGlobalStyle`
 
     .squeak-post-button {
         margin-top: 0 !important;
-    }
-
-    .squeak-form .squeak-reply-buttons {
-        margin-top: 1.25rem;
     }
 
     .squeak-by-line {
@@ -425,10 +449,14 @@ export const Theme = createGlobalStyle`
         margin: 0 .5rem 0 0;
     }
 
+    .squeak-form-frame {
+        margin-bottom: 1rem;
+    }
+
     .squeak-form-richtext-buttons-container {
+        align-items: center;
         display: flex;
         justify-content: space-between;
-        align-items: center;
         padding: 0.25rem 0;
     }
 
@@ -438,7 +466,7 @@ export const Theme = createGlobalStyle`
         background: transparent;
         border: none;
         font-size: 14px;
-        height: 200px;
+        height: 150px;
         padding: 0.75rem 1rem;
         resize: none;
         width: 100%;
@@ -483,7 +511,7 @@ export const Theme = createGlobalStyle`
     .squeak-return-to-post {
         background: none;
         border: none;
-        color: var(--squeak-button-color);
+        color: rgba(var(--squeak-button-color), 1);
         cursor: pointer;
         font-size: inherit;
         font-weight: 600;
@@ -495,7 +523,7 @@ export const Theme = createGlobalStyle`
         background: none;
         border: none;
         padding: 0;
-        color: var(--squeak-button-color);
+        color: rgba(var(--squeak-button-color), 1);
         cursor: pointer;
     }
     .squeak-resolve-button {
@@ -512,8 +540,17 @@ export const Theme = createGlobalStyle`
     }
 
     .squeak-locked-message {
+        background: rgba(var(--squeak-primary-color), .03);
+        border: 1px solid rgba(var(--squeak-primary-color), .1);
+        border-radius: 5px;
         margin-bottom: 0;
-        margin-top: 1rem;
+        padding: .75rem .5rem;
+        text-align: center;
+
+        p {
+            color: rgba(var(--squeak-primary-color), .6);
+            font-size: .875rem;
+        }
     }
 
     .squeak-resolved-badge {

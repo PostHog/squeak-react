@@ -86,8 +86,8 @@ export default function Question({
         </ul>
       )}
       {resolved ? (
-        <div className='squeak-post-preview-container squeak-locked-message'>
-          <p>This thread has been marked as resolved.</p>
+        <div className='squeak-locked-message'>
+          <p>This thread has been closed.</p>
         </div>
       ) : (
         <div className='squeak-reply-form-container'>

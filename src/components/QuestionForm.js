@@ -40,7 +40,7 @@ function QuestionForm({
         {({ setFieldValue, isValid }) => {
           return (
             <Form className='squeak-form'>
-              <div>
+              <div className='squeak-form-frame'>
                 {subject && (
                   <Field
                     required
@@ -95,7 +95,7 @@ export default function ({
   const [formValues, setFormValues] = useState(null)
   const [view, setView] = useState(null)
   const [loading, setLoading] = useState(false)
-  const buttonText = formType === 'question' ? 'Ask a question' : 'Reply'
+  const buttonText = formType === 'question' ? <span>Ask a question</span> : <span className='squeak-reply-label'><strong>Reply</strong>  to question</span>
 
   useEffect(() => {
     if (authState === 'PASSWORD_RECOVERY') {
@@ -194,9 +194,7 @@ export default function ({
         }
         onClick={() => setView('question-form')}
       >
-        <span>
-          {buttonText} {formType === 'reply' && 'to question'}
-        </span>
+        {buttonText}
       </button>
       {formType === 'question' && user && (
         <button
