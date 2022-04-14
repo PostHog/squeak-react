@@ -1,15 +1,14 @@
 import { createGlobalStyle } from 'styled-components'
-import reset from 'styled-reset'
 export const Theme = createGlobalStyle`
-:root {
-  --squeak-button-color: #f54e00;
-  --squeak-primary-color: ${(props) =>
-    props.dark ? '255, 255, 255' : '0, 0, 0'};
+:host {
+    --squeak-button-color: #f54e00;
+    --squeak-primary-color: ${(props) =>
+      props.dark ? '255, 255, 255' : '0, 0, 0'};
     --squeak-thread-border-style: dashed;
+    all: initial;
+    font-family: inherit;
   }
 .squeak {
-    ${reset}
-
     *:not(pre *) {
         color: rgba(var(--squeak-primary-color), 1);
         box-sizing: border-box;
