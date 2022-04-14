@@ -1,15 +1,15 @@
 import { createGlobalStyle } from 'styled-components'
 export const Theme = createGlobalStyle`
 :host {
-    --squeak-button-color: 29, 74, 255;
+    --squeak-button-color: 29, 74, 255; // rgb triplets, no hex
     --squeak-primary-color: ${(props) =>
-      props.dark ? '255, 255, 255' : '0, 0, 0'};
-      --squeak-border-radius: .25rem;
+      props.dark ? '255, 255, 255' : '0, 0, 0'}; // rgb triplets, no hex
+      --squeak-border-radius: .25rem; // adjusts all radii
       --squeak-base-font-size: 16px;
-      --squeak-thread-border-style: dashed;
+      --squeak-thread-border-style: dashed; // css border style
+      --squeak-input-background-color: #fff; // hex
     all: initial;
     font-family: inherit;
-    
   }
 
 .squeak {
@@ -21,7 +21,7 @@ export const Theme = createGlobalStyle`
     }
     
     button {
-        background: transparent;
+        background: var(--squeak-input-background-color);
         border: solid 1.5px rgba(var(--squeak-button-color), .85);
         border-radius: var(--squeak-border-radius);
         color: rgba(var(--squeak-button-color), .85);
@@ -41,20 +41,26 @@ export const Theme = createGlobalStyle`
         }
 
         &[disabled] {
+            background: transparent;
             border: solid 1.5px rgba(var(--squeak-primary-color), .2);
             color: rgba(var(--squeak-primary-color), .5);
         }
     }
 
+    input {
+        background: var(--squeak-input-background-color);
+    }
+
     .squeak-form input {
-        width: 100%;
-        padding: 0;
-        border: none;
+        background: var(--squeak-input-background-color);
+        border-top: none;
+        border-right: none;
+        border-bottom: 1px solid rgba(var(--squeak-primary-color), .3);
+        border-left: none;
         font-size: 1em;
         font-weight: 700;
         padding: 0.75rem 1rem;
-        border-bottom: 1px solid rgba(var(--squeak-primary-color), .3);
-        background: transparent;
+        width: 100%;
     }
 
     .squeak-form > div,
@@ -102,13 +108,12 @@ export const Theme = createGlobalStyle`
     }
 
     .squeak-authentication-form input {
+        border-radius: var(--squeak-border-radius);
         border: 1px solid rgba(var(--squeak-primary-color), .3);
+        display: block;
         font-size: .875em;
         padding: 0.75rem 1rem;
-        border-radius: var(--squeak-border-radius);
-        display: block;
         width: 100%;
-        background: transparent;
     }
 
     .squeak-authentication-form label {
@@ -481,14 +486,18 @@ export const Theme = createGlobalStyle`
 
     // UI elements
 
-    .squeak-form-richtext textarea {
-        background: transparent;
-        border: none;
-        font-size: .875em;
-        height: 150px;
-        padding: 0.75rem 1rem;
-        resize: none;
-        width: 100%;
+    .squeak-form-richtext {
+        background: var(--squeak-input-background-color);
+
+        textarea {
+            background: transparent;
+            border: none;
+            font-size: .875em;
+            height: 150px;
+            padding: 0.75rem 1rem;
+            resize: none;
+            width: 100%;
+        }
     }
 
     .squeak-form-richtext-buttons {
@@ -526,9 +535,15 @@ export const Theme = createGlobalStyle`
     }
 
     .squeak-forgot-password {
-        background: none !important;
+        background: transparent;
         color: rgba(var(--squeak-primary-color), .3) !important;
-        margin-top: 0.5rem !important;
+        border-color: transparent;
+        margin-top: 0.5rem;
+
+        &:hover,
+        &:active {
+            border-color: transparent;
+        }
     }
 
     .squeak-return-to-post {
