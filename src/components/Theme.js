@@ -201,27 +201,19 @@ export const Theme = createGlobalStyle`
         list-style: none;
     }
 
-    .squeak-questions > li {
-        padding: 1.25rem 0;
-        border-bottom: 1px solid rgba(var(--squeak-primary-color), .3);
-    }
-
-    .squeak-questions > li > div > .squeak-post:first-of-type {
-        margin-top: 0;
-    }
-
     .squeak-questions {
         margin-bottom: 1.5rem;
+
+        > li {
+            padding: 1.25rem 0;
+            border-bottom: 1px solid rgba(var(--squeak-primary-color), .3);
+        }
     }
 
     // affects questions (and FORMERLY replies)
     .squeak-post {
         display: flex;
         flex-direction: column;
-
-        p {
-            margin-bottom: 0;
-        }
     }
 
     .squeak-post-author {
@@ -304,7 +296,7 @@ export const Theme = createGlobalStyle`
         margin-left: 20px;
 
         li {
-            padding: 10px 5px 10px calc(25px + 8px);
+            padding: 0 5px 0 calc(25px + 8px);
             position: relative;
 
             .squeak-post {
@@ -346,7 +338,7 @@ export const Theme = createGlobalStyle`
         border-bottom: 1px var(--squeak-thread-border-style) rgba(var(--squeak-primary-color), .4);
         border-bottom-left-radius: 6px;
         content: '';
-        height: 22px;
+        height: 13px;
         left: 0;
         position: absolute;
         top: 0;
@@ -372,7 +364,6 @@ export const Theme = createGlobalStyle`
         margin-left: 20px;
         border-left: 1px var(--squeak-thread-border-style) rgba(var(--squeak-primary-color), .4);
         padding-left: calc(25px + 8px);
-        padding-bottom: .5rem;
     }
 
     .squeak-post-markdown {
@@ -402,7 +393,6 @@ export const Theme = createGlobalStyle`
         margin-left: 20px;
         padding-right: 20px;
         padding-left: calc(25px + 8px);
-        padding-top: 10px;
         position: relative;
         display: flex;
         width: 100%;
@@ -571,7 +561,6 @@ export const Theme = createGlobalStyle`
         border: 1px solid rgba(var(--squeak-primary-color), .1);
         border-radius: 5px;
         margin-bottom: 0;
-        padding: .75rem .5rem;
         text-align: center;
 
         p {
