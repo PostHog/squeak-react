@@ -4,13 +4,16 @@ import React, { useEffect, useRef, useState } from 'react'
 import Avatar from './Avatar'
 import Markdown from './Markdown'
 
-const ForgotPassword = ({ setMessage, setParentView, supabase }) => {
+const ForgotPassword = ({ setMessage, setParentView, supabase, apiHost }) => {
   const [loading, setLoading] = useState(false)
   const [emailSent, setEmailSent] = useState(false)
   const handleSubmit = async (values) => {
     setLoading(true)
     const { error } = await supabase.auth.api.resetPasswordForEmail(
-      values.email
+      values.email,
+      {
+        redirectTo: `${apiHost}/reset-password`
+      }
     )
     if (error) {
       setMessage(error.message)
@@ -407,6 +410,7 @@ export default function Authentication({
                     supabase={supabase}
                     setParentView={setParentView}
                     setMessage={setMessage}
+                    apiHost={apiHost}
                   />
                 ),
                 'reset-password': (
