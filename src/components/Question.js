@@ -67,9 +67,9 @@ export default function Question({
             )
 
             return (
-              <li 
+              <li
                 key={reply.id}
-                className='squeak-solution'
+                className={resolvedBy === reply.id ? 'squeak-solution' : ''}
               >
                 <Reply
                   className='squeak-post-reply'
