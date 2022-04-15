@@ -351,7 +351,10 @@ export default function Authentication({
         </div>
       )}
       <div className='squeak-authentication-form-container'>
-        <h4>Please login to post</h4>
+        <div className='squeak-authentication-form-message'>
+          <h4>Please signup to post.</h4>
+          <p>Create an account to ask questions &amp; help others.</p>
+        </div>
         <div className='squeak-authentication-form'>
           <div className='squeak-authentication-navigation'>
             <button
@@ -377,6 +380,8 @@ export default function Authentication({
             />
           </div>
           <div className='squeak-authentication-form-wrapper'>
+            {message && <p class='squeak-auth-error'>{message}</p>}
+
             {
               {
                 'sign-in': (
@@ -421,7 +426,6 @@ export default function Authentication({
                 Forgot password
               </button>
             )}
-            {message && <p>{message}</p>}
           </div>
         </div>
       </div>

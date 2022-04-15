@@ -6,6 +6,7 @@ export const Theme = createGlobalStyle`
       props.dark ? '255, 255, 255' : '0, 0, 0'}; // rgb triplets, no hex
       --squeak-border-radius: .25rem; // adjusts all radii
       --squeak-base-font-size: 16px;
+      --squeak-warning-color: #FFF7E9; // hex
       --squeak-thread-border-style: dashed; // css border style
       --squeak-input-background-color: #fff; // hex
     all: initial;
@@ -70,9 +71,28 @@ export const Theme = createGlobalStyle`
     .squeak-authentication-form-container {
         margin-left: 50px;
 
+        .squeak-authentication-form-message {
+            background: var(--squeak-warning-color);
+            border: 1px solid rgba(var(--squeak-primary-color), .2);
+            border-bottom: none;
+            padding: 1rem;
+
+            h4 {
+                margin: 0;
+                font-size: 1em;
+                padding-bottom: .25em;
+            }
+
+            p {
+                font-size: .875em;
+                margin: 0;
+            }
+        }
+
         .squeak-authentication-form {
-            border: 1px solid rgba(var(--squeak-primary-color), .3);
-            border-radius: var(--squeak-border-radius);
+            border: 1px solid rgba(var(--squeak-primary-color), .2);
+            border-top: none;
+            border-radius: 0 0 var(--squeak-border-radius) var(--squeak-border-radius);
             overflow: hidden;
             position: relative;
 
@@ -107,12 +127,6 @@ export const Theme = createGlobalStyle`
                 padding: 1.5rem 1.5rem .5rem;
             }
         }
-
-        h4 {
-            margin: 0 0 0.75rem;
-            font-size: 1em;
-            text-align: center;
-        }
     }
 
     .squeak-authentication-form-name {
@@ -123,6 +137,7 @@ export const Theme = createGlobalStyle`
 
     .squeak-authentication-navigation {
         background: rgba(var(--squeak-primary-color),.03);
+        border-top: 1px solid rgba(var(--squeak-primary-color),.1);
         border-bottom: 1px solid rgba(var(--squeak-primary-color),.1);
         display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -190,10 +205,10 @@ export const Theme = createGlobalStyle`
     .squeak-post-preview-container {
         align-items: center;
         border: 1px solid rgba(var(--squeak-primary-color), .3);
+        border-bottom: none;
         display: flex;
         padding: .7rem 1rem;
-        border-radius: var(--squeak-border-radius);
-        margin-bottom: 1rem;
+        border-radius: var(--squeak-border-radius) var(--squeak-border-radius) 0 0;
 
         .squeak-post-preview {
             align-items: baseline;
@@ -619,6 +634,12 @@ export const Theme = createGlobalStyle`
         &:active {
             border-color: transparent;
         }
+    }
+
+    .squeak-auth-error {
+        background: var(--squeak-warning-color);
+        margin: -1.5rem -1.5rem 1.5rem;
+        padding: 1.5rem;
     }
 
     .squeak-return-to-post {
