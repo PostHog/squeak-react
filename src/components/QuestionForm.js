@@ -1,6 +1,7 @@
 import { Field, Form, Formik } from 'formik'
 import React, { useEffect, useState } from 'react'
 import { Approval } from './Approval'
+import Avatar from './Avatar'
 import Authentication from './Authentication'
 import Logo from './Logo'
 import RichText from './RichText'
@@ -40,39 +41,44 @@ function QuestionForm({
         {({ setFieldValue, isValid }) => {
           return (
             <Form className='squeak-form'>
-              <div className='squeak-form-frame'>
-                {subject && (
-                  <Field
-                    required
-                    id='subject'
-                    name='subject'
-                    placeholder='Title'
-                    maxLength='50'
-                  />
-                )}
-                <div className='squeak-form-richtext'>
-                  <RichText
-                    setFieldValue={setFieldValue}
-                    initialValue={initialValues?.question}
-                  />
+
+              <Avatar image={user?.profile?.avatar} />
+
+              <div className=''>
+                <div class='squeak-inputs-wrapper'>
+                  {subject && (
+                    <Field
+                      required
+                      id='subject'
+                      name='subject'
+                      placeholder='Title'
+                      maxLength='50'
+                    />
+                  )}
+                  <div className='squeak-form-richtext'>
+                    <RichText
+                      setFieldValue={setFieldValue}
+                      initialValue={initialValues?.question}
+                    />
+                  </div>
                 </div>
+                <span className='squeak-reply-buttons-row'>
+                  <button
+                    className='squeak-post-button'
+                    style={loading || !isValid ? { opacity: '.5' } : {}}
+                    disabled={loading || !isValid}
+                    type='submit'
+                  >
+                    {user ? 'Post' : 'Login & post'}
+                  </button>
+                  <div className='squeak-by-line'>
+                    by
+                    <a href='https://squeak.posthog.com?utm_source=post-form'>
+                      <Logo />
+                    </a>
+                  </div>
+                </span>
               </div>
-              <span className='squeak-reply-buttons'>
-                <button
-                  className='squeak-post-button'
-                  style={loading || !isValid ? { opacity: '.5' } : {}}
-                  disabled={loading || !isValid}
-                  type='submit'
-                >
-                  {user ? 'Post' : 'Preview post'}
-                </button>
-                <div className='squeak-by-line'>
-                  by
-                  <a href='https://squeak.posthog.com?utm_source=post-form'>
-                    <Logo />
-                  </a>
-                </div>
-              </span>
             </Form>
           )
         }}
@@ -188,6 +194,7 @@ export default function ({
     }[view]
   ) : (
     <div className='squeak-reply-buttons'>
+      <Avatar image={user?.profile?.avatar} />
       <button
         className={
           formType === 'reply' ? 'squeak-reply-skeleton' : 'squeak-ask-button'

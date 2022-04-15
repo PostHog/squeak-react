@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import Avatar from './Avatar'
 import QuestionForm from './QuestionForm'
 import Reply from './Reply'
 
@@ -68,7 +67,10 @@ export default function Question({
             )
 
             return (
-              <li key={reply.id}>
+              <li
+                key={reply.id}
+                className={resolvedBy === reply.id ? 'squeak-solution' : ''}
+              >
                 <Reply
                   className='squeak-post-reply'
                   resolved={resolved}
@@ -91,7 +93,6 @@ export default function Question({
         </div>
       ) : (
         <div className='squeak-reply-form-container'>
-          <Avatar image={user?.profile?.avatar} />
           <QuestionForm
             user={user}
             authState={authState}

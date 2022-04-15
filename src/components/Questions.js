@@ -16,7 +16,7 @@ export default function Questions({
   return (
     questions &&
     questions.length > 0 && (
-      <div>
+      <>
         <ul className='squeak-questions'>
           {questions.map((question) => {
             return (
@@ -37,7 +37,7 @@ export default function Questions({
             )
           })}
         </ul>
-      </div>
+      </>
     )
   )
 }

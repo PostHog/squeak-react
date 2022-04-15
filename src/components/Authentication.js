@@ -1,6 +1,7 @@
 import { Field, Form, Formik } from 'formik'
 import getGravatar from 'gravatar'
 import React, { useEffect, useRef, useState } from 'react'
+import Avatar from './Avatar'
 import Markdown from './Markdown'
 
 const ForgotPassword = ({ setMessage, setParentView, supabase }) => {
@@ -131,7 +132,7 @@ const SignIn = ({ setMessage, handleMessageSubmit, formValues, supabase }) => {
               style={loading || !isValid ? { opacity: '.5' } : {}}
               type='submit'
             >
-              Login & post question
+              Login & post
             </button>
           </Form>
         )
@@ -335,17 +336,25 @@ export default function Authentication({
 
   return (
     <div>
+      <Avatar />
       {formValues && (
         <div className='squeak-post-preview-container'>
-          {formValues?.subject && <h3>{formValues.subject}</h3>}
-          <Markdown>{formValues.question}</Markdown>
-          <button onClick={() => setParentView('question-form')}>
-            Edit post
-          </button>
+          <div className='squeak-post-preview'>
+            {formValues?.subject && <h3>{formValues.subject}</h3>}
+            <Markdown>{formValues.question}</Markdown>
+          </div>
+          <div className='squeak-button-container'>
+            <button onClick={() => setParentView('question-form')}>
+              Edit post
+            </button>
+          </div>
         </div>
       )}
       <div className='squeak-authentication-form-container'>
-        <h4>Sign in to post</h4>
+        <div className='squeak-authentication-form-message'>
+          <h4>Please signup to post.</h4>
+          <p>Create an account to ask questions &amp; help others.</p>
+        </div>
         <div className='squeak-authentication-form'>
           <div className='squeak-authentication-navigation'>
             <button
@@ -370,51 +379,54 @@ export default function Authentication({
               className={`squeak-authentication-navigation-rail ${view}`}
             />
           </div>
-          {
+          <div className='squeak-authentication-form-wrapper'>
+            {message && <p class='squeak-auth-error'>{message}</p>}
+
             {
-              'sign-in': (
-                <SignIn
-                  supabase={supabase}
-                  formValues={formValues}
-                  handleMessageSubmit={handleMessageSubmit}
-                  setMessage={setMessage}
-                />
-              ),
-              'sign-up': (
-                <SignUp
-                  supabase={supabase}
-                  formValues={formValues}
-                  handleMessageSubmit={handleMessageSubmit}
-                  setMessage={setMessage}
-                  organizationId={organizationId}
-                  apiHost={apiHost}
-                />
-              ),
-              'forgot-password': (
-                <ForgotPassword
-                  supabase={supabase}
-                  setParentView={setParentView}
-                  setMessage={setMessage}
-                />
-              ),
-              'reset-password': (
-                <ResetPassword
-                  supabase={supabase}
-                  setParentView={setParentView}
-                  setMessage={setMessage}
-                />
-              )
-            }[view]
-          }
-          {view !== 'forgot-password' && view !== 'reset-password' && (
-            <button
-              onClick={handleForgotPassword}
-              className='squeak-forgot-password'
-            >
-              Forgot password
-            </button>
-          )}
-          {message && <p>{message}</p>}
+              {
+                'sign-in': (
+                  <SignIn
+                    supabase={supabase}
+                    formValues={formValues}
+                    handleMessageSubmit={handleMessageSubmit}
+                    setMessage={setMessage}
+                  />
+                ),
+                'sign-up': (
+                  <SignUp
+                    supabase={supabase}
+                    formValues={formValues}
+                    handleMessageSubmit={handleMessageSubmit}
+                    setMessage={setMessage}
+                    organizationId={organizationId}
+                    apiHost={apiHost}
+                  />
+                ),
+                'forgot-password': (
+                  <ForgotPassword
+                    supabase={supabase}
+                    setParentView={setParentView}
+                    setMessage={setMessage}
+                  />
+                ),
+                'reset-password': (
+                  <ResetPassword
+                    supabase={supabase}
+                    setParentView={setParentView}
+                    setMessage={setMessage}
+                  />
+                )
+              }[view]
+            }
+            {view !== 'forgot-password' && view !== 'reset-password' && (
+              <button
+                onClick={handleForgotPassword}
+                className='squeak-forgot-password'
+              >
+                Forgot password
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>

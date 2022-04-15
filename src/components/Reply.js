@@ -26,8 +26,8 @@ export default function Reply({
         {badgeText && <span className='squeak-author-badge'>{badgeText}</span>}
         <Days created={created_at} />
         {resolved && resolvedBy === id && (
-          <span>
-            <p className='squeak-resolved-badge'>SOLUTION</p>
+          <>
+            <span className='squeak-resolved-badge'>Solution</span>
             {isAuthor && (
               <button
                 onClick={() => handleResolve(false)}
@@ -36,7 +36,7 @@ export default function Reply({
                 Undo
               </button>
             )}
-          </span>
+          </>
         )}
       </div>
       <div className='squeak-post-content'>
