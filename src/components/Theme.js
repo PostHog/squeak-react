@@ -14,7 +14,7 @@ export const Theme = createGlobalStyle`
   }
 
 .squeak {
-    font-family: -apple-system, BlinkMacSystemFont; // for dev use
+    // font-family: -apple-system, BlinkMacSystemFont; // for dev use
     font-size: var(--squeak-base-font-size);
 
     *:not(pre *) {
