@@ -511,10 +511,6 @@ export const Theme = createGlobalStyle`
         margin-left: 50px;
     }
 
-    .squeak-post-button {
-        margin-top: 0 !important;
-    }
-
     .squeak-by-line {
         align-items: center;
         color: rgba(var(--squeak-primary-color), .3) !important;
@@ -530,6 +526,7 @@ export const Theme = createGlobalStyle`
     .squeak-logout-button {
         border: solid 1.5px transparent;
         background: none;
+        margin-left: auto;
         opacity: 0.5;
 
         &:hover {
@@ -697,16 +694,35 @@ export const Theme = createGlobalStyle`
         text-transform: uppercase;
     }
 
-    .squeak-locked-message {
+    .squeak-locked-message,
+    .squeak-approval-required {
         background: rgba(var(--squeak-primary-color), .03);
         border: 1px solid rgba(var(--squeak-primary-color), .1);
         border-radius: var(--squeak-border-radius);
         margin-bottom: 0;
-        text-align: center;
+        padding: 0 1rem;
 
         p {
             color: rgba(var(--squeak-primary-color), .6);
             font-size: .875em;
+        }
+    }
+    .squeak-locked-message {
+        text-align: center;
+    }
+    .squeak-approval-required {
+        padding-bottom: 1rem;
+
+        h3 {
+            margin-bottom: .5rem;
+        }
+        p {
+            font-size: 1em;
+            margin: .5rem 0 .25rem;
+        }
+
+        .squeak-post-button {
+            margin-top: .5rem;
         }
     }
 }
