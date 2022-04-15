@@ -265,7 +265,11 @@ export const Theme = createGlobalStyle`
         margin-bottom: 1.5rem;
 
         > li {
-            padding: 1.25rem 0;
+            padding-bottom: 1.25rem;
+
+            &:not(:first-child) {
+                padding-top: 1.25em;
+            }
         }
         
         .squeak-reply-buttons-row {
