@@ -1,52 +1,52 @@
 import { createGlobalStyle } from 'styled-components'
 export const Theme = createGlobalStyle`
 :host {
-    --squeak-primary-color: ${(props) => props.dark ? '255, 255, 255' : '0, 0, 0'}; // rgb triplets, no hex
-    --squeak-button-color: 29, 74, 255; // rgb triplet, no hex
-    --squeak-border-radius: .25rem; // adjusts all radii
-    --squeak-base-font-size: 16px;
-    --squeak-warning-color: #FFF7E9; // hex
-    --squeak-thread-border-style: dashed; // css border style
-    --squeak-input-text-color: 0, 0, 0; // rgb triplet, no hex
-    --squeak-input-background-color: transparent; // transparent, hex, rgb, or rgba
+    --primary-color: ${(props) => props.dark ? '255, 255, 255' : '0, 0, 0'}; // rgb triplets, no hex
+    --button-color: 29, 74, 255; // rgb triplet, no hex
+    --border-radius: .25rem; // adjusts all radii
+    --base-font-size: 16px;
+    --warning-color: #FFF7E9; // hex
+    --thread-border-style: dashed; // css border style
+    --input-text-color: 0, 0, 0; // rgb triplet, no hex
+    --input-background-color: transparent; // transparent, hex, rgb, or rgba
     all: initial;
     font-family: inherit;
   }
 
 .squeak {
     // font-family: -apple-system, BlinkMacSystemFont; // for dev use
-    color: rgba(var(--squeak-primary-color), 1);
-    font-size: var(--squeak-base-font-size);
+    color: rgba(var(--primary-color), 1);
+    font-size: var(--base-font-size);
 
     *:not(pre *) {
         box-sizing: border-box;
-        font-family: var(--squeak-font-family);
+        font-family: var(--font-family);
     }
     
     button {
         background: transparent;
-        border: solid 1.5px rgba(var(--squeak-button-color), .85);
-        border-radius: var(--squeak-border-radius);
-        color: rgba(var(--squeak-button-color), .85);
+        border: solid 1.5px rgba(var(--button-color), .85);
+        border-radius: var(--border-radius);
+        color: rgba(var(--button-color), .85);
         cursor: pointer;
         font-size: .933em;
         font-weight: 500;
         padding: 0.6rem 1rem;
 
         &:hover {
-            border: solid 1.5px rgba(var(--squeak-button-color), .9);
-            color: rgba(var(--squeak-button-color), .9);
+            border: solid 1.5px rgba(var(--button-color), .9);
+            color: rgba(var(--button-color), .9);
         }
 
         &:active {
-            border: solid 1.5px rgba(var(--squeak-button-color), 1);
-            color: rgba(var(--squeak-button-color), 1);
+            border: solid 1.5px rgba(var(--button-color), 1);
+            color: rgba(var(--button-color), 1);
         }
 
         &[disabled] {
             background: transparent;
-            border: solid 1.5px rgba(var(--squeak-primary-color), .5);
-            color: rgba(var(--squeak-primary-color), 1);
+            border: solid 1.5px rgba(var(--primary-color), .5);
+            color: rgba(var(--primary-color), 1);
             cursor: not-allowed;
         }
     }
@@ -55,8 +55,8 @@ export const Theme = createGlobalStyle`
         margin-left: 50px;
 
         .squeak-authentication-form-message {
-            background: var(--squeak-warning-color);
-            border: 1px solid rgba(var(--squeak-primary-color), .2);
+            background: var(--warning-color);
+            border: 1px solid rgba(var(--primary-color), .2);
             color: #000;
             border-bottom: none;
             padding: 1rem;
@@ -76,9 +76,9 @@ export const Theme = createGlobalStyle`
         }
 
         .squeak-authentication-form {
-            border: 1px solid rgba(var(--squeak-primary-color), .2);
+            border: 1px solid rgba(var(--primary-color), .2);
             border-top: none;
-            border-radius: 0 0 var(--squeak-border-radius) var(--squeak-border-radius);
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
             overflow: hidden;
             position: relative;
 
@@ -87,13 +87,13 @@ export const Theme = createGlobalStyle`
                 width: 100%;
 
                 &.active {
-                    color: rgba(var(--squeak-button-color), 1);
+                    color: rgba(var(--button-color), 1);
                 }
             }
 
             input {
-                border-radius: var(--squeak-border-radius);
-                border: 1px solid rgba(var(--squeak-primary-color), .3);
+                border-radius: var(--border-radius);
+                border: 1px solid rgba(var(--primary-color), .3);
                 display: block;
                 font-size: .875em;
                 margin-bottom: 1.25rem;
@@ -122,9 +122,9 @@ export const Theme = createGlobalStyle`
     }
 
     .squeak-authentication-navigation {
-        background: rgba(var(--squeak-primary-color),.03);
-        border-top: 1px solid rgba(var(--squeak-primary-color),.1);
-        border-bottom: 1px solid rgba(var(--squeak-primary-color),.1);
+        background: rgba(var(--primary-color),.03);
+        border-top: 1px solid rgba(var(--primary-color),.1);
+        border-bottom: 1px solid rgba(var(--primary-color),.1);
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         position: relative;
@@ -138,19 +138,19 @@ export const Theme = createGlobalStyle`
             padding: .75rem .25rem calc(.75rem + 1px);
 
             &:not(.active) {
-                color: rgba(var(--squeak-primary-color),.5);
+                color: rgba(var(--primary-color),.5);
 
                 &:hover {
-                    color: rgba(var(--squeak-primary-color),.6);
-                    border-bottom: .5px solid rgba(var(--squeak-primary-color),.25);
+                    color: rgba(var(--primary-color),.6);
+                    border-bottom: .5px solid rgba(var(--primary-color),.25);
                 }
             }
         }
     }
 
     .squeak-authentication-navigation-rail {
-        background: rgba(var(--squeak-button-color), 1);
-        border-radius: var(--squeak-border-radius);
+        background: rgba(var(--button-color), 1);
+        border-radius: var(--border-radius);
         bottom: -1px;
         height: 2px;
         left: 0;
@@ -171,7 +171,7 @@ export const Theme = createGlobalStyle`
     }
 
     .squeak-avatar-container svg path:first-child {
-        fill: rgba(var(--squeak-primary-color), .3);
+        fill: rgba(var(--primary-color), .3);
     }
 
     .squeak-avatar-container img,
@@ -190,11 +190,11 @@ export const Theme = createGlobalStyle`
 
     .squeak-post-preview-container {
         align-items: center;
-        border: 1px solid rgba(var(--squeak-primary-color), .3);
+        border: 1px solid rgba(var(--primary-color), .3);
         border-bottom: none;
         display: flex;
         padding: .7rem 1rem;
-        border-radius: var(--squeak-border-radius) var(--squeak-border-radius) 0 0;
+        border-radius: var(--border-radius) var(--border-radius) 0 0;
 
         .squeak-post-preview {
             align-items: baseline;
@@ -235,7 +235,7 @@ export const Theme = createGlobalStyle`
 
         button {
             border: 1px solid transparent;
-            color: rgba(var(--squeak-button-color), 1);
+            color: rgba(var(--button-color), 1);
             padding: 0;
         }
     }
@@ -271,7 +271,7 @@ export const Theme = createGlobalStyle`
         // top-level questions
         .squeak-post-content {
             margin-left: 20px;
-            border-left: 1px var(--squeak-thread-border-style) rgba(var(--squeak-primary-color), .4);
+            border-left: 1px var(--thread-border-style) rgba(var(--primary-color), .4);
             padding-left: calc(25px + 5px);
         }
 
@@ -313,46 +313,46 @@ export const Theme = createGlobalStyle`
 
     button.squeak-reply-skeleton {
         background: transparent;
-        border: solid 1.5px rgba(var(--squeak-primary-color), .3);
+        border: solid 1.5px rgba(var(--primary-color), .3);
         padding: 15px;
         flex: 1;
         text-align: left;
 
         span {
-            color: rgba(var(--squeak-primary-color), .6);
+            color: rgba(var(--primary-color), .6);
 
             strong {
-                color: rgba(var(--squeak-primary-color), .65);
+                color: rgba(var(--primary-color), .65);
                 font-weight: bold;
                 text-decoration: underline;
             }
         }
 
         &:hover {
-            border: solid 1.5px rgba(var(--squeak-primary-color), .5);
+            border: solid 1.5px rgba(var(--primary-color), .5);
             
             span {
-                color: rgba(var(--squeak-primary-color), .7);
+                color: rgba(var(--primary-color), .7);
 
                 strong {
-                    color: rgba(var(--squeak-primary-color), .75);
+                    color: rgba(var(--primary-color), .75);
                 }
             }
         }
     }
 
     button:hover .squeak-reply-skeleton strong {
-        color: rgba(var(--squeak-primary-color), .9);
+        color: rgba(var(--primary-color), .9);
     }
 
     .squeak-post-timestamp {
-        color: rgba(var(--squeak-primary-color), .6);
+        color: rgba(var(--primary-color), .6);
         font-size: .875em;
     }
 
     .squeak-author-badge {
-        border: 1px solid rgba(var(--squeak-primary-color), .3);
-        border-radius: calc(var(--squeak-border-radius) * .75);
+        border: 1px solid rgba(var(--primary-color), .3);
+        border-radius: calc(var(--border-radius) * .75);
         color: rgba(var(--primary-color),0.6);
         font-size: .75em;
         padding: .2rem .3rem;
@@ -396,7 +396,7 @@ export const Theme = createGlobalStyle`
 
         // left border on replies
         &:not(.squeak-thread-resolved) > li {
-            border-left: 1px var(--squeak-thread-border-style) rgba(var(--squeak-primary-color), .4);
+            border-left: 1px var(--thread-border-style) rgba(var(--primary-color), .4);
 
             // don't show left border inside, since parent has border
             &:before {
@@ -408,8 +408,8 @@ export const Theme = createGlobalStyle`
     // left border and curved line on replies
     .squeak-reply-form-container:before,
     .squeak-replies li:before {
-        border-left: 1px var(--squeak-thread-border-style) rgba(var(--squeak-primary-color), .4);
-        border-bottom: 1px var(--squeak-thread-border-style) rgba(var(--squeak-primary-color), .4);
+        border-left: 1px var(--thread-border-style) rgba(var(--primary-color), .4);
+        border-bottom: 1px var(--thread-border-style) rgba(var(--primary-color), .4);
         border-bottom-left-radius: 6px;
         content: '';
         height: 13px;
@@ -420,7 +420,7 @@ export const Theme = createGlobalStyle`
     }
 
     .squeak-replies.squeak-thread-resolved li:not(:last-child) {
-        border-left: 1px var(--squeak-thread-border-style) rgba(var(--squeak-primary-color), .4);
+        border-left: 1px var(--thread-border-style) rgba(var(--primary-color), .4);
     }
 
     // don't show left border inside, since parent has border
@@ -455,12 +455,12 @@ export const Theme = createGlobalStyle`
         }
 
         a {
-            color: rgba(var(--squeak-button-color), 1);
+            color: rgba(var(--button-color), 1);
             text-decoration: none;
         }
 
         pre {
-            border-radius: var(--squeak-border-radius);
+            border-radius: var(--border-radius);
             font-size: .875em;
             margin: 0.75rem 0;
             max-height: 450px;
@@ -507,21 +507,21 @@ export const Theme = createGlobalStyle`
 
     .squeak-by-line {
         align-items: center;
-        color: rgba(var(--squeak-primary-color), .5);
+        color: rgba(var(--primary-color), .5);
         display: flex;
         font-size: .813rem;
 
         a {
-            color: rgba(var(--squeak-primary-color), .5);
+            color: rgba(var(--primary-color), .5);
             display: flex;
             margin-left: .2rem;
 
             &:hover {
-                color: rgba(var(--squeak-primary-color), .6);
+                color: rgba(var(--primary-color), .6);
             }
 
             &:active {
-                color: rgba(var(--squeak-primary-color), .55);
+                color: rgba(var(--primary-color), .55);
             }
         }
 
@@ -550,10 +550,10 @@ export const Theme = createGlobalStyle`
         margin: 0 .5rem 0 0;
 
         a {
-            color: rgba(var(--squeak-primary-color), .3);
+            color: rgba(var(--primary-color), .3);
 
             &:hover {
-                color: rgba(var(--squeak-primary-color), .4);
+                color: rgba(var(--primary-color), .4);
             }
         }
     }
@@ -573,9 +573,9 @@ export const Theme = createGlobalStyle`
     }
 
     .squeak-inputs-wrapper {
-        background: var(--squeak-input-background-color);
-        border: 1px solid rgba(var(--squeak-primary-color), .3);
-        border-radius: var(--squeak-border-radius);
+        background: var(--input-background-color);
+        border: 1px solid rgba(var(--primary-color), .3);
+        border-radius: var(--border-radius);
         overflow: hidden;
         margin-bottom: 1rem;
         // don't apply width: 100%
@@ -586,25 +586,25 @@ export const Theme = createGlobalStyle`
     }
 
     hr {
-        background: rgba(var(--squeak-input-text-color), .3);
+        background: rgba(var(--input-text-color), .3);
         border: none;
         height: 1px;
         margin: 0;
     }
 
     input {
-        background: var(--squeak-input-background-color);
+        background: var(--input-background-color);
         border: none;
-        color: rgba(var(--squeak-input-text-color), 1);
+        color: rgba(var(--input-text-color), 1);
         font-size: 1em;
         padding: 0.75rem 1rem;
         width: 100%;
     }
 
     textarea {
-        background: var(--squeak-input-background-color);
+        background: var(--input-background-color);
         border: none;
-        color: rgba(var(--squeak-input-text-color), 1);
+        color: rgba(var(--input-text-color), 1);
         font-size: .875em;
         height: 150px;
         padding: 0.75rem 1rem;
@@ -634,8 +634,8 @@ export const Theme = createGlobalStyle`
             align-items: center;
             background: none;
             border: none;
-            border-radius: var(--squeak-border-radius);
-            color: rgba(var(--squeak-input-text-color), .5);
+            border-radius: var(--border-radius);
+            color: rgba(var(--input-text-color), .5);
             cursor: pointer;
             display: flex;
             height: 32px;
@@ -646,20 +646,20 @@ export const Theme = createGlobalStyle`
             width: 32px;
 
             &:hover {
-                background: rgba(var(--squeak-input-text-color), .15);
-                color: rgba(var(--squeak-input-text-color), .75);
+                background: rgba(var(--input-text-color), .15);
+                color: rgba(var(--input-text-color), .75);
             }
 
             &:active {
-                background: rgba(var(--squeak-input-text-color), .2);
-                color: rgba(var(--squeak-input-text-color), 1);
+                background: rgba(var(--input-text-color), .2);
+                color: rgba(var(--input-text-color), 1);
             }
         }
     }
 
     .squeak-forgot-password {
         background: transparent;
-        color: rgba(var(--squeak-primary-color), .3) !important;
+        color: rgba(var(--primary-color), .3) !important;
         border-color: transparent;
         margin-top: 0.5rem;
 
@@ -670,7 +670,7 @@ export const Theme = createGlobalStyle`
     }
 
     .squeak-auth-error {
-        background: var(--squeak-warning-color);
+        background: var(--warning-color);
         margin: -1.5rem -1.5rem 1.5rem;
         padding: 1.5rem;
     }
@@ -678,7 +678,7 @@ export const Theme = createGlobalStyle`
     .squeak-return-to-post {
         background: none;
         border: none;
-        color: rgba(var(--squeak-button-color), 1);
+        color: rgba(var(--button-color), 1);
         cursor: pointer;
         font-size: inherit;
         font-weight: 600;
@@ -697,7 +697,7 @@ export const Theme = createGlobalStyle`
         background: none;
         border: none;
         padding: 0;
-        color: rgba(var(--squeak-button-color), 1);
+        color: rgba(var(--button-color), 1);
         cursor: pointer;
 
         &:hover,
@@ -717,7 +717,7 @@ export const Theme = createGlobalStyle`
     }
 
     .squeak-resolved-badge {
-        border-radius: calc(var(--squeak-border-radius) * .75);
+        border-radius: calc(var(--border-radius) * .75);
         border: 1.5px solid rgba(0, 130, 0, .8);
         color: rgba(0, 130, 0, .8);
         font-size: .688em;
@@ -728,14 +728,14 @@ export const Theme = createGlobalStyle`
 
     .squeak-locked-message,
     .squeak-approval-required {
-        background: rgba(var(--squeak-primary-color), .03);
-        border: 1px solid rgba(var(--squeak-primary-color), .2);
-        border-radius: var(--squeak-border-radius);
+        background: rgba(var(--primary-color), .03);
+        border: 1px solid rgba(var(--primary-color), .2);
+        border-radius: var(--border-radius);
         margin-bottom: 0;
         padding: 0 1rem;
 
         p {
-            color: rgba(var(--squeak-primary-color), .6);
+            color: rgba(var(--primary-color), .6);
             font-size: .875em;
         }
     }
