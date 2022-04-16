@@ -1,20 +1,21 @@
 import { createGlobalStyle } from 'styled-components'
 export const Theme = createGlobalStyle`
 :host {
+    --squeak-primary-color: ${(props) => props.dark ? '255, 255, 255' : '0, 0, 0'}; // rgb triplets, no hex
     --squeak-button-color: 29, 74, 255; // rgb triplets, no hex
-    --squeak-primary-color: ${(props) =>
-      props.dark ? '255, 255, 255' : '0, 0, 0'}; // rgb triplets, no hex
-      --squeak-border-radius: .25rem; // adjusts all radii
-      --squeak-base-font-size: 16px;
-      --squeak-warning-color: #FFF7E9; // hex
-      --squeak-thread-border-style: dashed; // css border style
-      --squeak-input-background-color: #fff; // hex
+    --squeak-border-radius: .25rem; // adjusts all radii
+    --squeak-base-font-size: 16px;
+    --squeak-warning-color: #FFF7E9; // hex
+    --squeak-thread-border-style: dashed; // css border style
+    --squeak-input-text-color: 0, 0, 0; // rgb triplets, no hex
+    --squeak-input-background-color: transparent; // transparent, hex, rgb, or rgba
     all: initial;
     font-family: inherit;
   }
 
 .squeak {
     // font-family: -apple-system, BlinkMacSystemFont; // for dev use
+    color: rgba(var(--squeak-primary-color), 1);
     font-size: var(--squeak-base-font-size);
 
     *:not(pre *) {
@@ -23,7 +24,7 @@ export const Theme = createGlobalStyle`
     }
     
     button {
-        background: var(--squeak-input-background-color);
+        background: transparent;
         border: solid 1.5px rgba(var(--squeak-button-color), .85);
         border-radius: var(--squeak-border-radius);
         color: rgba(var(--squeak-button-color), .85);
@@ -44,27 +45,9 @@ export const Theme = createGlobalStyle`
 
         &[disabled] {
             background: transparent;
-            border: solid 1.5px rgba(var(--squeak-primary-color), .2);
-            color: rgba(var(--squeak-primary-color), .5);
+            border: solid 1.5px rgba(var(--squeak-primary-color), .5);
+            color: rgba(var(--squeak-primary-color), 1);
             cursor: not-allowed;
-        }
-    }
-
-    input {
-        background: var(--squeak-input-background-color);
-    }
-
-    .squeak-form {
-        input {
-            background: var(--squeak-input-background-color);
-            border-top: none;
-            border-right: none;
-            border-bottom: 1px solid rgba(var(--squeak-primary-color), .3);
-            border-left: none;
-            font-size: 1em;
-            font-weight: 700;
-            padding: 0.75rem 1rem;
-            width: 100%;
         }
     }
 
@@ -74,18 +57,21 @@ export const Theme = createGlobalStyle`
         .squeak-authentication-form-message {
             background: var(--squeak-warning-color);
             border: 1px solid rgba(var(--squeak-primary-color), .2);
+            color: #000;
             border-bottom: none;
             padding: 1rem;
 
-            h4 {
+            h4, p {
                 margin: 0;
+            }
+
+            h4 {
                 font-size: 1em;
                 padding-bottom: .25em;
             }
 
             p {
                 font-size: .875em;
-                margin: 0;
             }
         }
 
@@ -326,6 +312,7 @@ export const Theme = createGlobalStyle`
     }
 
     button.squeak-reply-skeleton {
+        background: transparent;
         border: solid 1.5px rgba(var(--squeak-primary-color), .3);
         padding: 15px;
         flex: 1;
@@ -366,6 +353,7 @@ export const Theme = createGlobalStyle`
     .squeak-author-badge {
         border: 1px solid rgba(var(--squeak-primary-color), .3);
         border-radius: calc(var(--squeak-border-radius) * .75);
+        color: rgba(var(--primary-color),0.6);
         font-size: .75em;
         padding: .2rem .3rem;
     }
@@ -382,7 +370,7 @@ export const Theme = createGlobalStyle`
     .squeak-replies {
         margin-left: 20px;
 
-        li {
+        > li {
             padding: 0 5px 0 calc(25px + 5px);
             position: relative;
 
@@ -407,7 +395,7 @@ export const Theme = createGlobalStyle`
         }
 
         // left border on replies
-        &:not(.squeak-thread-resolved) li {
+        &:not(.squeak-thread-resolved) > li {
             border-left: 1px var(--squeak-thread-border-style) rgba(var(--squeak-primary-color), .4);
 
             // don't show left border inside, since parent has border
@@ -446,7 +434,9 @@ export const Theme = createGlobalStyle`
 
     ul.squeak-thread-resolved {
         li:not(.squeak-solution) {
-            opacity: .5;
+            > div {
+                opacity: .6;
+            }
         }
     }
 
@@ -458,6 +448,10 @@ export const Theme = createGlobalStyle`
 
         p {
             margin-top: 0;
+        }
+
+        ol, ul {
+            padding-bottom: 1em;
         }
 
         a {
@@ -513,13 +507,29 @@ export const Theme = createGlobalStyle`
 
     .squeak-by-line {
         align-items: center;
-        color: rgba(var(--squeak-primary-color), .3) !important;
+        color: rgba(var(--squeak-primary-color), .5);
         display: flex;
         font-size: .813rem;
 
         a {
+            color: rgba(var(--squeak-primary-color), .5);
             display: flex;
             margin-left: .2rem;
+
+            &:hover {
+                color: rgba(var(--squeak-primary-color), .6);
+            }
+
+            &:active {
+                color: rgba(var(--squeak-primary-color), .55);
+            }
+        }
+
+        svg {
+
+            path {
+                fill: currentColor;
+            }
         }
     }
 
@@ -530,6 +540,7 @@ export const Theme = createGlobalStyle`
         opacity: 0.5;
 
         &:hover {
+            border: solid 1.5px transparent;
             opacity: 1;
         }
     }
@@ -554,6 +565,8 @@ export const Theme = createGlobalStyle`
         }
     }
 
+    // UI elements
+
     .squeak-form-frame {
         flex: 1;
         margin-bottom: 1rem;
@@ -566,6 +579,41 @@ export const Theme = createGlobalStyle`
         overflow: hidden;
         margin-bottom: 1rem;
         // don't apply width: 100%
+
+        input[name="subject"] {
+            font-weight: 700;
+        }
+    }
+
+    hr {
+        background: rgba(var(--squeak-input-text-color), .3);
+        border: none;
+        height: 1px;
+        margin: 0;
+    }
+
+    input {
+        background: var(--squeak-input-background-color);
+        border: none;
+        color: rgba(var(--squeak-input-text-color), 1);
+        font-size: 1em;
+        padding: 0.75rem 1rem;
+        width: 100%;
+    }
+
+    textarea {
+        background: var(--squeak-input-background-color);
+        border: none;
+        color: rgba(var(--squeak-input-text-color), 1);
+        font-size: .875em;
+        height: 150px;
+        padding: 0.75rem 1rem;
+        resize: none;
+        width: 100%;
+    }
+
+    .squeak-form-richtext {
+        line-height: 0;
     }
 
     .squeak-form-richtext-buttons-container {
@@ -573,22 +621,6 @@ export const Theme = createGlobalStyle`
         display: flex;
         justify-content: space-between;
         padding: 0.25rem 0;
-    }
-
-    // UI elements
-
-    .squeak-form-richtext {
-        // only applies to replies, not questions
-
-        textarea {
-            background: transparent;
-            border: none;
-            font-size: .875em;
-            height: 150px;
-            padding: 0.75rem 1rem;
-            resize: none;
-            width: 100%;
-        }
     }
 
     .squeak-form-richtext-buttons {
@@ -603,24 +635,24 @@ export const Theme = createGlobalStyle`
             background: none;
             border: none;
             border-radius: var(--squeak-border-radius);
-            color: rgba(var(--squeak-primary-color), .4);
+            color: rgba(var(--squeak-input-text-color), .5);
             cursor: pointer;
             display: flex;
             height: 32px;
             justify-content: center;
-            margin: 0;
+            margin: 0 1px 0 0;
             opacity: 1;
             padding: 0;
             width: 32px;
 
             &:hover {
-                background: rgba(var(--squeak-primary-color), .1);
-                color: rgba(var(--squeak-primary-color), .75);
+                background: rgba(var(--squeak-input-text-color), .15);
+                color: rgba(var(--squeak-input-text-color), .75);
             }
 
             &:active {
-                background: rgba(var(--squeak-primary-color), .2);
-                color: rgba(var(--squeak-primary-color), 1);
+                background: rgba(var(--squeak-input-text-color), .2);
+                color: rgba(var(--squeak-input-text-color), 1);
             }
         }
     }
@@ -697,7 +729,7 @@ export const Theme = createGlobalStyle`
     .squeak-locked-message,
     .squeak-approval-required {
         background: rgba(var(--squeak-primary-color), .03);
-        border: 1px solid rgba(var(--squeak-primary-color), .1);
+        border: 1px solid rgba(var(--squeak-primary-color), .2);
         border-radius: var(--squeak-border-radius);
         margin-bottom: 0;
         padding: 0 1rem;
