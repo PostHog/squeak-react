@@ -2,16 +2,16 @@ import { createGlobalStyle } from 'styled-components'
 export const Theme = createGlobalStyle`
 :host {
     --primary-color: ${(props) => props.dark ? '255, 255, 255' : '0, 0, 0'}; // rgb triplets, no hex
-    --button-color: 29, 74, 255; // rgb triplet, no hex
-    --border-radius: .25rem; // adjusts all radii
-    --base-font-size: 16px;
-    --warning-color: #FFF7E9; // hex
-    --thread-border-style: dashed; // css border style
-    --input-text-color: 0, 0, 0; // rgb triplet, no hex
-    --input-background-color: transparent; // transparent, hex, rgb, or rgba
+    --button-color: var(--squeak-button-color, 29, 74, 255); // rgb triplet, no hex
+    --border-radius: var(--squeak-border-radius, .25rem); // adjusts all radii
+    --base-font-size: var(--squeak-base-font-size, 16px);
+    --warning-color: var(--squeak-warning-color, #FFF7E9); // hex
+    --thread-border-style: var(--squeak-thread-border-style, dashed); // css border style
+    --input-text-color: var(--squeak-input-text-color, 0, 0, 0); // rgb triplet, no hex
+    --input-background-color: var(--squeak-input-background-color, #fff); // transparent, hex, rgb, or rgba
     all: initial;
     font-family: inherit;
-  }
+}
 
 .squeak {
     // font-family: -apple-system, BlinkMacSystemFont; // for dev use
@@ -24,7 +24,7 @@ export const Theme = createGlobalStyle`
     }
     
     button {
-        background: transparent;
+        background: var(--input-background-color);
         border: solid 1.5px rgba(var(--button-color), .85);
         border-radius: var(--border-radius);
         color: rgba(var(--button-color), .85);
@@ -635,7 +635,7 @@ export const Theme = createGlobalStyle`
             background: none;
             border: none;
             border-radius: var(--border-radius);
-            color: rgba(var(--input-text-color), .5);
+            color: rgba(var(--primary-color), .5);
             cursor: pointer;
             display: flex;
             height: 32px;
