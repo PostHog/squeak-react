@@ -173,9 +173,25 @@ export default function ({ formType = 'question', messageID, onSubmit }) {
       ),
       auth: (
         <Authentication
+          banner={{
+            title: 'Please signup to post.',
+            body: 'Create an account to ask questions & help others.'
+          }}
+          buttonText={{
+            login: 'Login & post question',
+            signUp: 'Sign up & post question'
+          }}
           setParentView={setView}
           formValues={formValues}
           handleMessageSubmit={handleMessageSubmit}
+          loading={loading}
+        />
+      ),
+      login: (
+        <Authentication
+          setParentView={setView}
+          formValues={formValues}
+          handleMessageSubmit={() => setView(null)}
           loading={loading}
         />
       ),
@@ -192,12 +208,18 @@ export default function ({ formType = 'question', messageID, onSubmit }) {
       >
         {buttonText}
       </button>
-      {formType === 'question' && user && (
+      {formType === 'question' && (
         <button
-          onClick={() => supabase.auth.signOut()}
+          onClick={() => {
+            if (user) {
+              supabase.auth.signOut()
+            } else {
+              setView('login')
+            }
+          }}
           className='squeak-logout-button'
         >
-          Logout
+          {user ? 'Logout' : 'Login'}
         </button>
       )}
     </div>

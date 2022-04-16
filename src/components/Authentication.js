@@ -84,7 +84,12 @@ const ForgotPassword = ({ setMessage, setParentView, apiHost }) => {
   )
 }
 
-const SignIn = ({ setMessage, handleMessageSubmit, formValues }) => {
+const SignIn = ({
+  setMessage,
+  handleMessageSubmit,
+  formValues,
+  buttonText
+}) => {
   const supabase = useClient()
   const [loading, setLoading] = useState(false)
   const handleSubmit = async (values) => {
@@ -133,13 +138,13 @@ const SignIn = ({ setMessage, handleMessageSubmit, formValues }) => {
               id='password'
               name='password'
               type='password'
-              placeholder='Email password...'
+              placeholder='Password...'
             />
             <button
               style={loading || !isValid ? { opacity: '.5' } : {}}
               type='submit'
             >
-              Login & post
+              {buttonText}
             </button>
           </Form>
         )
@@ -153,7 +158,8 @@ const SignUp = ({
   handleMessageSubmit,
   formValues,
   organizationId,
-  apiHost
+  apiHost,
+  buttonText
 }) => {
   const supabase = useClient()
   const [loading, setLoading] = useState(false)
@@ -246,13 +252,13 @@ const SignUp = ({
               id='password'
               name='password'
               type='password'
-              placeholder='Email password...'
+              placeholder='Password...'
             />
             <button
               style={loading || !isValid ? { opacity: '.5' } : {}}
               type='submit'
             >
-              Sign up & post question
+              {buttonText}
             </button>
           </Form>
         )
@@ -329,7 +335,9 @@ export default function Authentication({
   handleMessageSubmit,
   formValues,
   setParentView,
-  initialView = 'sign-in'
+  initialView = 'sign-in',
+  buttonText = { login: 'Login', signUp: 'Sign up' },
+  banner
 }) {
   const { organizationId, apiHost } = useOrg()
   const [view, setView] = useState(initialView)
@@ -357,10 +365,12 @@ export default function Authentication({
         </div>
       )}
       <div className='squeak-authentication-form-container'>
-        <div className='squeak-authentication-form-message'>
-          <h4>Please signup to post.</h4>
-          <p>Create an account to ask questions &amp; help others.</p>
-        </div>
+        {banner && (
+          <div className='squeak-authentication-form-message'>
+            <h4>{banner.title}</h4>
+            <p>{banner.body}</p>
+          </div>
+        )}
         <div className='squeak-authentication-form'>
           <div className='squeak-authentication-navigation'>
             <button
@@ -392,6 +402,7 @@ export default function Authentication({
               {
                 'sign-in': (
                   <SignIn
+                    buttonText={buttonText.login}
                     formValues={formValues}
                     handleMessageSubmit={handleMessageSubmit}
                     setMessage={setMessage}
@@ -399,6 +410,7 @@ export default function Authentication({
                 ),
                 'sign-up': (
                   <SignUp
+                    buttonText={buttonText.signUp}
                     formValues={formValues}
                     handleMessageSubmit={handleMessageSubmit}
                     setMessage={setMessage}

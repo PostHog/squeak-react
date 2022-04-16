@@ -13,7 +13,7 @@ export const useUser = () => {
       .eq('user_id', user?.id)
       .single()
 
-    return data.squeak_profiles
+    return data?.squeak_profiles
   }
 
   useAuthStateChange(async (e, session) => {
