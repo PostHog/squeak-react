@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
+import { useOrg } from '../hooks/useOrg'
 import Question from './Question'
 import QuestionForm from './QuestionForm'
 
-export default function App({ apiHost, organizationId }) {
+export default function Questions() {
+  const { organizationId, apiHost } = useOrg()
   const [questions, setQuestions] = useState([])
-
   const getQuestions = async () => {
     const pathname = window.location.pathname
     const response = await fetch(`${apiHost}/api/questions`, {
@@ -46,12 +47,7 @@ export default function App({ apiHost, organizationId }) {
             {questions.map((question) => {
               return (
                 <li key={question.question.id}>
-                  <Question
-                    organizationId={organizationId}
-                    apiHost={apiHost}
-                    onSubmit={handleSubmit}
-                    {...question}
-                  />
+                  <Question onSubmit={handleSubmit} {...question} />
                 </li>
               )
             })}

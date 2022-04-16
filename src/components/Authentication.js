@@ -2,6 +2,7 @@ import { Field, Form, Formik } from 'formik'
 import getGravatar from 'gravatar'
 import React, { useEffect, useRef, useState } from 'react'
 import { useClient } from 'react-supabase'
+import { useOrg } from '../hooks/useOrg'
 import Avatar from './Avatar'
 import Markdown from './Markdown'
 
@@ -328,10 +329,9 @@ export default function Authentication({
   handleMessageSubmit,
   formValues,
   setParentView,
-  initialView = 'sign-in',
-  organizationId,
-  apiHost
+  initialView = 'sign-in'
 }) {
+  const { organizationId, apiHost } = useOrg()
   const [view, setView] = useState(initialView)
   const [message, setMessage] = useState(null)
 

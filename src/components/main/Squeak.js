@@ -1,7 +1,8 @@
 import { createClient } from '@supabase/supabase-js'
 import React, { useEffect, useRef, useState } from 'react'
 import root from 'react-shadow/styled-components'
-import { Provider } from 'react-supabase'
+import { Provider as SupabaseProvider } from 'react-supabase'
+import { Provider as OrgProvider } from '../../context/org'
 import getBackgroundColor from '../../util/getBackgroundColor'
 import lightOrDark from '../../util/lightOrDark'
 import Questions from '../Questions'
@@ -21,13 +22,15 @@ export const Squeak = ({ apiKey, url, apiHost, organizationId }) => {
   }, [])
 
   return (
-    <Provider value={supabase}>
-      <root.div ref={containerRef}>
-        <Theme dark={darkMode} />
-        <div className='squeak'>
-          <Questions apiHost={apiHost} organizationId={organizationId} />
-        </div>
-      </root.div>
-    </Provider>
+    <SupabaseProvider value={supabase}>
+      <OrgProvider value={{ organizationId, apiHost }}>
+        <root.div ref={containerRef}>
+          <Theme dark={darkMode} />
+          <div className='squeak'>
+            <Questions />
+          </div>
+        </root.div>
+      </OrgProvider>
+    </SupabaseProvider>
   )
 }

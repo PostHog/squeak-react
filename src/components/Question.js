@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useClient } from 'react-supabase'
+import { useOrg } from '../hooks/useOrg'
 import { useUser } from '../hooks/useUser'
 import QuestionForm from './QuestionForm'
 import Reply from './Reply'
@@ -16,14 +17,9 @@ const getBadge = (questionAuthorId, replyAuthorId, replyAuthorRole) => {
   return questionAuthorId === replyAuthorId ? 'Author' : null
 }
 
-export default function Question({
-  organizationId,
-  question,
-  replies,
-  onSubmit,
-  apiHost
-}) {
+export default function Question({ question, replies, onSubmit }) {
   const supabase = useClient()
+  const { organizationId, apiHost } = useOrg()
   const [user] = useUser()
   const [firstReply] = replies
   const [resolvedBy, setResolvedBy] = useState(question?.resolved_reply_id)
@@ -93,10 +89,8 @@ export default function Question({
       ) : (
         <div className='squeak-reply-form-container'>
           <QuestionForm
-            apiHost={apiHost}
             onSubmit={onSubmit}
             messageID={question.id}
-            organizationId={organizationId}
             formType='reply'
           />
         </div>

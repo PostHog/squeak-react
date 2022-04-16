@@ -1,7 +1,8 @@
 import { createClient } from '@supabase/supabase-js'
 import React, { useEffect, useRef, useState } from 'react'
 import root from 'react-shadow/styled-components'
-import { Provider, useClient } from 'react-supabase'
+import { Provider as SupabaseProvider, useClient } from 'react-supabase'
+import { Provider as OrgProvider } from '../../context/org'
 import getBackgroundColor from '../../util/getBackgroundColor'
 import lightOrDark from '../../util/lightOrDark'
 import SingleQuestion from '../Question'
@@ -20,21 +21,19 @@ export const Question = ({ apiKey, url, apiHost, organizationId, id }) => {
   }, [])
   return (
     <root.div ref={containerRef}>
-      <Provider value={supabase}>
-        <Theme dark={darkMode} />
-        <div className='squeak'>
-          <QuestionFromId
-            apiHost={apiHost}
-            organizationId={organizationId}
-            id={id}
-          />
-        </div>
-      </Provider>
+      <SupabaseProvider value={supabase}>
+        <OrgProvider value={{ organizationId, apiHost }}>
+          <Theme dark={darkMode} />
+          <div className='squeak'>
+            <QuestionFromId id={id} />
+          </div>
+        </OrgProvider>
+      </SupabaseProvider>
     </root.div>
   )
 }
 
-const QuestionFromId = ({ apiHost, organizationId, id }) => {
+const QuestionFromId = ({ id }) => {
   const supabase = useClient()
   const [question, setQuestion] = useState(null)
 
@@ -67,8 +66,6 @@ const QuestionFromId = ({ apiHost, organizationId, id }) => {
   return (
     question && (
       <SingleQuestion
-        apiHost={apiHost}
-        organizationId={organizationId}
         replies={question?.replies}
         question={question?.question}
         onSubmit={handleSubmit}

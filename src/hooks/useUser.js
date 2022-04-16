@@ -3,7 +3,6 @@ import { useAuthStateChange, useClient } from 'react-supabase'
 export const useUser = () => {
   const supabase = useClient()
   const [user, setUser] = useState(supabase.auth.user())
-  const [authState, setAuthState] = useState()
 
   const getProfile = async (user) => {
     const { data } = await supabase
@@ -18,7 +17,6 @@ export const useUser = () => {
   }
 
   useAuthStateChange(async (e, session) => {
-    setAuthState(e)
     setUser(session?.user)
   })
 

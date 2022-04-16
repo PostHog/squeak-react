@@ -1,6 +1,7 @@
 import { Field, Form, Formik } from 'formik'
 import React, { useState } from 'react'
 import { useClient } from 'react-supabase'
+import { useOrg } from '../hooks/useOrg'
 import { useUser } from '../hooks/useUser'
 import { Approval } from './Approval'
 import Authentication from './Authentication'
@@ -88,14 +89,9 @@ function QuestionForm({
   )
 }
 
-export default function ({
-  formType = 'question',
-  organizationId,
-  messageID,
-  onSubmit,
-  apiHost
-}) {
+export default function ({ formType = 'question', messageID, onSubmit }) {
   const supabase = useClient()
+  const { organizationId, apiHost } = useOrg()
   const [user] = useUser()
   const [formValues, setFormValues] = useState(null)
   const [view, setView] = useState(null)
@@ -180,8 +176,6 @@ export default function ({
           setParentView={setView}
           formValues={formValues}
           handleMessageSubmit={handleMessageSubmit}
-          organizationId={organizationId}
-          apiHost={apiHost}
           loading={loading}
         />
       ),
