@@ -2,12 +2,12 @@ import { createGlobalStyle } from 'styled-components'
 export const Theme = createGlobalStyle`
 :host {
     --squeak-primary-color: ${(props) => props.dark ? '255, 255, 255' : '0, 0, 0'}; // rgb triplets, no hex
-    --squeak-button-color: 29, 74, 255; // rgb triplets, no hex
+    --squeak-button-color: 29, 74, 255; // rgb triplet, no hex
     --squeak-border-radius: .25rem; // adjusts all radii
     --squeak-base-font-size: 16px;
     --squeak-warning-color: #FFF7E9; // hex
     --squeak-thread-border-style: dashed; // css border style
-    --squeak-input-text-color: 0, 0, 0; // rgb triplets, no hex
+    --squeak-input-text-color: 0, 0, 0; // rgb triplet, no hex
     --squeak-input-background-color: transparent; // transparent, hex, rgb, or rgba
     all: initial;
     font-family: inherit;
