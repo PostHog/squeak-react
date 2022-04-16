@@ -1,8 +1,10 @@
 import { Field, Form, Formik } from 'formik'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
+import { useClient } from 'react-supabase'
+import { useUser } from '../hooks/useUser'
 import { Approval } from './Approval'
-import Avatar from './Avatar'
 import Authentication from './Authentication'
+import Avatar from './Avatar'
 import Logo from './Logo'
 import RichText from './RichText'
 
@@ -11,9 +13,9 @@ function QuestionForm({
   onSubmit,
   subject = true,
   loading,
-  initialValues,
-  user
+  initialValues
 }) {
+  const [user] = useUser()
   const handleSubmit = async (values) => {
     onSubmit && (await onSubmit(values))
   }
@@ -41,7 +43,6 @@ function QuestionForm({
         {({ setFieldValue, isValid }) => {
           return (
             <Form className='squeak-form'>
-
               <Avatar image={user?.profile?.avatar} />
 
               <div className=''>
@@ -91,23 +92,22 @@ export default function ({
   formType = 'question',
   organizationId,
   messageID,
-  setQuestions,
-  getQuestions,
-  authState,
-  apiHost,
-  supabase,
-  user
+  onSubmit,
+  apiHost
 }) {
+  const supabase = useClient()
+  const [user] = useUser()
   const [formValues, setFormValues] = useState(null)
   const [view, setView] = useState(null)
   const [loading, setLoading] = useState(false)
-  const buttonText = formType === 'question' ? <span>Ask a question</span> : <span className='squeak-reply-label'><strong>Reply</strong>  to question</span>
-
-  useEffect(() => {
-    if (authState === 'PASSWORD_RECOVERY') {
-      setView('auth')
-    }
-  }, [authState])
+  const buttonText =
+    formType === 'question' ? (
+      <span>Ask a question</span>
+    ) : (
+      <span className='squeak-reply-label'>
+        <strong>Reply</strong> to question
+      </span>
+    )
 
   const insertReply = async ({ body, messageID }) => {
     return fetch(`${apiHost}/api/reply`, {
@@ -152,9 +152,9 @@ export default function ({
         await insertReply({ body: values.question, messageID })
       }
 
-      await getQuestions().then((questions) => {
-        setQuestions(questions)
-      })
+      if (onSubmit) {
+        onSubmit()
+      }
       setLoading(false)
       setView(view)
       setFormValues(null)
@@ -169,7 +169,6 @@ export default function ({
     {
       'question-form': (
         <QuestionForm
-          user={user}
           subject={formType === 'question'}
           initialValues={formValues}
           loading={loading}
@@ -178,10 +177,6 @@ export default function ({
       ),
       auth: (
         <Authentication
-          supabase={supabase}
-          initialView={
-            authState === 'PASSWORD_RECOVERY' ? 'reset-password' : undefined
-          }
           setParentView={setView}
           formValues={formValues}
           handleMessageSubmit={handleMessageSubmit}

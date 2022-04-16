@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { useClient } from 'react-supabase'
+import { useUser } from '../hooks/useUser'
 import QuestionForm from './QuestionForm'
 import Reply from './Reply'
 
@@ -18,13 +20,11 @@ export default function Question({
   organizationId,
   question,
   replies,
-  setQuestions,
-  getQuestions,
-  authState,
-  apiHost,
-  supabase,
-  user
+  onSubmit,
+  apiHost
 }) {
+  const supabase = useClient()
+  const [user] = useUser()
   const [firstReply] = replies
   const [resolvedBy, setResolvedBy] = useState(question?.resolved_reply_id)
   const [resolved, setResolved] = useState(question?.resolved)
@@ -77,7 +77,6 @@ export default function Question({
                   resolvedBy={resolvedBy}
                   handleResolve={handleResolve}
                   isAuthor={user?.profile?.id === questionAuthorId}
-                  user={user}
                   key={reply.id}
                   {...reply}
                   badgeText={badgeText}
@@ -94,12 +93,8 @@ export default function Question({
       ) : (
         <div className='squeak-reply-form-container'>
           <QuestionForm
-            user={user}
-            authState={authState}
             apiHost={apiHost}
-            supabase={supabase}
-            getQuestions={getQuestions}
-            setQuestions={setQuestions}
+            onSubmit={onSubmit}
             messageID={question.id}
             organizationId={organizationId}
             formType='reply'

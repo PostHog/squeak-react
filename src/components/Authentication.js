@@ -1,10 +1,12 @@
 import { Field, Form, Formik } from 'formik'
 import getGravatar from 'gravatar'
 import React, { useEffect, useRef, useState } from 'react'
+import { useClient } from 'react-supabase'
 import Avatar from './Avatar'
 import Markdown from './Markdown'
 
-const ForgotPassword = ({ setMessage, setParentView, supabase, apiHost }) => {
+const ForgotPassword = ({ setMessage, setParentView, apiHost }) => {
+  const supabase = useClient()
   const [loading, setLoading] = useState(false)
   const [emailSent, setEmailSent] = useState(false)
   const handleSubmit = async (values) => {
@@ -81,7 +83,8 @@ const ForgotPassword = ({ setMessage, setParentView, supabase, apiHost }) => {
   )
 }
 
-const SignIn = ({ setMessage, handleMessageSubmit, formValues, supabase }) => {
+const SignIn = ({ setMessage, handleMessageSubmit, formValues }) => {
+  const supabase = useClient()
   const [loading, setLoading] = useState(false)
   const handleSubmit = async (values) => {
     setLoading(true)
@@ -148,10 +151,10 @@ const SignUp = ({
   setMessage,
   handleMessageSubmit,
   formValues,
-  supabase,
   organizationId,
   apiHost
 }) => {
+  const supabase = useClient()
   const [loading, setLoading] = useState(false)
   const handleSubmit = async (values) => {
     setLoading(true)
@@ -257,7 +260,8 @@ const SignUp = ({
   )
 }
 
-const ResetPassword = ({ setMessage, setParentView, supabase }) => {
+const ResetPassword = ({ setMessage, setParentView }) => {
+  const supabase = useClient()
   const [loading, setLoading] = useState(false)
   const resetPassword = useRef()
   const handleSubmit = async (values) => {
@@ -325,7 +329,6 @@ export default function Authentication({
   formValues,
   setParentView,
   initialView = 'sign-in',
-  supabase,
   organizationId,
   apiHost
 }) {
@@ -389,7 +392,6 @@ export default function Authentication({
               {
                 'sign-in': (
                   <SignIn
-                    supabase={supabase}
                     formValues={formValues}
                     handleMessageSubmit={handleMessageSubmit}
                     setMessage={setMessage}
@@ -397,7 +399,6 @@ export default function Authentication({
                 ),
                 'sign-up': (
                   <SignUp
-                    supabase={supabase}
                     formValues={formValues}
                     handleMessageSubmit={handleMessageSubmit}
                     setMessage={setMessage}
@@ -407,7 +408,6 @@ export default function Authentication({
                 ),
                 'forgot-password': (
                   <ForgotPassword
-                    supabase={supabase}
                     setParentView={setParentView}
                     setMessage={setMessage}
                     apiHost={apiHost}
@@ -415,7 +415,6 @@ export default function Authentication({
                 ),
                 'reset-password': (
                   <ResetPassword
-                    supabase={supabase}
                     setParentView={setParentView}
                     setMessage={setMessage}
                   />
