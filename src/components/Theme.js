@@ -226,6 +226,10 @@ export const Theme = createGlobalStyle`
             p {
                 margin: 0;
             }
+
+            img {
+                max-width: 100%;
+            }
         }
 
         .squeak-button-container {
