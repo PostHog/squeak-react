@@ -454,6 +454,10 @@ const Style = createGlobalStyle`
         }
     }
 
+    .squeak-reply-unpublished {
+        opacity: .5;
+    }
+
     // post content defaults
 
     .squeak-post-markdown {
@@ -665,7 +669,7 @@ const Style = createGlobalStyle`
         top: -.5em;
     }
 
-    .squeak-resolve-button {
+    .squeak-resolve-button, .squeak-publish-button {
         margin-right: .75rem;
     }
 
@@ -685,7 +689,7 @@ const Style = createGlobalStyle`
     }
 
     .squeak-resolve-button,
-    .squeak-undo-resolved {
+    .squeak-undo-resolved, .squeak-publish-button {
         background: none;
         border: none;
         padding: 0;
@@ -702,7 +706,7 @@ const Style = createGlobalStyle`
         font-weight: 600;
         margin-left: .5rem;
     }
-    .squeak-resolve-button, .squeak-unresolve-button, .squeak-resolve-text {
+    .squeak-resolve-button, .squeak-unresolve-button, .squeak-resolve-text, .squeak-publish-button {
         font-size: .875em;
         font-weight: 600;
         z-index: 1;

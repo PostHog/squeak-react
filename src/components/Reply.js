@@ -15,6 +15,8 @@ export default function Reply({
   handleResolve,
   id,
   isModerator,
+  published,
+  handlePublish,
   ...other
 }) {
   const [confirmDelete, setConfirmDelete] = useState(false)
@@ -65,6 +67,14 @@ export default function Reply({
               className='squeak-resolve-button'
             >
               Mark as solution
+            </button>
+          )}
+          {isModerator && (
+            <button
+              onClick={() => handlePublish(id, !published)}
+              className='squeak-publish-button'
+            >
+              {published ? 'Unpublish' : 'Publish'}
             </button>
           )}
           {isModerator && (

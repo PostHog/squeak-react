@@ -52,6 +52,21 @@ export default function Question({ question, onSubmit, ...other }) {
     setReplies(replies.filter((reply) => id !== reply.id))
   }
 
+  const handlePublish = async (id, published) => {
+    await supabase
+      .from('squeak_replies')
+      .update({ published })
+      .match({ id, organization_id: organizationId })
+    const newReplies = [...replies]
+    newReplies.some((reply) => {
+      if (reply.id === id) {
+        reply.published = published
+        return true
+      }
+    })
+    setReplies(newReplies)
+  }
+
   useEffect(() => {
     setReplies(other.replies)
   }, [other.replies])
@@ -79,23 +94,28 @@ export default function Question({ question, onSubmit, ...other }) {
             )
 
             return (
-              <li
-                key={reply.id}
-                className={resolvedBy === reply.id ? 'squeak-solution' : ''}
-              >
-                <Reply
-                  handleDelete={handleReplyDelete}
-                  className='squeak-post-reply'
-                  resolved={resolved}
-                  resolvedBy={resolvedBy}
-                  handleResolve={handleResolve}
-                  isModerator={isModerator}
-                  isAuthor={user?.profile?.id === questionAuthorId}
+              (reply.published || (!reply.published && isModerator)) && (
+                <li
                   key={reply.id}
-                  {...reply}
-                  badgeText={badgeText}
-                />
-              </li>
+                  className={`${
+                    resolvedBy === reply.id ? 'squeak-solution' : ''
+                  } ${!reply.published ? 'squeak-reply-unpublished' : ''}`}
+                >
+                  <Reply
+                    handlePublish={handlePublish}
+                    handleDelete={handleReplyDelete}
+                    className='squeak-post-reply'
+                    resolved={resolved}
+                    resolvedBy={resolvedBy}
+                    handleResolve={handleResolve}
+                    isModerator={isModerator}
+                    isAuthor={user?.profile?.id === questionAuthorId}
+                    key={reply.id}
+                    {...reply}
+                    badgeText={badgeText}
+                  />
+                </li>
+              )
             )
           })}
         </ul>
