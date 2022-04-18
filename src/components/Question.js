@@ -20,7 +20,7 @@ const getBadge = (questionAuthorId, replyAuthorId, replyAuthorRole) => {
 export default function Question({ question, onSubmit, ...other }) {
   const supabase = useClient()
   const { organizationId, apiHost } = useOrg()
-  const [user] = useUser()
+  const user = useUser()
   const [replies, setReplies] = useState(other.replies)
   const [firstReply] = replies
   const [resolvedBy, setResolvedBy] = useState(question?.resolved_reply_id)

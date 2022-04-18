@@ -3,30 +3,24 @@ import React, { useEffect, useRef, useState } from 'react'
 import root from 'react-shadow/styled-components'
 import { Provider as SupabaseProvider, useClient } from 'react-supabase'
 import { Provider as OrgProvider } from '../../context/org'
-import getBackgroundColor from '../../util/getBackgroundColor'
-import lightOrDark from '../../util/lightOrDark'
+import { Provider as UserProvider } from '../../context/user'
 import SingleQuestion from '../Question'
 import { Theme } from '../Theme'
 
 export const Question = ({ apiKey, url, apiHost, organizationId, id }) => {
   const supabase = createClient(url, apiKey)
-  const [darkMode, setDarkMode] = useState(null)
   const containerRef = useRef()
 
-  useEffect(() => {
-    if (containerRef.current) {
-      const color = getBackgroundColor(containerRef.current)
-      setDarkMode(lightOrDark(color) === 'dark')
-    }
-  }, [])
   return (
     <root.div ref={containerRef}>
       <SupabaseProvider value={supabase}>
         <OrgProvider value={{ organizationId, apiHost }}>
-          <Theme dark={darkMode} />
-          <div className='squeak'>
-            <QuestionFromId id={id} />
-          </div>
+          <UserProvider>
+            <Theme containerRef={containerRef} />
+            <div className='squeak'>
+              <QuestionFromId id={id} />
+            </div>
+          </UserProvider>
         </OrgProvider>
       </SupabaseProvider>
     </root.div>

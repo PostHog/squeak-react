@@ -1,5 +1,9 @@
+import React, { useEffect, useState } from 'react'
 import { createGlobalStyle } from 'styled-components'
-export const Theme = createGlobalStyle`
+import getBackgroundColor from '../util/getBackgroundColor'
+import lightOrDark from '../util/lightOrDark'
+
+const Style = createGlobalStyle`
 :host {
     --button-color: var(--squeak-button-color, 29, 74, 255); // rgb triplets, no hex
     --primary-color: ${(props) =>
@@ -747,3 +751,15 @@ export const Theme = createGlobalStyle`
     }
 }
 `
+
+export const Theme = ({ containerRef }) => {
+  const [dark, setDark] = useState(null)
+
+  useEffect(() => {
+    if (containerRef.current) {
+      const color = getBackgroundColor(containerRef.current)
+      setDark(lightOrDark(color) === 'dark')
+    }
+  }, [])
+  return <Style dark={dark} />
+}

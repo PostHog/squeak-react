@@ -16,7 +16,7 @@ function QuestionForm({
   loading,
   initialValues
 }) {
-  const [user] = useUser()
+  const user = useUser()
   const handleSubmit = async (values) => {
     onSubmit && (await onSubmit(values))
   }
@@ -92,7 +92,7 @@ function QuestionForm({
 export default function ({ formType = 'question', messageID, onSubmit }) {
   const supabase = useClient()
   const { organizationId, apiHost } = useOrg()
-  const [user] = useUser()
+  const user = useUser()
   const [formValues, setFormValues] = useState(null)
   const [view, setView] = useState(null)
   const [loading, setLoading] = useState(false)
