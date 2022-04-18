@@ -1,10 +1,12 @@
 import React, { createContext, useEffect, useState } from 'react'
 import { useAuthStateChange, useClient } from 'react-supabase'
+import { useOrg } from '../hooks/useOrg'
 
 export const Context = createContext(undefined)
 export const Provider = ({ children }) => {
   const supabase = useClient()
   const [user, setUser] = useState(supabase.auth.user())
+  const { organizationId } = useOrg()
 
   const getProfile = async (user) => {
     const { data } = await supabase
@@ -12,7 +14,7 @@ export const Provider = ({ children }) => {
       .select(
         'squeak_profiles!profiles_readonly_profile_id_fkey!inner(avatar, first_name, last_name, id, metadata:squeak_profiles_readonly(role))'
       )
-      .eq('user_id', user?.id)
+      .match({ user_id: user?.id, organization_id: organizationId })
       .single()
 
     return data?.squeak_profiles

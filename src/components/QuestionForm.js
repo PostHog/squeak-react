@@ -136,16 +136,22 @@ export default function ({ formType = 'question', messageID, onSubmit }) {
     if (userID) {
       let view = null
       if (formType === 'question') {
-        const { published } = await insertMessage({
+        const { published: messagePublished } = await insertMessage({
           subject: values.subject,
           body: values.question
         })
-        if (!published) {
+        if (!messagePublished) {
           view = 'approval'
         }
       }
       if (formType === 'reply') {
-        await insertReply({ body: values.question, messageID })
+        const { published: replyPublished } = await insertReply({
+          body: values.question,
+          messageID
+        })
+        if (!replyPublished) {
+          view = 'approval'
+        }
       }
 
       if (onSubmit) {
