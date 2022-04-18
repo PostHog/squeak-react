@@ -55,7 +55,6 @@ export default function Questions() {
         </>
       )}
       <QuestionForm
-        apiHost={apiHost}
         onSubmit={handleSubmit}
         organizationId={organizationId}
         formType='question'

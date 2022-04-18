@@ -654,10 +654,30 @@ export const Theme = createGlobalStyle`
         width: auto !important;
     }
 
-    .squeak-resolve-button {
+    .squeak-reply-action-buttons {
+        display: flex;
         margin-bottom: 1rem;
         position: relative;
         top: -.5em;
+    }
+
+    .squeak-resolve-button {
+        margin-right: .75rem;
+    }
+
+    .squeak-delete-button {
+        color: red;
+        background: none;
+        border: none;
+        padding: 0;
+        font-size: .875em;
+        font-weight: 600;
+        z-index: 1;
+        &:hover,
+        &:active {
+            border: none;
+            color: red;
+        }
     }
 
     .squeak-resolve-button,

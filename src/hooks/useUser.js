@@ -8,7 +8,7 @@ export const useUser = () => {
     const { data } = await supabase
       .from('squeak_profiles_readonly')
       .select(
-        'squeak_profiles!profiles_readonly_profile_id_fkey!inner(avatar, first_name, last_name, id)'
+        'squeak_profiles!profiles_readonly_profile_id_fkey!inner(avatar, first_name, last_name, id, metadata:squeak_profiles_readonly(role))'
       )
       .eq('user_id', user?.id)
       .single()

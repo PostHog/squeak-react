@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Avatar from './Avatar'
 import Days from './Days'
 import Markdown from './Markdown'
@@ -14,10 +14,26 @@ export default function Reply({
   isAuthor,
   handleResolve,
   id,
+  isModerator,
   ...other
 }) {
+  const [confirmDelete, setConfirmDelete] = useState(false)
+
+  const handleDelete = (e) => {
+    e.stopPropagation()
+    if (confirmDelete) {
+      other.handleDelete(id)
+    } else {
+      setConfirmDelete(true)
+    }
+  }
+
+  const handleContainerClick = (e) => {
+    setConfirmDelete(false)
+  }
+
   return (
-    <div {...other}>
+    <div {...other} onClick={handleContainerClick}>
       <div className='squeak-post-author'>
         <Avatar image={profile?.avatar} />
         <strong className='squeak-author-name'>
@@ -28,7 +44,7 @@ export default function Reply({
         {resolved && resolvedBy === id && (
           <>
             <span className='squeak-resolved-badge'>Solution</span>
-            {isAuthor && (
+            {(isAuthor || isModerator) && (
               <button
                 onClick={() => handleResolve(false)}
                 className='squeak-undo-resolved'
@@ -42,14 +58,21 @@ export default function Reply({
       <div className='squeak-post-content'>
         {subject && <h3>{subject}</h3>}
         <Markdown>{body}</Markdown>
-        {!resolved && isAuthor && (
-          <button
-            onClick={() => handleResolve(true, id)}
-            className='squeak-resolve-button'
-          >
-            Mark as solution
-          </button>
-        )}
+        <div className='squeak-reply-action-buttons'>
+          {!resolved && (isAuthor || isModerator) && (
+            <button
+              onClick={() => handleResolve(true, id)}
+              className='squeak-resolve-button'
+            >
+              Mark as solution
+            </button>
+          )}
+          {isModerator && (
+            <button onClick={handleDelete} className='squeak-delete-button'>
+              {confirmDelete ? 'Click again to confirm' : 'Delete'}
+            </button>
+          )}
+        </div>
       </div>
     </div>
   )

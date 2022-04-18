@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useClient } from 'react-supabase'
 import { useOrg } from '../hooks/useOrg'
 import { useUser } from '../hooks/useUser'
@@ -17,14 +17,18 @@ const getBadge = (questionAuthorId, replyAuthorId, replyAuthorRole) => {
   return questionAuthorId === replyAuthorId ? 'Author' : null
 }
 
-export default function Question({ question, replies, onSubmit }) {
+export default function Question({ question, onSubmit, ...other }) {
   const supabase = useClient()
   const { organizationId, apiHost } = useOrg()
   const [user] = useUser()
+  const [replies, setReplies] = useState(other.replies)
   const [firstReply] = replies
   const [resolvedBy, setResolvedBy] = useState(question?.resolved_reply_id)
   const [resolved, setResolved] = useState(question?.resolved)
   const questionAuthorId = firstReply?.profile?.id
+  const userMetadata = user?.profile?.metadata[0]
+  const isModerator =
+    userMetadata?.role === 'admin' || userMetadata?.role === 'moderator'
   const handleResolve = async (resolved, replyId = null) => {
     await fetch(`${apiHost}/api/question/resolve`, {
       method: 'POST',
@@ -39,6 +43,18 @@ export default function Question({ question, replies, onSubmit }) {
     setResolved(resolved)
     setResolvedBy(replyId)
   }
+
+  const handleReplyDelete = async (id) => {
+    await supabase
+      .from('squeak_replies')
+      .delete()
+      .match({ id, organization_id: organizationId })
+    setReplies(replies.filter((reply) => id !== reply.id))
+  }
+
+  useEffect(() => {
+    setReplies(other.replies)
+  }, [other.replies])
 
   return (
     <div className='squeak-question-container'>
@@ -68,10 +84,12 @@ export default function Question({ question, replies, onSubmit }) {
                 className={resolvedBy === reply.id ? 'squeak-solution' : ''}
               >
                 <Reply
+                  handleDelete={handleReplyDelete}
                   className='squeak-post-reply'
                   resolved={resolved}
                   resolvedBy={resolvedBy}
                   handleResolve={handleResolve}
+                  isModerator={isModerator}
                   isAuthor={user?.profile?.id === questionAuthorId}
                   key={reply.id}
                   {...reply}
