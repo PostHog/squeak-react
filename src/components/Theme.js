@@ -215,6 +215,8 @@ export const Theme = createGlobalStyle`
             display: flex;
             flex: 1;
             min-width: 0;
+            white-space: nowrap;
+            overflow: hidden;
         }
 
         h3, p {
@@ -228,6 +230,7 @@ export const Theme = createGlobalStyle`
             font-size: 1em;
             font-weight: 700;
             margin: 0 .5em 0 0;
+            flex-shrink: 0;
         }
 
         .squeak-post-markdown {

@@ -2,7 +2,6 @@ import { Field, Form, Formik } from 'formik'
 import getGravatar from 'gravatar'
 import React, { useEffect, useRef, useState } from 'react'
 import Avatar from './Avatar'
-import Markdown from './Markdown'
 
 const ForgotPassword = ({ setMessage, setParentView, supabase, apiHost }) => {
   const [loading, setLoading] = useState(false)
@@ -344,7 +343,7 @@ export default function Authentication({
         <div className='squeak-post-preview-container'>
           <div className='squeak-post-preview'>
             {formValues?.subject && <h3>{formValues.subject}</h3>}
-            <Markdown>{formValues.question}</Markdown>
+            {formValues.question}
           </div>
           <div className='squeak-button-container'>
             <button onClick={() => setParentView('question-form')}>
