@@ -1,5 +1,9 @@
+import React, { useEffect, useState } from 'react'
 import { createGlobalStyle } from 'styled-components'
-export const Theme = createGlobalStyle`
+import getBackgroundColor from '../util/getBackgroundColor'
+import lightOrDark from '../util/lightOrDark'
+
+const Style = createGlobalStyle`
 :host {
     --button-color: var(--squeak-button-color, 29, 74, 255); // rgb triplets, no hex
     --primary-color: ${(props) =>
@@ -453,6 +457,10 @@ export const Theme = createGlobalStyle`
         }
     }
 
+    .squeak-reply-unpublished {
+        opacity: .5;
+    }
+
     // post content defaults
 
     .squeak-post-markdown {
@@ -657,14 +665,34 @@ export const Theme = createGlobalStyle`
         width: auto !important;
     }
 
-    .squeak-resolve-button {
+    .squeak-reply-action-buttons {
+        display: flex;
         margin-bottom: 1rem;
         position: relative;
         top: -.5em;
     }
 
+    .squeak-resolve-button, .squeak-publish-button {
+        margin-right: .75rem;
+    }
+
+    .squeak-delete-button {
+        color: red;
+        background: none;
+        border: none;
+        padding: 0;
+        font-size: .875em;
+        font-weight: 600;
+        z-index: 1;
+        &:hover,
+        &:active {
+            border: none;
+            color: red;
+        }
+    }
+
     .squeak-resolve-button,
-    .squeak-undo-resolved {
+    .squeak-undo-resolved, .squeak-publish-button {
         background: none;
         border: none;
         padding: 0;
@@ -681,7 +709,7 @@ export const Theme = createGlobalStyle`
         font-weight: 600;
         margin-left: .5rem;
     }
-    .squeak-resolve-button, .squeak-unresolve-button, .squeak-resolve-text {
+    .squeak-resolve-button, .squeak-unresolve-button, .squeak-resolve-text, .squeak-publish-button {
         font-size: .875em;
         font-weight: 600;
         z-index: 1;
@@ -730,3 +758,15 @@ export const Theme = createGlobalStyle`
     }
 }
 `
+
+export const Theme = ({ containerRef }) => {
+  const [dark, setDark] = useState(null)
+
+  useEffect(() => {
+    if (containerRef.current) {
+      const color = getBackgroundColor(containerRef.current)
+      setDark(lightOrDark(color) === 'dark')
+    }
+  }, [])
+  return <Style dark={dark} />
+}

@@ -30,6 +30,7 @@
     "query-string": "^7.1.1",
     "react-markdown": "^8.0.2",
     "react-shadow": "^19.0.3",
+    "react-supabase": "^0.2.0",
     "rehype-sanitize": "^5.0.1",
     "styled-components": "^5.3.3",
     "styled-reset": "^4.3.4"

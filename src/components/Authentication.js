@@ -1,9 +1,12 @@
 import { Field, Form, Formik } from 'formik'
 import getGravatar from 'gravatar'
 import React, { useEffect, useRef, useState } from 'react'
+import { useClient } from 'react-supabase'
+import { useOrg } from '../hooks/useOrg'
 import Avatar from './Avatar'
 
-const ForgotPassword = ({ setMessage, setParentView, supabase, apiHost }) => {
+const ForgotPassword = ({ setMessage, setParentView, apiHost }) => {
+  const supabase = useClient()
   const [loading, setLoading] = useState(false)
   const [emailSent, setEmailSent] = useState(false)
   const handleSubmit = async (values) => {
@@ -80,7 +83,13 @@ const ForgotPassword = ({ setMessage, setParentView, supabase, apiHost }) => {
   )
 }
 
-const SignIn = ({ setMessage, handleMessageSubmit, formValues, supabase }) => {
+const SignIn = ({
+  setMessage,
+  handleMessageSubmit,
+  formValues,
+  buttonText
+}) => {
+  const supabase = useClient()
   const [loading, setLoading] = useState(false)
   const handleSubmit = async (values) => {
     setLoading(true)
@@ -128,13 +137,13 @@ const SignIn = ({ setMessage, handleMessageSubmit, formValues, supabase }) => {
               id='password'
               name='password'
               type='password'
-              placeholder='Email password...'
+              placeholder='Password...'
             />
             <button
               style={loading || !isValid ? { opacity: '.5' } : {}}
               type='submit'
             >
-              Login & post
+              {buttonText}
             </button>
           </Form>
         )
@@ -147,10 +156,11 @@ const SignUp = ({
   setMessage,
   handleMessageSubmit,
   formValues,
-  supabase,
   organizationId,
-  apiHost
+  apiHost,
+  buttonText
 }) => {
+  const supabase = useClient()
   const [loading, setLoading] = useState(false)
   const handleSubmit = async (values) => {
     setLoading(true)
@@ -241,13 +251,13 @@ const SignUp = ({
               id='password'
               name='password'
               type='password'
-              placeholder='Email password...'
+              placeholder='Password...'
             />
             <button
               style={loading || !isValid ? { opacity: '.5' } : {}}
               type='submit'
             >
-              Sign up & post question
+              {buttonText}
             </button>
           </Form>
         )
@@ -256,7 +266,8 @@ const SignUp = ({
   )
 }
 
-const ResetPassword = ({ setMessage, setParentView, supabase }) => {
+const ResetPassword = ({ setMessage, setParentView }) => {
+  const supabase = useClient()
   const [loading, setLoading] = useState(false)
   const resetPassword = useRef()
   const handleSubmit = async (values) => {
@@ -324,10 +335,10 @@ export default function Authentication({
   formValues,
   setParentView,
   initialView = 'sign-in',
-  supabase,
-  organizationId,
-  apiHost
+  buttonText = { login: 'Login', signUp: 'Sign up' },
+  banner
 }) {
+  const { organizationId, apiHost } = useOrg()
   const [view, setView] = useState(initialView)
   const [message, setMessage] = useState(null)
 
@@ -353,10 +364,12 @@ export default function Authentication({
         </div>
       )}
       <div className='squeak-authentication-form-container'>
-        <div className='squeak-authentication-form-message'>
-          <h4>Please signup to post.</h4>
-          <p>Create an account to ask questions &amp; help others.</p>
-        </div>
+        {banner && (
+          <div className='squeak-authentication-form-message'>
+            <h4>{banner.title}</h4>
+            <p>{banner.body}</p>
+          </div>
+        )}
         <div className='squeak-authentication-form'>
           <div className='squeak-authentication-navigation'>
             <button
@@ -388,7 +401,7 @@ export default function Authentication({
               {
                 'sign-in': (
                   <SignIn
-                    supabase={supabase}
+                    buttonText={buttonText.login}
                     formValues={formValues}
                     handleMessageSubmit={handleMessageSubmit}
                     setMessage={setMessage}
@@ -396,7 +409,7 @@ export default function Authentication({
                 ),
                 'sign-up': (
                   <SignUp
-                    supabase={supabase}
+                    buttonText={buttonText.signUp}
                     formValues={formValues}
                     handleMessageSubmit={handleMessageSubmit}
                     setMessage={setMessage}
@@ -406,7 +419,6 @@ export default function Authentication({
                 ),
                 'forgot-password': (
                   <ForgotPassword
-                    supabase={supabase}
                     setParentView={setParentView}
                     setMessage={setMessage}
                     apiHost={apiHost}
@@ -414,7 +426,6 @@ export default function Authentication({
                 ),
                 'reset-password': (
                   <ResetPassword
-                    supabase={supabase}
                     setParentView={setParentView}
                     setMessage={setMessage}
                   />

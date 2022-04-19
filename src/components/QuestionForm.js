@@ -1,8 +1,11 @@
 import { Field, Form, Formik } from 'formik'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
+import { useClient } from 'react-supabase'
+import { useOrg } from '../hooks/useOrg'
+import { useUser } from '../hooks/useUser'
 import { Approval } from './Approval'
-import Avatar from './Avatar'
 import Authentication from './Authentication'
+import Avatar from './Avatar'
 import Logo from './Logo'
 import RichText from './RichText'
 
@@ -11,9 +14,9 @@ function QuestionForm({
   onSubmit,
   subject = true,
   loading,
-  initialValues,
-  user
+  initialValues
 }) {
+  const user = useUser()
   const handleSubmit = async (values) => {
     onSubmit && (await onSubmit(values))
   }
@@ -41,7 +44,6 @@ function QuestionForm({
         {({ setFieldValue, isValid }) => {
           return (
             <Form className='squeak-form'>
-
               <Avatar image={user?.profile?.avatar} />
 
               <div className=''>
@@ -87,27 +89,21 @@ function QuestionForm({
   )
 }
 
-export default function ({
-  formType = 'question',
-  organizationId,
-  messageID,
-  setQuestions,
-  getQuestions,
-  authState,
-  apiHost,
-  supabase,
-  user
-}) {
+export default function ({ formType = 'question', messageID, onSubmit }) {
+  const supabase = useClient()
+  const { organizationId, apiHost } = useOrg()
+  const user = useUser()
   const [formValues, setFormValues] = useState(null)
   const [view, setView] = useState(null)
   const [loading, setLoading] = useState(false)
-  const buttonText = formType === 'question' ? <span>Ask a question</span> : <span className='squeak-reply-label'><strong>Reply</strong>  to question</span>
-
-  useEffect(() => {
-    if (authState === 'PASSWORD_RECOVERY') {
-      setView('auth')
-    }
-  }, [authState])
+  const buttonText =
+    formType === 'question' ? (
+      <span>Ask a question</span>
+    ) : (
+      <span className='squeak-reply-label'>
+        <strong>Reply</strong> to question
+      </span>
+    )
 
   const insertReply = async ({ body, messageID }) => {
     return fetch(`${apiHost}/api/reply`, {
@@ -140,21 +136,27 @@ export default function ({
     if (userID) {
       let view = null
       if (formType === 'question') {
-        const { published } = await insertMessage({
+        const { published: messagePublished } = await insertMessage({
           subject: values.subject,
           body: values.question
         })
-        if (!published) {
+        if (!messagePublished) {
           view = 'approval'
         }
       }
       if (formType === 'reply') {
-        await insertReply({ body: values.question, messageID })
+        const { published: replyPublished } = await insertReply({
+          body: values.question,
+          messageID
+        })
+        if (!replyPublished) {
+          view = 'approval'
+        }
       }
 
-      await getQuestions().then((questions) => {
-        setQuestions(questions)
-      })
+      if (onSubmit) {
+        onSubmit()
+      }
       setLoading(false)
       setView(view)
       setFormValues(null)
@@ -169,7 +171,6 @@ export default function ({
     {
       'question-form': (
         <QuestionForm
-          user={user}
           subject={formType === 'question'}
           initialValues={formValues}
           loading={loading}
@@ -178,15 +179,25 @@ export default function ({
       ),
       auth: (
         <Authentication
-          supabase={supabase}
-          initialView={
-            authState === 'PASSWORD_RECOVERY' ? 'reset-password' : undefined
-          }
+          banner={{
+            title: 'Please signup to post.',
+            body: 'Create an account to ask questions & help others.'
+          }}
+          buttonText={{
+            login: 'Login & post question',
+            signUp: 'Sign up & post question'
+          }}
           setParentView={setView}
           formValues={formValues}
           handleMessageSubmit={handleMessageSubmit}
-          organizationId={organizationId}
-          apiHost={apiHost}
+          loading={loading}
+        />
+      ),
+      login: (
+        <Authentication
+          setParentView={setView}
+          formValues={formValues}
+          handleMessageSubmit={() => setView(null)}
           loading={loading}
         />
       ),
@@ -203,12 +214,18 @@ export default function ({
       >
         {buttonText}
       </button>
-      {formType === 'question' && user && (
+      {formType === 'question' && (
         <button
-          onClick={() => supabase.auth.signOut()}
+          onClick={() => {
+            if (user) {
+              supabase.auth.signOut()
+            } else {
+              setView('login')
+            }
+          }}
           className='squeak-logout-button'
         >
-          Logout
+          {user ? 'Logout' : 'Login'}
         </button>
       )}
     </div>

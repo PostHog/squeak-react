@@ -1,4 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useClient } from 'react-supabase'
+import { useOrg } from '../hooks/useOrg'
+import { useUser } from '../hooks/useUser'
 import QuestionForm from './QuestionForm'
 import Reply from './Reply'
 
@@ -14,21 +17,18 @@ const getBadge = (questionAuthorId, replyAuthorId, replyAuthorRole) => {
   return questionAuthorId === replyAuthorId ? 'Author' : null
 }
 
-export default function Question({
-  organizationId,
-  question,
-  replies,
-  setQuestions,
-  getQuestions,
-  authState,
-  apiHost,
-  supabase,
-  user
-}) {
+export default function Question({ question, onSubmit, ...other }) {
+  const supabase = useClient()
+  const { organizationId, apiHost } = useOrg()
+  const user = useUser()
+  const [replies, setReplies] = useState(other.replies)
   const [firstReply] = replies
   const [resolvedBy, setResolvedBy] = useState(question?.resolved_reply_id)
   const [resolved, setResolved] = useState(question?.resolved)
   const questionAuthorId = firstReply?.profile?.id
+  const userMetadata = user?.profile?.metadata[0]
+  const isModerator =
+    userMetadata?.role === 'admin' || userMetadata?.role === 'moderator'
   const handleResolve = async (resolved, replyId = null) => {
     await fetch(`${apiHost}/api/question/resolve`, {
       method: 'POST',
@@ -43,6 +43,33 @@ export default function Question({
     setResolved(resolved)
     setResolvedBy(replyId)
   }
+
+  const handleReplyDelete = async (id) => {
+    await supabase
+      .from('squeak_replies')
+      .delete()
+      .match({ id, organization_id: organizationId })
+    setReplies(replies.filter((reply) => id !== reply.id))
+  }
+
+  const handlePublish = async (id, published) => {
+    await supabase
+      .from('squeak_replies')
+      .update({ published })
+      .match({ id, organization_id: organizationId })
+    const newReplies = [...replies]
+    newReplies.some((reply) => {
+      if (reply.id === id) {
+        reply.published = published
+        return true
+      }
+    })
+    setReplies(newReplies)
+  }
+
+  useEffect(() => {
+    setReplies(other.replies)
+  }, [other.replies])
 
   return (
     <div className='squeak-question-container'>
@@ -67,22 +94,28 @@ export default function Question({
             )
 
             return (
-              <li
-                key={reply.id}
-                className={resolvedBy === reply.id ? 'squeak-solution' : ''}
-              >
-                <Reply
-                  className='squeak-post-reply'
-                  resolved={resolved}
-                  resolvedBy={resolvedBy}
-                  handleResolve={handleResolve}
-                  isAuthor={user?.profile?.id === questionAuthorId}
-                  user={user}
+              (reply.published || (!reply.published && isModerator)) && (
+                <li
                   key={reply.id}
-                  {...reply}
-                  badgeText={badgeText}
-                />
-              </li>
+                  className={`${
+                    resolvedBy === reply.id ? 'squeak-solution' : ''
+                  } ${!reply.published ? 'squeak-reply-unpublished' : ''}`}
+                >
+                  <Reply
+                    handlePublish={handlePublish}
+                    handleDelete={handleReplyDelete}
+                    className='squeak-post-reply'
+                    resolved={resolved}
+                    resolvedBy={resolvedBy}
+                    handleResolve={handleResolve}
+                    isModerator={isModerator}
+                    isAuthor={user?.profile?.id === questionAuthorId}
+                    key={reply.id}
+                    {...reply}
+                    badgeText={badgeText}
+                  />
+                </li>
+              )
             )
           })}
         </ul>
@@ -94,14 +127,8 @@ export default function Question({
       ) : (
         <div className='squeak-reply-form-container'>
           <QuestionForm
-            user={user}
-            authState={authState}
-            apiHost={apiHost}
-            supabase={supabase}
-            getQuestions={getQuestions}
-            setQuestions={setQuestions}
+            onSubmit={onSubmit}
             messageID={question.id}
-            organizationId={organizationId}
             formType='reply'
           />
         </div>
