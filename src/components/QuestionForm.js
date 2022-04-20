@@ -49,13 +49,16 @@ function QuestionForm({
               <div className=''>
                 <div class='squeak-inputs-wrapper'>
                   {subject && (
-                    <Field
-                      required
-                      id='subject'
-                      name='subject'
-                      placeholder='Title'
-                      maxLength='50'
-                    />
+                    <>
+                      <Field
+                        required
+                        id='subject'
+                        name='subject'
+                        placeholder='Title'
+                        maxLength='50'
+                      />
+                      <hr />
+                    </>
                   )}
                   <div className='squeak-form-richtext'>
                     <RichText

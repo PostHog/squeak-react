@@ -139,7 +139,7 @@ export default function RichText({ initialValue = '', setFieldValue }) {
   }, [value])
 
   return (
-    <div>
+    <>
       <textarea
         name='question'
         as='textarea'
@@ -168,11 +168,11 @@ export default function RichText({ initialValue = '', setFieldValue }) {
           })}
         </ul>
         <div className='squeak-markdown-logo'>
-          <a href="https://www.markdownguide.org/cheat-sheet/" target="_blank" rel="noopener">
+          <a href="https://www.markdownguide.org/cheat-sheet/" target="_blank" rel="noopener" title="Supports Markdown syntax">
             <MarkdownLogo />
           </a>
         </div>
       </div>
-    </div>
+    </>
   )
 }
