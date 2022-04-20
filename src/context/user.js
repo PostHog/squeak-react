@@ -27,7 +27,9 @@ export const Provider = ({ children }) => {
   useEffect(() => {
     if (user && !user?.profile) {
       getProfile(user).then((profile) => {
-        setUser({ ...user, profile })
+        if (profile) {
+          setUser({ ...user, profile })
+        }
       })
     }
   }, [user])
