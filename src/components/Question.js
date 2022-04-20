@@ -17,7 +17,7 @@ const getBadge = (questionAuthorId, replyAuthorId, replyAuthorRole) => {
   return questionAuthorId === replyAuthorId ? 'Author' : null
 }
 
-export default function Question({ question, onSubmit, ...other }) {
+export default function Question({ question, onSubmit, onResolve, ...other }) {
   const supabase = useClient()
   const { organizationId, apiHost } = useOrg()
   const user = useUser()
@@ -42,6 +42,9 @@ export default function Question({ question, onSubmit, ...other }) {
     })
     setResolved(resolved)
     setResolvedBy(replyId)
+    if (onResolve) {
+      onResolve(resolved, replyId)
+    }
   }
 
   const handleReplyDelete = async (id) => {
@@ -70,6 +73,14 @@ export default function Question({ question, onSubmit, ...other }) {
   useEffect(() => {
     setReplies(other.replies)
   }, [other.replies])
+
+  useEffect(() => {
+    setResolved(question.resolved)
+  }, [question.resolved])
+
+  useEffect(() => {
+    setResolvedBy(question.resolved_reply_id)
+  }, [question.resolved_reply_id])
 
   return (
     <div className='squeak-question-container'>
@@ -110,7 +121,6 @@ export default function Question({ question, onSubmit, ...other }) {
                     handleResolve={handleResolve}
                     isModerator={isModerator}
                     isAuthor={user?.profile?.id === questionAuthorId}
-                    key={reply.id}
                     {...reply}
                     badgeText={badgeText}
                   />

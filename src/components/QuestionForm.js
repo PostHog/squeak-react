@@ -114,7 +114,7 @@ export default function ({ formType = 'question', messageID, onSubmit }) {
         messageId: messageID,
         token: supabase.auth.session()?.access_token
       })
-    })
+    }).then((res) => res.json())
   }
 
   const insertMessage = async ({ subject, body, userID }) => {
@@ -155,7 +155,7 @@ export default function ({ formType = 'question', messageID, onSubmit }) {
       }
 
       if (onSubmit) {
-        onSubmit()
+        onSubmit(values)
       }
       setLoading(false)
       setView(view)

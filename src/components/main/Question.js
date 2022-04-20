@@ -1,14 +1,19 @@
-import { createClient } from '@supabase/supabase-js'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import root from 'react-shadow/styled-components'
-import { Provider as SupabaseProvider, useClient } from 'react-supabase'
+import { Provider as SupabaseProvider } from 'react-supabase'
 import { Provider as OrgProvider } from '../../context/org'
 import { Provider as UserProvider } from '../../context/user'
 import SingleQuestion from '../Question'
 import { Theme } from '../Theme'
 
-export const Question = ({ apiKey, url, apiHost, organizationId, id }) => {
-  const supabase = createClient(url, apiKey)
+export const Question = ({
+  apiHost,
+  organizationId,
+  supabase,
+  onResolve,
+  onSubmit,
+  question
+}) => {
   const containerRef = useRef()
 
   return (
@@ -18,52 +23,16 @@ export const Question = ({ apiKey, url, apiHost, organizationId, id }) => {
           <UserProvider>
             <Theme containerRef={containerRef} />
             <div className='squeak'>
-              <QuestionFromId id={id} />
+              <SingleQuestion
+                replies={question?.replies}
+                question={question?.question}
+                onSubmit={onSubmit}
+                onResolve={onResolve}
+              />
             </div>
           </UserProvider>
         </OrgProvider>
       </SupabaseProvider>
     </root.div>
-  )
-}
-
-const QuestionFromId = ({ id }) => {
-  const supabase = useClient()
-  const [question, setQuestion] = useState(null)
-
-  const getQuestion = async () => {
-    const { data: question } = await supabase
-      .from('squeak_messages')
-      .select('*')
-      .eq('id', id)
-      .single()
-    const { data: replies } = await supabase
-      .from('squeak_replies')
-      .select(
-        `id, body, created_at,
-      profile:squeak_profiles!replies_profile_id_fkey (
-          id, first_name, last_name, avatar, metadata:squeak_profiles_readonly(role)
-     )`
-      )
-      .eq('message_id', id)
-    setQuestion({ question, replies })
-  }
-
-  useEffect(() => {
-    getQuestion()
-  }, [])
-
-  const handleSubmit = async () => {
-    await getQuestion()
-  }
-
-  return (
-    question && (
-      <SingleQuestion
-        replies={question?.replies}
-        question={question?.question}
-        onSubmit={handleSubmit}
-      />
-    )
   )
 }
