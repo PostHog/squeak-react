@@ -446,7 +446,7 @@ const Style = createGlobalStyle`
 
     ul.squeak-thread-resolved {
         li:not(.squeak-solution) {
-            > div {
+            > div:not(.squeak-other-replies-container) {
                 opacity: .6;
             }
         }
@@ -754,8 +754,14 @@ const Style = createGlobalStyle`
         z-index: 1;
     }
 
-    .squeak-other-replies {
+    .squeak-other-replies-container {
         padding-bottom: 2rem;
+        display: flex;
+        align-items: center;
+        .squeak-avatar-container:not(:first-of-type) {
+            margin-left: -1rem;
+            position: relative;
+        }
     }
 
     .squeak-resolved-badge {

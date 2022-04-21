@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Provider as QuestionProvider } from '../context/question'
 import { useQuestion } from '../hooks/useQuestion'
+import Avatar from './Avatar'
 import QuestionForm from './QuestionForm'
 import Reply from './Reply'
 
@@ -22,6 +23,7 @@ const Collapsed = ({ setExpanded }) => {
     replies[replies.findIndex((reply) => reply?.id === resolvedBy)] ||
     replies[replies.length - 1]
   const replyCount = replies.length - 2
+  const maxAvatars = Math.min(replyCount, 3)
   const replyAuthorMetadata = reply?.profile?.metadata[0]
 
   const badgeText = getBadge(
@@ -29,15 +31,35 @@ const Collapsed = ({ setExpanded }) => {
     reply?.profile?.id,
     replyAuthorMetadata?.role
   )
+
+  const avatars = []
+
+  for (let reply of replies.slice(1)) {
+    if (avatars.length >= maxAvatars) break
+    const avatar = reply?.profile?.avatar
+    if (avatar && !avatars.includes(avatar)) {
+      avatars.push(avatar)
+    }
+  }
+
+  if (avatars.length < maxAvatars) {
+    avatars.push(...Array(maxAvatars - avatars.length))
+  }
+
   return (
     <>
       <li>
-        <button
-          className='squeak-other-replies'
-          onClick={() => setExpanded(true)}
-        >
-          View {replyCount} other {replyCount === 1 ? 'reply' : 'replies'}
-        </button>
+        <div className='squeak-other-replies-container'>
+          {avatars.map((avatar) => {
+            return <Avatar image={avatar} />
+          })}
+          <button
+            className='squeak-other-replies'
+            onClick={() => setExpanded(true)}
+          >
+            View {replyCount} other {replyCount === 1 ? 'reply' : 'replies'}
+          </button>
+        </div>
       </li>
 
       <li
