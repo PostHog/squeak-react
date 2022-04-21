@@ -17,15 +17,113 @@ const getBadge = (questionAuthorId, replyAuthorId, replyAuthorRole) => {
   return questionAuthorId === replyAuthorId ? 'Author' : null
 }
 
+const Collapsed = ({
+  reply,
+  isModerator,
+  resolvedBy,
+  handlePublish,
+  handleReplyDelete,
+  resolved,
+  handleResolve,
+  user,
+  questionAuthorId,
+  setExpanded,
+  replyCount
+}) => {
+  const replyAuthorMetadata = reply?.profile?.metadata[0]
+
+  const badgeText = getBadge(
+    questionAuthorId,
+    reply?.profile?.id,
+    replyAuthorMetadata?.role
+  )
+  return (
+    <>
+      <li>
+        <button
+          className='squeak-other-replies'
+          onClick={() => setExpanded(true)}
+        >
+          View {replyCount} other {replyCount === 1 ? 'reply' : 'replies'}
+        </button>
+      </li>
+
+      <li
+        className={`${resolvedBy === reply.id ? 'squeak-solution' : ''} ${
+          !reply.published ? 'squeak-reply-unpublished' : ''
+        }`}
+      >
+        <Reply
+          handlePublish={handlePublish}
+          handleDelete={handleReplyDelete}
+          className='squeak-post-reply'
+          resolved={resolved}
+          resolvedBy={resolvedBy}
+          handleResolve={handleResolve}
+          isModerator={isModerator}
+          isAuthor={user?.profile?.id === questionAuthorId}
+          {...reply}
+          badgeText={badgeText}
+        />
+      </li>
+    </>
+  )
+}
+
+const Expanded = ({
+  replies,
+  isModerator,
+  resolvedBy,
+  handlePublish,
+  handleReplyDelete,
+  resolved,
+  handleResolve,
+  user,
+  questionAuthorId
+}) => {
+  return replies.map((reply) => {
+    const replyAuthorMetadata = reply?.profile?.metadata[0]
+
+    const badgeText = getBadge(
+      questionAuthorId,
+      reply?.profile?.id,
+      replyAuthorMetadata?.role
+    )
+
+    return (
+      <li
+        key={reply.id}
+        className={`${resolvedBy === reply.id ? 'squeak-solution' : ''} ${
+          !reply.published ? 'squeak-reply-unpublished' : ''
+        }`}
+      >
+        <Reply
+          handlePublish={handlePublish}
+          handleDelete={handleReplyDelete}
+          className='squeak-post-reply'
+          resolved={resolved}
+          resolvedBy={resolvedBy}
+          handleResolve={handleResolve}
+          isModerator={isModerator}
+          isAuthor={user?.profile?.id === questionAuthorId}
+          {...reply}
+          badgeText={badgeText}
+        />
+      </li>
+    )
+  })
+}
+
 export default function Question({ question, onSubmit, onResolve, ...other }) {
   const supabase = useClient()
   const { organizationId, apiHost } = useOrg()
   const user = useUser()
-  const [replies, setReplies] = useState(other.replies)
+  const [replies, setReplies] = useState([])
   const [firstReply] = replies
   const [resolvedBy, setResolvedBy] = useState(question?.resolved_reply_id)
   const [resolved, setResolved] = useState(question?.resolved)
-  const questionAuthorId = firstReply?.profile?.id
+  const [expanded, setExpanded] = useState(false)
+  const questionAuthorId = firstReply?.profile?.id || null
   const userMetadata = user?.profile?.metadata[0]
   const isModerator =
     userMetadata?.role === 'admin' || userMetadata?.role === 'moderator'
@@ -71,8 +169,12 @@ export default function Question({ question, onSubmit, onResolve, ...other }) {
   }
 
   useEffect(() => {
-    setReplies(other.replies)
-  }, [other.replies])
+    setReplies(
+      other.replies.filter(
+        (reply) => reply.published || (!reply.published && isModerator)
+      )
+    )
+  }, [other.replies, user])
 
   useEffect(() => {
     setResolved(question.resolved)
@@ -95,39 +197,37 @@ export default function Question({ question, onSubmit, onResolve, ...other }) {
             resolved ? 'squeak-thread-resolved' : ''
           }`}
         >
-          {replies.slice(1).map((reply) => {
-            const replyAuthorMetadata = reply?.profile?.metadata[0]
-
-            const badgeText = getBadge(
-              questionAuthorId,
-              reply?.profile?.id,
-              replyAuthorMetadata?.role
-            )
-
-            return (
-              (reply.published || (!reply.published && isModerator)) && (
-                <li
-                  key={reply.id}
-                  className={`${
-                    resolvedBy === reply.id ? 'squeak-solution' : ''
-                  } ${!reply.published ? 'squeak-reply-unpublished' : ''}`}
-                >
-                  <Reply
-                    handlePublish={handlePublish}
-                    handleDelete={handleReplyDelete}
-                    className='squeak-post-reply'
-                    resolved={resolved}
-                    resolvedBy={resolvedBy}
-                    handleResolve={handleResolve}
-                    isModerator={isModerator}
-                    isAuthor={user?.profile?.id === questionAuthorId}
-                    {...reply}
-                    badgeText={badgeText}
-                  />
-                </li>
-              )
-            )
-          })}
+          {expanded || replies.length <= 2 ? (
+            <Expanded
+              replies={replies.slice(1)}
+              isModerator={isModerator}
+              resolvedBy={resolvedBy}
+              handlePublish={handlePublish}
+              handleReplyDelete={handleReplyDelete}
+              resolved={resolved}
+              handleResolve={handleResolve}
+              user={user}
+              questionAuthorId={questionAuthorId}
+            />
+          ) : (
+            <Collapsed
+              isModerator={isModerator}
+              resolvedBy={resolvedBy}
+              handlePublish={handlePublish}
+              handleReplyDelete={handleReplyDelete}
+              resolved={resolved}
+              handleResolve={handleResolve}
+              user={user}
+              questionAuthorId={questionAuthorId}
+              setExpanded={setExpanded}
+              replyCount={replies.length - 2}
+              reply={
+                replies[
+                  replies.findIndex((reply) => reply.id === resolvedBy)
+                ] || replies[replies.length - 1]
+              }
+            />
+          )}
         </ul>
       )}
       {resolved ? (
