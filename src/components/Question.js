@@ -41,6 +41,7 @@ const Collapsed = ({ setExpanded }) => {
       </li>
 
       <li
+        key={reply?.id}
         className={`${resolvedBy === reply?.id ? 'squeak-solution' : ''} ${
           !reply?.published ? 'squeak-reply-unpublished' : ''
         }`}

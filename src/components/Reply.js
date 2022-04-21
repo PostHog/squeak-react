@@ -21,7 +21,8 @@ export default function Reply({
     resolved,
     resolvedBy,
     handleResolve,
-    handlePublish
+    handlePublish,
+    handleReplyDelete
   } = question
   const [confirmDelete, setConfirmDelete] = useState(false)
   const user = useUser()
@@ -30,13 +31,13 @@ export default function Reply({
   const handleDelete = (e) => {
     e.stopPropagation()
     if (confirmDelete) {
-      question.handleDelete(id)
+      handleReplyDelete(id)
     } else {
       setConfirmDelete(true)
     }
   }
 
-  const handleContainerClick = (e) => {
+  const handleContainerClick = () => {
     setConfirmDelete(false)
   }
 
