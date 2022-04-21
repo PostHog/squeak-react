@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import { useClient } from 'react-supabase'
-import { useOrg } from '../hooks/useOrg'
-import { useUser } from '../hooks/useUser'
+import React, { useState } from 'react'
+import { Provider as QuestionProvider } from '../context/question'
+import { useQuestion } from '../hooks/useQuestion'
 import QuestionForm from './QuestionForm'
 import Reply from './Reply'
 
@@ -17,117 +16,83 @@ const getBadge = (questionAuthorId, replyAuthorId, replyAuthorRole) => {
   return questionAuthorId === replyAuthorId ? 'Author' : null
 }
 
-export default function Question({ question, onSubmit, onResolve, ...other }) {
-  const supabase = useClient()
-  const { organizationId, apiHost } = useOrg()
-  const user = useUser()
-  const [replies, setReplies] = useState(other.replies)
-  const [firstReply] = replies
-  const [resolvedBy, setResolvedBy] = useState(question?.resolved_reply_id)
-  const [resolved, setResolved] = useState(question?.resolved)
-  const questionAuthorId = firstReply?.profile?.id
-  const userMetadata = user?.profile?.metadata[0]
-  const isModerator =
-    userMetadata?.role === 'admin' || userMetadata?.role === 'moderator'
-  const handleResolve = async (resolved, replyId = null) => {
-    await fetch(`${apiHost}/api/question/resolve`, {
-      method: 'POST',
-      body: JSON.stringify({
-        token: supabase.auth?.session()?.access_token,
-        messageId: question?.id,
-        replyId,
-        organizationId,
-        resolved
-      })
-    })
-    setResolved(resolved)
-    setResolvedBy(replyId)
-    if (onResolve) {
-      onResolve(resolved, replyId)
-    }
-  }
+const Collapsed = ({ setExpanded }) => {
+  const { replies, resolvedBy, questionAuthorId } = useQuestion()
+  const reply =
+    replies[replies.findIndex((reply) => reply?.id === resolvedBy)] ||
+    replies[replies.length - 1]
+  const replyCount = replies.length - 2
+  const replyAuthorMetadata = reply?.profile?.metadata[0]
 
-  const handleReplyDelete = async (id) => {
-    await supabase
-      .from('squeak_replies')
-      .delete()
-      .match({ id, organization_id: organizationId })
-    setReplies(replies.filter((reply) => id !== reply.id))
-  }
-
-  const handlePublish = async (id, published) => {
-    await supabase
-      .from('squeak_replies')
-      .update({ published })
-      .match({ id, organization_id: organizationId })
-    const newReplies = [...replies]
-    newReplies.some((reply) => {
-      if (reply.id === id) {
-        reply.published = published
-        return true
-      }
-    })
-    setReplies(newReplies)
-  }
-
-  useEffect(() => {
-    setReplies(other.replies)
-  }, [other.replies])
-
-  useEffect(() => {
-    setResolved(question.resolved)
-  }, [question.resolved])
-
-  useEffect(() => {
-    setResolvedBy(question.resolved_reply_id)
-  }, [question.resolved_reply_id])
-
+  const badgeText = getBadge(
+    questionAuthorId,
+    reply?.profile?.id,
+    replyAuthorMetadata?.role
+  )
   return (
-    <div className='squeak-question-container'>
-      <Reply
-        className='squeak-post'
-        subject={question.subject}
-        {...firstReply}
-      />
+    <>
+      <li>
+        <button
+          className='squeak-other-replies'
+          onClick={() => setExpanded(true)}
+        >
+          View {replyCount} other {replyCount === 1 ? 'reply' : 'replies'}
+        </button>
+      </li>
+
+      <li
+        key={reply?.id}
+        className={`${resolvedBy === reply?.id ? 'squeak-solution' : ''} ${
+          !reply?.published ? 'squeak-reply-unpublished' : ''
+        }`}
+      >
+        <Reply className='squeak-post-reply' {...reply} badgeText={badgeText} />
+      </li>
+    </>
+  )
+}
+
+const Expanded = ({}) => {
+  const question = useQuestion()
+  const replies = question.replies?.slice(1)
+  const { resolvedBy, questionAuthorId } = question
+  return replies.map((reply) => {
+    const replyAuthorMetadata = reply?.profile?.metadata[0]
+
+    const badgeText = getBadge(
+      questionAuthorId,
+      reply?.profile?.id,
+      replyAuthorMetadata?.role
+    )
+
+    return (
+      <li
+        key={reply.id}
+        className={`${resolvedBy === reply.id ? 'squeak-solution' : ''} ${
+          !reply.published ? 'squeak-reply-unpublished' : ''
+        }`}
+      >
+        <Reply className='squeak-post-reply' {...reply} badgeText={badgeText} />
+      </li>
+    )
+  })
+}
+
+const Replies = ({ expanded, setExpanded }) => {
+  const { resolved, replies, onSubmit, question } = useQuestion()
+  return (
+    <>
       {replies && replies.length - 1 > 0 && (
         <ul
           className={`squeak-replies ${
             resolved ? 'squeak-thread-resolved' : ''
           }`}
         >
-          {replies.slice(1).map((reply) => {
-            const replyAuthorMetadata = reply?.profile?.metadata[0]
-
-            const badgeText = getBadge(
-              questionAuthorId,
-              reply?.profile?.id,
-              replyAuthorMetadata?.role
-            )
-
-            return (
-              (reply.published || (!reply.published && isModerator)) && (
-                <li
-                  key={reply.id}
-                  className={`${
-                    resolvedBy === reply.id ? 'squeak-solution' : ''
-                  } ${!reply.published ? 'squeak-reply-unpublished' : ''}`}
-                >
-                  <Reply
-                    handlePublish={handlePublish}
-                    handleDelete={handleReplyDelete}
-                    className='squeak-post-reply'
-                    resolved={resolved}
-                    resolvedBy={resolvedBy}
-                    handleResolve={handleResolve}
-                    isModerator={isModerator}
-                    isAuthor={user?.profile?.id === questionAuthorId}
-                    {...reply}
-                    badgeText={badgeText}
-                  />
-                </li>
-              )
-            )
-          })}
+          {expanded || replies.length <= 2 ? (
+            <Expanded />
+          ) : (
+            <Collapsed setExpanded={setExpanded} />
+          )}
         </ul>
       )}
       {resolved ? (
@@ -143,6 +108,29 @@ export default function Question({ question, onSubmit, onResolve, ...other }) {
           />
         </div>
       )}
+    </>
+  )
+}
+
+export default function Question({ question, onSubmit, onResolve, replies }) {
+  const [expanded, setExpanded] = useState(false)
+  const [firstReply] = replies
+
+  return (
+    <div className='squeak-question-container'>
+      <Reply
+        className='squeak-post'
+        subject={question.subject}
+        {...firstReply}
+      />
+      <QuestionProvider
+        onSubmit={onSubmit}
+        question={question}
+        replies={replies}
+        onResolve={onResolve}
+      >
+        <Replies expanded={expanded} setExpanded={setExpanded} />
+      </QuestionProvider>
     </div>
   )
 }

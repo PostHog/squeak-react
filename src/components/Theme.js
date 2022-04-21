@@ -5,7 +5,8 @@ import lightOrDark from '../util/lightOrDark'
 
 const Style = createGlobalStyle`
 :host {
-    --primary-color: ${(props) => props.dark ? '255, 255, 255' : '0, 0, 0'}; // rgb triplets, no hex
+    --primary-color: ${(props) =>
+      props.dark ? '255, 255, 255' : '0, 0, 0'}; // rgb triplets, no hex
     --button-color: var(--squeak-button-color, 29, 74, 255); // rgb triplet, no hex
     --border-radius: var(--squeak-border-radius, .25rem); // adjusts all radii
     --base-font-size: var(--squeak-base-font-size, 16px);
@@ -727,8 +728,10 @@ const Style = createGlobalStyle`
         }
     }
 
+   
+
     .squeak-resolve-button,
-    .squeak-undo-resolved, .squeak-publish-button {
+    .squeak-undo-resolved, .squeak-publish-button, .squeak-other-replies {
         background: none;
         border: none;
         padding: 0;
@@ -745,10 +748,14 @@ const Style = createGlobalStyle`
         font-weight: 600;
         margin-left: .5rem;
     }
-    .squeak-resolve-button, .squeak-unresolve-button, .squeak-resolve-text, .squeak-publish-button {
+    .squeak-resolve-button, .squeak-unresolve-button, .squeak-resolve-text, .squeak-publish-button, .squeak-other-replies {
         font-size: .875em;
         font-weight: 600;
         z-index: 1;
+    }
+
+    .squeak-other-replies {
+        padding-bottom: 2rem;
     }
 
     .squeak-resolved-badge {

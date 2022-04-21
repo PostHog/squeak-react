@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { useQuestion } from '../hooks/useQuestion'
+import { useUser } from '../hooks/useUser'
 import Avatar from './Avatar'
 import Days from './Days'
 import Markdown from './Markdown'
@@ -9,28 +11,33 @@ export default function Reply({
   body,
   subject,
   badgeText,
-  resolved,
-  resolvedBy,
-  isAuthor,
-  handleResolve,
   id,
-  isModerator,
   published,
-  handlePublish,
   ...other
 }) {
+  const question = useQuestion()
+  const {
+    questionAuthorId,
+    resolved,
+    resolvedBy,
+    handleResolve,
+    handlePublish,
+    handleReplyDelete
+  } = question
   const [confirmDelete, setConfirmDelete] = useState(false)
-
+  const user = useUser()
+  const isModerator = user?.isModerator
+  const isAuthor = user?.profile?.id === questionAuthorId
   const handleDelete = (e) => {
     e.stopPropagation()
     if (confirmDelete) {
-      other.handleDelete(id)
+      handleReplyDelete(id)
     } else {
       setConfirmDelete(true)
     }
   }
 
-  const handleContainerClick = (e) => {
+  const handleContainerClick = () => {
     setConfirmDelete(false)
   }
 
@@ -60,29 +67,31 @@ export default function Reply({
       <div className='squeak-post-content'>
         {subject && <h3>{subject}</h3>}
         <Markdown>{body}</Markdown>
-        <div className='squeak-reply-action-buttons'>
-          {!resolved && (isAuthor || isModerator) && (
-            <button
-              onClick={() => handleResolve(true, id)}
-              className='squeak-resolve-button'
-            >
-              Mark as solution
-            </button>
-          )}
-          {isModerator && (
-            <button
-              onClick={() => handlePublish(id, !published)}
-              className='squeak-publish-button'
-            >
-              {published ? 'Unpublish' : 'Publish'}
-            </button>
-          )}
-          {isModerator && (
-            <button onClick={handleDelete} className='squeak-delete-button'>
-              {confirmDelete ? 'Click again to confirm' : 'Delete'}
-            </button>
-          )}
-        </div>
+        {!subject && (
+          <div className='squeak-reply-action-buttons'>
+            {!resolved && (isAuthor || isModerator) && (
+              <button
+                onClick={() => handleResolve(true, id)}
+                className='squeak-resolve-button'
+              >
+                Mark as solution
+              </button>
+            )}
+            {isModerator && (
+              <button
+                onClick={() => handlePublish(id, !published)}
+                className='squeak-publish-button'
+              >
+                {published ? 'Unpublish' : 'Publish'}
+              </button>
+            )}
+            {isModerator && (
+              <button onClick={handleDelete} className='squeak-delete-button'>
+                {confirmDelete ? 'Click again to confirm' : 'Delete'}
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   )

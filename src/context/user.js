@@ -27,8 +27,11 @@ export const Provider = ({ children }) => {
   useEffect(() => {
     if (user && !user?.profile) {
       getProfile(user).then((profile) => {
+        const userMetadata = profile?.metadata[0]
+        const isModerator =
+          userMetadata?.role === 'admin' || userMetadata?.role === 'moderator'
         if (profile) {
-          setUser({ ...user, profile })
+          setUser({ ...user, profile, isModerator })
         }
       })
     }
