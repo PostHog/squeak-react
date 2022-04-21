@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useUser } from '../hooks/useUser'
 import Avatar from './Avatar'
 import Days from './Days'
 import Markdown from './Markdown'
@@ -14,13 +15,13 @@ export default function Reply({
   isAuthor,
   handleResolve,
   id,
-  isModerator,
   published,
   handlePublish,
   ...other
 }) {
   const [confirmDelete, setConfirmDelete] = useState(false)
-
+  const user = useUser()
+  const isModerator = user?.isModerator
   const handleDelete = (e) => {
     e.stopPropagation()
     if (confirmDelete) {

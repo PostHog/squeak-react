@@ -19,7 +19,6 @@ const getBadge = (questionAuthorId, replyAuthorId, replyAuthorRole) => {
 
 const Collapsed = ({
   reply,
-  isModerator,
   resolvedBy,
   handlePublish,
   handleReplyDelete,
@@ -60,7 +59,6 @@ const Collapsed = ({
           resolved={resolved}
           resolvedBy={resolvedBy}
           handleResolve={handleResolve}
-          isModerator={isModerator}
           isAuthor={user?.profile?.id === questionAuthorId}
           {...reply}
           badgeText={badgeText}
@@ -72,7 +70,6 @@ const Collapsed = ({
 
 const Expanded = ({
   replies,
-  isModerator,
   resolvedBy,
   handlePublish,
   handleReplyDelete,
@@ -104,7 +101,6 @@ const Expanded = ({
           resolved={resolved}
           resolvedBy={resolvedBy}
           handleResolve={handleResolve}
-          isModerator={isModerator}
           isAuthor={user?.profile?.id === questionAuthorId}
           {...reply}
           badgeText={badgeText}
@@ -124,9 +120,6 @@ export default function Question({ question, onSubmit, onResolve, ...other }) {
   const [resolved, setResolved] = useState(question?.resolved)
   const [expanded, setExpanded] = useState(false)
   const questionAuthorId = firstReply?.profile?.id || null
-  const userMetadata = user?.profile?.metadata[0]
-  const isModerator =
-    userMetadata?.role === 'admin' || userMetadata?.role === 'moderator'
   const handleResolve = async (resolved, replyId = null) => {
     await fetch(`${apiHost}/api/question/resolve`, {
       method: 'POST',
@@ -171,7 +164,7 @@ export default function Question({ question, onSubmit, onResolve, ...other }) {
   useEffect(() => {
     setReplies(
       other.replies.filter(
-        (reply) => reply.published || (!reply.published && isModerator)
+        (reply) => reply.published || (!reply.published && user?.isModerator)
       )
     )
   }, [other.replies, user])
@@ -200,7 +193,6 @@ export default function Question({ question, onSubmit, onResolve, ...other }) {
           {expanded || replies.length <= 2 ? (
             <Expanded
               replies={replies.slice(1)}
-              isModerator={isModerator}
               resolvedBy={resolvedBy}
               handlePublish={handlePublish}
               handleReplyDelete={handleReplyDelete}
@@ -211,7 +203,6 @@ export default function Question({ question, onSubmit, onResolve, ...other }) {
             />
           ) : (
             <Collapsed
-              isModerator={isModerator}
               resolvedBy={resolvedBy}
               handlePublish={handlePublish}
               handleReplyDelete={handleReplyDelete}
