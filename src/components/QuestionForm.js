@@ -55,7 +55,7 @@ function QuestionForm({
                         id='subject'
                         name='subject'
                         placeholder='Title'
-                        maxLength='50'
+                        maxLength='140'
                       />
                       <hr />
                     </>
