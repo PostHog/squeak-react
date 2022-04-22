@@ -3,7 +3,7 @@ import { useOrg } from '../hooks/useOrg'
 import Question from './Question'
 import QuestionForm from './QuestionForm'
 
-export default function Questions() {
+export default function Questions({ allQuestions = false }) {
   const { organizationId, apiHost } = useOrg()
   const [questions, setQuestions] = useState([])
   const getQuestions = async () => {
@@ -12,7 +12,7 @@ export default function Questions() {
       method: 'POST',
       body: JSON.stringify({
         organizationId,
-        slug: pathname,
+        slug: !allQuestions && pathname,
         published: true,
         perPage: 100
       })
