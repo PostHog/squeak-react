@@ -3,16 +3,15 @@ import { useOrg } from '../hooks/useOrg'
 import Question from './Question'
 import QuestionForm from './QuestionForm'
 
-export default function Questions({ allQuestions = false }) {
+export default function Questions({ slug = window.location.pathname }) {
   const { organizationId, apiHost } = useOrg()
   const [questions, setQuestions] = useState([])
   const getQuestions = async () => {
-    const pathname = window.location.pathname
     const response = await fetch(`${apiHost}/api/questions`, {
       method: 'POST',
       body: JSON.stringify({
         organizationId,
-        slug: !allQuestions && pathname,
+        slug,
         published: true,
         perPage: 100
       })

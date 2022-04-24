@@ -7,13 +7,7 @@ import { Provider as UserProvider } from '../../context/user'
 import Questions from '../Questions'
 import { Theme } from '../Theme'
 
-export const Squeak = ({
-  apiKey,
-  url,
-  apiHost,
-  organizationId,
-  allQuestions
-}) => {
+export const Squeak = ({ apiKey, url, apiHost, organizationId, slug }) => {
   const supabase = createClient(url, apiKey)
   const containerRef = useRef()
 
@@ -24,7 +18,7 @@ export const Squeak = ({
           <UserProvider>
             <Theme containerRef={containerRef} />
             <div className='squeak'>
-              <Questions allQuestions={allQuestions} />
+              <Questions slug={slug} />
             </div>
           </UserProvider>
         </OrgProvider>
