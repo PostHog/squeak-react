@@ -11,7 +11,7 @@ npm install --save squeak-react
 
 # or
 
-yarn add squeak
+yarn add squeak-react
 ```
 
 ## Usage
