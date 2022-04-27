@@ -249,6 +249,7 @@ const Style = createGlobalStyle`
             border: 1px solid transparent;
             color: rgba(var(--button-color), 1);
             padding: 0;
+            background: transparent;
         }
     }
 
