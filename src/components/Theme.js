@@ -17,7 +17,7 @@ const Style = createGlobalStyle`
     --thread-border-style: var(--squeak-thread-border-style, dashed); // css border style
     --input-text-color: var(--squeak-input-text-color, 0, 0, 0); // rgb triplet, no hex
     --input-background-color: var(--squeak-input-background-color, #fff); // transparent, hex, rgb, or rgba
-    --link-text-decoration: underline; // none | underline | dashed | etc
+    --link-text-decoration: none; // none | underline | dashed | etc
     all: initial;
     font-family: inherit;
 }
