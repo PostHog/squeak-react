@@ -119,7 +119,7 @@ const Replies = ({ expanded, setExpanded }) => {
       )}
       {resolved ? (
         <div className='squeak-locked-message'>
-          <p>This thread has been closed.</p>
+          <p>This thread has been closed</p>
         </div>
       ) : (
         <div className='squeak-reply-form-container'>

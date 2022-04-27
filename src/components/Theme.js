@@ -7,13 +7,17 @@ const Style = createGlobalStyle`
 :host {
     --primary-color: ${(props) =>
       props.dark ? '255, 255, 255' : '0, 0, 0'}; // rgb triplets, no hex
+    --default-avatar-fill: ${(props) =>
+    props.dark ? '0, 0, 0' : '255, 255, 255'}; // rgb triplets, no hex
     --button-color: var(--squeak-button-color, 29, 74, 255); // rgb triplet, no hex
+    --button-weight: bold; // normal | bold | 600 | etc
     --border-radius: var(--squeak-border-radius, .25rem); // adjusts all radii
     --base-font-size: var(--squeak-base-font-size, 16px);
     --warning-color: var(--squeak-warning-color, #FFF7E9); // hex
     --thread-border-style: var(--squeak-thread-border-style, dashed); // css border style
     --input-text-color: var(--squeak-input-text-color, 0, 0, 0); // rgb triplet, no hex
     --input-background-color: var(--squeak-input-background-color, #fff); // transparent, hex, rgb, or rgba
+    --link-text-decoration: underline; // none | underline | dashed | etc
     all: initial;
     font-family: inherit;
 }
@@ -35,7 +39,7 @@ const Style = createGlobalStyle`
         color: rgba(var(--button-color), .85);
         cursor: pointer;
         font-size: .933em;
-        font-weight: 500;
+        font-weight: var(--button-weight);
         padding: 0.6rem 1rem;
 
         &:hover {
@@ -58,6 +62,7 @@ const Style = createGlobalStyle`
 
     .squeak-authentication-form-container {
         margin-left: 50px;
+        max-width: 600px;
 
         .squeak-authentication-form-message {
             background: var(--warning-color);
@@ -173,6 +178,10 @@ const Style = createGlobalStyle`
         flex-shrink: 0;
         line-height: 0;
         margin-right: 10px;
+
+        svg {
+            background: rgba(var(--default-avatar-fill), 1);
+        }
     }
 
     .squeak-avatar-container svg path:first-child {
@@ -182,6 +191,7 @@ const Style = createGlobalStyle`
     .squeak-avatar-container img,
     .squeak-avatar-container svg {
         border-radius: 100px;
+        border: 1px solid rgba(var(--default-avatar-fill), 1);
         height: 40px;
         width: 40px;
     }
@@ -196,10 +206,11 @@ const Style = createGlobalStyle`
     .squeak-post-preview-container {
         align-items: center;
         border: 1px solid rgba(var(--primary-color), .3);
+        border-radius: var(--border-radius) var(--border-radius) 0 0;
         border-bottom: none;
         display: flex;
+        max-width: 600px;
         padding: .7rem 1rem;
-        border-radius: var(--border-radius) var(--border-radius) 0 0;
 
         .squeak-post-preview {
             align-items: baseline;
@@ -264,10 +275,10 @@ const Style = createGlobalStyle`
         margin-bottom: 1.5rem;
 
         > li {
-            padding-bottom: 1.25rem;
+            padding-bottom: 1rem;
 
             &:not(:first-child) {
-                padding-top: 1.25em;
+                padding-top: 1em;
             }
         }
         
@@ -462,7 +473,6 @@ const Style = createGlobalStyle`
     .squeak-post-markdown {
         font-size: .933em;
         line-height: 1.4;
-
         p {
             margin-top: 0;
         }
@@ -473,7 +483,7 @@ const Style = createGlobalStyle`
 
         a {
             color: rgba(var(--button-color), 1);
-            text-decoration: none;
+            text-decoration: var(--link-text-decoration);
         }
 
         pre {
@@ -489,6 +499,7 @@ const Style = createGlobalStyle`
     .squeak-reply-form-container {
         margin-left: 20px;
         padding-right: 20px;
+        padding-bottom: .25rem;
         padding-left: calc(25px + 8px);
         position: relative;
         width: 100%;
@@ -708,6 +719,10 @@ const Style = createGlobalStyle`
         margin-bottom: 1rem;
         position: relative;
         top: -.5em;
+
+        &:empty {
+            display: none;
+        }
     }
 
     .squeak-resolve-button, .squeak-publish-button {
@@ -775,7 +790,17 @@ const Style = createGlobalStyle`
         text-transform: uppercase;
     }
 
-    .squeak-locked-message,
+    .squeak-locked-message {
+        border-radius: var(--border-radius);
+        margin: -1.5rem 0 0 calc(20px + 25px + 22px);
+        padding: 0 1rem;
+
+        p {
+            color: rgba(var(--primary-color), .6);
+            font-size: .875em;
+        }
+    }
+
     .squeak-approval-required {
         background: rgba(var(--primary-color), .03);
         border: 1px solid rgba(var(--primary-color), .2);
@@ -788,9 +813,7 @@ const Style = createGlobalStyle`
             font-size: .875em;
         }
     }
-    .squeak-locked-message {
-        text-align: center;
-    }
+    
     .squeak-approval-required {
         padding-bottom: 1rem;
 
