@@ -191,7 +191,6 @@ const Style = createGlobalStyle`
     .squeak-avatar-container img,
     .squeak-avatar-container svg {
         border-radius: 100px;
-        border: 1px solid rgba(var(--default-avatar-fill), 1);
         height: 40px;
         width: 40px;
     }
