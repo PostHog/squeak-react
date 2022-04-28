@@ -128,7 +128,7 @@ export default function ({ formType = 'question', messageID, onSubmit }) {
         body,
         organizationId,
         token: supabase.auth.session()?.access_token,
-        slug: window.location.pathname
+        slug: window.location.pathname.replace(/\/$/, '')
       })
     }).then((res) => res.json())
   }
