@@ -17,7 +17,7 @@ const Style = createGlobalStyle`
     --thread-border-style: var(--squeak-thread-border-style, dashed); // css border style
     --input-text-color: var(--squeak-input-text-color, 0, 0, 0); // rgb triplet, no hex
     --input-background-color: var(--squeak-input-background-color, #fff); // transparent, hex, rgb, or rgba
-    --link-text-decoration: underline; // none | underline | dashed | etc
+    --link-text-decoration: none; // none | underline | dashed | etc
     all: initial;
     font-family: inherit;
 }
@@ -191,7 +191,6 @@ const Style = createGlobalStyle`
     .squeak-avatar-container img,
     .squeak-avatar-container svg {
         border-radius: 100px;
-        border: 1px solid rgba(var(--default-avatar-fill), 1);
         height: 40px;
         width: 40px;
     }
