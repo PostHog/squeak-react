@@ -3,7 +3,9 @@ import { useOrg } from '../hooks/useOrg'
 import Question from './Question'
 import QuestionForm from './QuestionForm'
 
-export default function Questions({ slug = window.location.pathname }) {
+export default function Questions({
+  slug = window.location.pathname.replace(/\/$/, '')
+}) {
   const { organizationId, apiHost } = useOrg()
   const [questions, setQuestions] = useState([])
   const getQuestions = async () => {
