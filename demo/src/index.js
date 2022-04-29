@@ -1,10 +1,7 @@
 import React from 'react'
-import { createRoot } from 'react-dom/client'
-import { Squeak } from '../../src'
+import ReactDOM from 'react-dom'
 
-const container = document.querySelector('#demo')
-const root = createRoot(container)
-root.render(
+ReactDOM.render(
   <div style={{ maxWidth: 450 }}>
     <Squeak
       apiHost='YOUR_API_HOST'
@@ -12,5 +9,6 @@ root.render(
       url='YOUR_SUPABASE_URL'
       organizationId='YOUR_ORGANIZATION_ID'
     />
-  </div>
+  </div>,
+  document.getElementById('demo')
 )
