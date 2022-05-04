@@ -34,7 +34,7 @@ const Style = createGlobalStyle`
 
     code, pre {
         padding: 2px 3px;
-        background: rgba(var(--primary-color),0.05); // this prob needs squeak- prefix in our code
+        background: rgba(var(--primary-color),0.05);
         font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
         border-radius: 2px;
     }
