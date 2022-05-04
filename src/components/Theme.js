@@ -569,11 +569,11 @@ const Style = createGlobalStyle`
         }
     }
 
-    .squeak-logout-button {
+    .squeak-auth-button {
         border: solid 1.5px transparent;
         background: none;
         margin-left: auto;
-        opacity: 0.5;
+        opacity: 0.85;
 
         &:hover {
             border: solid 1.5px transparent;

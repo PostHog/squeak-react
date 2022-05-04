@@ -226,7 +226,7 @@ export default function ({ formType = 'question', messageID, onSubmit }) {
               setView('login')
             }
           }}
-          className='squeak-logout-button'
+          className='squeak-auth-button'
         >
           {user ? 'Logout' : 'Login'}
         </button>
