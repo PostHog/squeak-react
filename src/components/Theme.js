@@ -31,9 +31,16 @@ const Style = createGlobalStyle`
         box-sizing: border-box;
         font-family: var(--font-family);
     }
+
+    code, pre {
+        padding: 2px 3px;
+        background: rgba(var(--primary-color),0.05);
+        font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+        border-radius: 2px;
+    }
     
     button {
-        background: var(--input-background-color);
+        background: transparent;
         border: solid 1.5px rgba(var(--button-color), .85);
         border-radius: var(--border-radius);
         color: rgba(var(--button-color), .85);
@@ -240,7 +247,6 @@ const Style = createGlobalStyle`
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-
             p {
                 margin: 0;
             }
@@ -386,6 +392,7 @@ const Style = createGlobalStyle`
         font-weight: 600;
         margin: 0;
         padding-bottom: .25rem;
+        line-height: 1.25rem;
     }
 
     // replies styling only
@@ -471,7 +478,9 @@ const Style = createGlobalStyle`
 
     .squeak-post-markdown {
         font-size: .933em;
-        line-height: 1.4;
+        line-height: 1.5;
+        overflow-wrap: break-word;
+        word-break: break-word;
         p {
             margin-top: 0;
         }
@@ -560,11 +569,11 @@ const Style = createGlobalStyle`
         }
     }
 
-    .squeak-logout-button {
+    .squeak-auth-button {
         border: solid 1.5px transparent;
         background: none;
         margin-left: auto;
-        opacity: 0.5;
+        opacity: 0.85;
 
         &:hover {
             border: solid 1.5px transparent;
