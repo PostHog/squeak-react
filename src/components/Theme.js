@@ -837,6 +837,11 @@ const Style = createGlobalStyle`
             margin-top: .5rem;
         }
     }
+
+    .squeak-show-more-questions-button {
+        width: 100%;
+        margin-bottom: 2rem;
+    }
 }
 `
 
