@@ -837,6 +837,30 @@ const Style = createGlobalStyle`
             margin-top: .5rem;
         }
     }
+
+    .squeak-topics-container {
+        list-style: none;
+        margin: 0 0 1.5rem;
+        padding: 0;
+        display: flex;
+        white-space: nowrap;
+        overflow: auto;
+
+        > li {
+            margin-right: .5rem;
+
+            button {
+                padding: 0 0 .2rem;
+                border: none;
+                border-radius: 0;
+                border-bottom: 1px solid rgba(var(--button-color), 0);
+                 &.squeak-active-topic {
+                    color: rgba(var(--button-color), 100);
+                    border-bottom: 1px solid rgba(var(--button-color), 100);
+                }
+            }
+        }
+    }
 }
 `
 
