@@ -3,16 +3,49 @@ import { useOrg } from '../hooks/useOrg'
 import Question from './Question'
 import QuestionForm from './QuestionForm'
 
+const Topics = ({ handleTopicChange, activeTopic }) => {
+  const { topics } = useOrg()
+
+  return (
+    topics &&
+    topics.length > 0 && (
+      <ul className='squeak-topics-container'>
+        <li>
+          <button
+            className={activeTopic === null ? 'squeak-active-topic' : ''}
+            onClick={() => handleTopicChange(null)}
+          >
+            All
+          </button>
+        </li>
+        {topics.map(({ label }) => {
+          return (
+            <li>
+              <button
+                className={activeTopic === label ? 'squeak-active-topic' : ''}
+                onClick={() => handleTopicChange(label)}
+              >
+                {label}
+              </button>
+            </li>
+          )
+        })}
+      </ul>
+    )
+  )
+}
+
 export default function Questions({
   slug = window.location.pathname.replace(/\/$/, ''),
   limit = 100
 }) {
+  const [activeTopic, setActiveTopic] = useState(null)
   const { organizationId, apiHost } = useOrg()
   const [questions, setQuestions] = useState([])
   const [count, setCount] = useState(0)
   const [start, setStart] = useState(0)
   const [loading, setLoading] = useState(false)
-  const getQuestions = async ({ limit, start }) => {
+  const getQuestions = async ({ limit, start, topic }) => {
     setLoading(true)
     const response = await fetch(`${apiHost}/api/questions`, {
       method: 'POST',
@@ -21,7 +54,8 @@ export default function Questions({
         slug,
         published: true,
         perPage: limit,
-        start
+        start,
+        topic
       })
     })
 
@@ -57,8 +91,19 @@ export default function Questions({
     })
   }
 
+  const handleTopicChange = (topic) => {
+    if (topic === activeTopic) return
+    getQuestions({ limit, start: 0, topic }).then((data) => {
+      setStart(0)
+      setQuestions(data.questions)
+      setCount(data.count)
+      setActiveTopic(topic)
+    })
+  }
+
   return (
     <>
+      <Topics handleTopicChange={handleTopicChange} activeTopic={activeTopic} />
       {questions && questions.length > 0 && (
         <>
           <ul className='squeak-questions'>
