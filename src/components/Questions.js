@@ -10,6 +10,14 @@ const Topics = ({ handleTopicChange, activeTopic }) => {
     topics &&
     topics.length > 0 && (
       <ul className='squeak-topics-container'>
+        <li>
+          <button
+            className={activeTopic === null ? 'squeak-active-topic' : ''}
+            onClick={() => handleTopicChange(null)}
+          >
+            All
+          </button>
+        </li>
         {topics.map(({ label }) => {
           return (
             <li>
@@ -67,10 +75,10 @@ export default function Questions({
   }
 
   const handleTopicChange = (topic) => {
-    const newActiveTopic = topic !== activeTopic && topic
-    getQuestions(newActiveTopic).then((questions) => {
+    if (topic === activeTopic) return
+    getQuestions(topic).then((questions) => {
       setQuestions(questions)
-      setActiveTopic(newActiveTopic)
+      setActiveTopic(topic)
     })
   }
 
