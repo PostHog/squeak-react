@@ -36,7 +36,8 @@ const Topics = ({ handleTopicChange, activeTopic }) => {
 }
 
 export default function Questions({
-  slug = window.location.pathname.replace(/\/$/, '')
+  slug = window.location.pathname.replace(/\/$/, ''),
+  onSubmit
 }) {
   const [activeTopic, setActiveTopic] = useState(null)
   const { organizationId, apiHost } = useOrg()
@@ -68,9 +69,10 @@ export default function Questions({
     })
   }, [])
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (values, formType) => {
     await getQuestions().then((questions) => {
       setQuestions(questions)
+      onSubmit && onSubmit(values, formType)
     })
   }
 
