@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Provider as QuestionProvider } from '../context/question'
+import { useOrg } from '../hooks/useOrg'
 import { useQuestion } from '../hooks/useQuestion'
 import Avatar from './Avatar'
 import QuestionForm from './QuestionForm'
@@ -134,11 +135,38 @@ const Replies = ({ expanded, setExpanded }) => {
   )
 }
 
-export default function Question({ question, onSubmit, onResolve, replies }) {
+export default function Question({ onSubmit, onResolve, apiHost, ...other }) {
   const [expanded, setExpanded] = useState(false)
+  const [question, setQuestion] = useState(other.question)
+  const [replies, setReplies] = useState(other.replies || [])
   const [firstReply] = replies
+  const { organizationId } = useOrg()
 
-  return (
+  const getQuestion = async () => {
+    const permalink = window.location.pathname
+    const response = await fetch(
+      `${apiHost}/api/question?organizationId=${organizationId}&permalink=${permalink}`
+    )
+
+    if (response.status !== 200) {
+      return null
+    }
+
+    const question = await response.json()
+
+    return question
+  }
+
+  useEffect(() => {
+    if (!question) {
+      getQuestion().then((question) => {
+        setQuestion(question?.question)
+        setReplies(question?.replies || [])
+      })
+    }
+  }, [])
+
+  return question ? (
     <div className='squeak-question-container'>
       <Reply
         className='squeak-post'
@@ -154,5 +182,5 @@ export default function Question({ question, onSubmit, onResolve, replies }) {
         <Replies expanded={expanded} setExpanded={setExpanded} />
       </QuestionProvider>
     </div>
-  )
+  ) : null
 }
