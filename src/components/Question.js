@@ -140,7 +140,10 @@ export default function Question({ onSubmit, onResolve, apiHost, ...other }) {
   const [question, setQuestion] = useState(other.question)
   const [replies, setReplies] = useState(other.replies || [])
   const [firstReply] = replies
-  const { organizationId } = useOrg()
+  const {
+    organizationId,
+    config: { permalink_base, permalinks_enabled }
+  } = useOrg()
 
   const getQuestion = async () => {
     const permalink = window.location.pathname
@@ -169,6 +172,11 @@ export default function Question({ onSubmit, onResolve, apiHost, ...other }) {
   return question ? (
     <div className='squeak-question-container'>
       <Reply
+        permalink={
+          permalinks_enabled &&
+          question?.permalink &&
+          `/${permalink_base}/${question?.permalink}`
+        }
         className='squeak-post'
         subject={question.subject}
         {...firstReply}
