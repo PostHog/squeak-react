@@ -1,3 +1,4 @@
+import { createClient } from '@supabase/supabase-js'
 import React, { useRef } from 'react'
 import root from 'react-shadow/styled-components'
 import { Provider as SupabaseProvider } from 'react-supabase'
@@ -9,13 +10,15 @@ import { Theme } from '../Theme'
 export const Question = ({
   apiHost,
   organizationId,
-  supabase,
   onResolve,
   onSubmit,
-  question
+  question,
+  url,
+  apiKey,
+  ...other
 }) => {
   const containerRef = useRef()
-
+  const supabase = other.supabase || createClient(url, apiKey)
   return (
     <root.div ref={containerRef}>
       <SupabaseProvider value={supabase}>
@@ -24,6 +27,7 @@ export const Question = ({
             <Theme containerRef={containerRef} />
             <div className='squeak'>
               <SingleQuestion
+                apiHost={apiHost}
                 replies={question?.replies}
                 question={question?.question}
                 onSubmit={onSubmit}
