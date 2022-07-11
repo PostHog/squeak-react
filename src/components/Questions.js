@@ -37,19 +37,25 @@ const Topics = ({ handleTopicChange, activeTopic }) => {
 
 export default function Questions({
   slug = window.location.pathname.replace(/\/$/, ''),
+  limit = 100,
   onSubmit
 }) {
   const [activeTopic, setActiveTopic] = useState(null)
   const { organizationId, apiHost } = useOrg()
   const [questions, setQuestions] = useState([])
-  const getQuestions = async (topic) => {
+  const [count, setCount] = useState(0)
+  const [start, setStart] = useState(0)
+  const [loading, setLoading] = useState(false)
+  const getQuestions = async ({ limit, start, topic }) => {
+    setLoading(true)
     const response = await fetch(`${apiHost}/api/questions`, {
       method: 'POST',
       body: JSON.stringify({
         organizationId,
         slug,
         published: true,
-        perPage: 100,
+        perPage: limit,
+        start,
         topic
       })
     })
@@ -58,28 +64,41 @@ export default function Questions({
       return []
     }
 
-    const { questions } = await response.json()
-
-    return questions
+    const data = await response.json()
+    setLoading(false)
+    return data
   }
 
   useEffect(() => {
-    getQuestions().then((questions) => {
-      setQuestions(questions)
+    getQuestions({ limit, start }).then((data) => {
+      setQuestions([...questions, ...data.questions])
+      setCount(data.count)
     })
   }, [])
 
-  const handleSubmit = async (values, formType) => {
-    await getQuestions().then((questions) => {
-      setQuestions(questions)
+  const handleSubmit = async () => {
+    await getQuestions({ limit: 1, start: 0 }).then((data) => {
+      setQuestions([...data.questions, ...questions])
+      setCount(data.count)
+      setStart(start + 1)
       onSubmit && onSubmit(values, formType)
+    })
+  }
+
+  const handleShowMore = () => {
+    getQuestions({ limit, start: start + limit }).then((data) => {
+      setQuestions([...questions, ...data.questions])
+      setCount(data.count)
+      setStart(start + limit)
     })
   }
 
   const handleTopicChange = (topic) => {
     if (topic === activeTopic) return
-    getQuestions(topic).then((questions) => {
-      setQuestions(questions)
+    getQuestions({ limit, start: 0, topic }).then((data) => {
+      setStart(0)
+      setQuestions(data.questions)
+      setCount(data.count)
       setActiveTopic(topic)
     })
   }
@@ -99,6 +118,15 @@ export default function Questions({
             })}
           </ul>
         </>
+      )}
+      {start + limit < count && (
+        <button
+          disabled={loading}
+          className='squeak-show-more-questions-button'
+          onClick={handleShowMore}
+        >
+          Show more
+        </button>
       )}
       <QuestionForm
         onSubmit={handleSubmit}

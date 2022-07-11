@@ -842,6 +842,10 @@ const Style = createGlobalStyle`
         }
     }
 
+    .squeak-show-more-questions-button {
+        width: 100%;
+        margin-bottom: 2rem;
+    }
     .squeak-topics-container {
         list-style: none;
         margin: 0 0 1.5rem;
