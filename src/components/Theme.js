@@ -377,6 +377,10 @@ const Style = createGlobalStyle`
     .squeak-post-timestamp {
         color: rgba(var(--primary-color), .6);
         font-size: .875em;
+
+        a {
+            color: inherit;
+        }
     }
 
     .squeak-author-badge {

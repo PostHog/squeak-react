@@ -13,6 +13,7 @@ export default function Reply({
   badgeText,
   id,
   published,
+  permalink,
   ...other
 }) {
   const question = useQuestion()
@@ -49,7 +50,7 @@ export default function Reply({
           {profile?.first_name || 'Anonymous'}
         </strong>
         {badgeText && <span className='squeak-author-badge'>{badgeText}</span>}
-        <Days created={created_at} />
+        <Days permalink={permalink} created={created_at} />
         {resolved && resolvedBy === id && (
           <>
             <span className='squeak-resolved-badge'>Solution</span>

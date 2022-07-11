@@ -158,7 +158,7 @@ export default function ({ formType = 'question', messageID, onSubmit }) {
       }
 
       if (onSubmit) {
-        onSubmit(values)
+        onSubmit(values, formType)
       }
       setLoading(false)
       setView(view)
