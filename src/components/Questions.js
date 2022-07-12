@@ -39,6 +39,7 @@ export default function Questions({
   slug = window.location.pathname.replace(/\/$/, ''),
   limit = 100,
   onSubmit,
+  onLoad,
   topics
 }) {
   const [activeTopic, setActiveTopic] = useState(null)
@@ -74,6 +75,7 @@ export default function Questions({
     getQuestions({ limit, start }).then((data) => {
       setQuestions([...questions, ...data.questions])
       setCount(data.count)
+      onLoad && onLoad()
     })
   }, [])
 
