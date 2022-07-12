@@ -3,9 +3,7 @@ import { useOrg } from '../hooks/useOrg'
 import Question from './Question'
 import QuestionForm from './QuestionForm'
 
-const Topics = ({ handleTopicChange, activeTopic }) => {
-  const { topics } = useOrg()
-
+const Topics = ({ handleTopicChange, activeTopic, topics }) => {
   return (
     topics &&
     topics.length > 0 && (
@@ -18,7 +16,7 @@ const Topics = ({ handleTopicChange, activeTopic }) => {
             All
           </button>
         </li>
-        {topics.map(({ label }) => {
+        {topics.map((label) => {
           return (
             <li>
               <button
@@ -48,6 +46,7 @@ export default function Questions({
   const [count, setCount] = useState(0)
   const [start, setStart] = useState(0)
   const [loading, setLoading] = useState(false)
+  const [availableTopics, setAvailableTopics] = useState([])
   const getQuestions = async ({ limit, start, topic }) => {
     setLoading(true)
     const response = await fetch(`${apiHost}/api/questions`, {
@@ -71,10 +70,21 @@ export default function Questions({
     return data
   }
 
+  const getAvailableTopics = (questions) => {
+    const availableTopics = []
+    questions.forEach(({ question: { topics } }) => {
+      topics?.forEach((topic) => {
+        if (!availableTopics.includes(topic)) availableTopics.push(topic)
+      })
+    })
+    return availableTopics
+  }
+
   useEffect(() => {
     getQuestions({ limit, start }).then((data) => {
       setQuestions([...questions, ...data.questions])
       setCount(data.count)
+      setAvailableTopics(getAvailableTopics([...questions, ...data.questions]))
       onLoad && onLoad()
     })
   }, [])
@@ -84,16 +94,22 @@ export default function Questions({
       setQuestions([...data.questions, ...questions])
       setCount(data.count)
       setStart(start + 1)
+      setAvailableTopics(getAvailableTopics([...questions, ...data.questions]))
       onSubmit && onSubmit(values, formType)
     })
   }
 
   const handleShowMore = () => {
-    getQuestions({ limit, start: start + limit }).then((data) => {
-      setQuestions([...questions, ...data.questions])
-      setCount(data.count)
-      setStart(start + limit)
-    })
+    getQuestions({ limit, start: start + limit, topic: activeTopic }).then(
+      (data) => {
+        setQuestions([...questions, ...data.questions])
+        setCount(data.count)
+        setStart(start + limit)
+        setAvailableTopics(
+          getAvailableTopics([...questions, ...data.questions])
+        )
+      }
+    )
   }
 
   const handleTopicChange = (topic) => {
@@ -110,6 +126,7 @@ export default function Questions({
     <>
       {topics && (
         <Topics
+          topics={availableTopics}
           handleTopicChange={handleTopicChange}
           activeTopic={activeTopic}
         />
