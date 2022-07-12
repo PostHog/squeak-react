@@ -38,7 +38,8 @@ const Topics = ({ handleTopicChange, activeTopic }) => {
 export default function Questions({
   slug = window.location.pathname.replace(/\/$/, ''),
   limit = 100,
-  onSubmit
+  onSubmit,
+  onLoad
 }) {
   const [activeTopic, setActiveTopic] = useState(null)
   const { organizationId, apiHost } = useOrg()
@@ -73,6 +74,7 @@ export default function Questions({
     getQuestions({ limit, start }).then((data) => {
       setQuestions([...questions, ...data.questions])
       setCount(data.count)
+      onLoad && onLoad()
     })
   }, [])
 

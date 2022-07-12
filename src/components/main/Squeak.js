@@ -14,7 +14,8 @@ export const Squeak = ({
   organizationId,
   slug,
   limit,
-  onSubmit
+  onSubmit,
+  onLoad
 }) => {
   const supabase = createClient(url, apiKey)
   const containerRef = useRef()
@@ -26,7 +27,12 @@ export const Squeak = ({
           <UserProvider>
             <Theme containerRef={containerRef} />
             <div className='squeak'>
-              <Questions onSubmit={onSubmit} limit={limit} slug={slug} />
+              <Questions
+                onLoad={onLoad}
+                onSubmit={onSubmit}
+                limit={limit}
+                slug={slug}
+              />
             </div>
           </UserProvider>
         </OrgProvider>
