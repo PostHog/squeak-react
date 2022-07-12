@@ -39,7 +39,8 @@ export default function Questions({
   slug = window.location.pathname.replace(/\/$/, ''),
   limit = 100,
   onSubmit,
-  onLoad
+  onLoad,
+  topics
 }) {
   const [activeTopic, setActiveTopic] = useState(null)
   const { organizationId, apiHost } = useOrg()
@@ -107,7 +108,12 @@ export default function Questions({
 
   return (
     <>
-      <Topics handleTopicChange={handleTopicChange} activeTopic={activeTopic} />
+      {topics && (
+        <Topics
+          handleTopicChange={handleTopicChange}
+          activeTopic={activeTopic}
+        />
+      )}
       {questions && questions.length > 0 && (
         <>
           <ul className='squeak-questions'>
