@@ -44,7 +44,7 @@ export default function Questions({
   const [questions, setQuestions] = useState([])
   const getQuestions = async (topic) => {
     const response = await fetch(`${apiHost}/api/questions`, {
-      method: 'POST',
+      method: 'GET',
       body: JSON.stringify({
         organizationId,
         slug,
