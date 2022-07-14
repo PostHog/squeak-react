@@ -62,7 +62,7 @@ export default function Questions({
     })
 
     if (response.status !== 200) {
-      return []
+      return { questions: [], count: 0 }
     }
 
     const data = await response.json()
