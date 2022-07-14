@@ -7,7 +7,7 @@ export const Provider = ({ value: { apiHost, organizationId }, children }) => {
 
   const getTopics = async () => {
     return await fetch(`${apiHost}/api/topics`, {
-      method: 'POST',
+      method: 'GET',
       body: JSON.stringify({
         organizationId
       })
@@ -16,7 +16,7 @@ export const Provider = ({ value: { apiHost, organizationId }, children }) => {
 
   const getConfig = async () => {
     return await fetch(`${apiHost}/api/config`, {
-      method: 'POST',
+      method: 'GET',
       body: JSON.stringify({
         organizationId
       })
