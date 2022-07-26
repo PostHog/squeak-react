@@ -1,4 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react'
+import { get, post } from '../lib/api'
 
 export const Context = createContext(undefined)
 export const Provider = ({ value: { apiHost, organizationId }, children }) => {
@@ -6,21 +7,13 @@ export const Provider = ({ value: { apiHost, organizationId }, children }) => {
   const [config, setConfig] = useState({})
 
   const getTopics = async () => {
-    return await fetch(`${apiHost}/api/topics`, {
-      method: 'GET',
-      body: JSON.stringify({
-        organizationId
-      })
-    }).then((res) => res.json())
+    const { data } = await post(apiHost, `/api/topics`, { organizationId })
+    return data
   }
 
   const getConfig = async () => {
-    return await fetch(`${apiHost}/api/config`, {
-      method: 'GET',
-      body: JSON.stringify({
-        organizationId
-      })
-    }).then((res) => res.json())
+    const { data } = await get(apiHost, '/api/config', { organizationId })
+    return data
   }
 
   useEffect(() => {
