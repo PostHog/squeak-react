@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Provider as QuestionProvider } from '../context/question'
 import { useOrg } from '../hooks/useOrg'
 import { useQuestion } from '../hooks/useQuestion'
+import { get } from '../lib/api'
 import Avatar from './Avatar'
 import QuestionForm from './QuestionForm'
 import Reply from './Reply'
@@ -19,13 +20,19 @@ const getBadge = (questionAuthorId, replyAuthorId, replyAuthorRole) => {
 }
 
 const Collapsed = ({ setExpanded }) => {
-  const { replies, resolvedBy, questionAuthorId } = useQuestion()
+  const {
+    replies,
+    resolvedBy,
+    questionAuthorId,
+    id: questionId
+  } = useQuestion()
   const reply =
     replies[replies.findIndex((reply) => reply?.id === resolvedBy)] ||
     replies[replies.length - 1]
   const replyCount = replies.length - 2
   const maxAvatars = Math.min(replyCount, 3)
-  const replyAuthorMetadata = reply?.profile?.metadata[0]
+  const replyAuthorMetadata =
+    reply?.profile?.profiles_readonly?.[0] || reply?.profile?.metadata?.[0]
 
   const badgeText = getBadge(
     questionAuthorId,
@@ -52,7 +59,12 @@ const Collapsed = ({ setExpanded }) => {
       <li>
         <div className='squeak-other-replies-container'>
           {avatars.map((avatar) => {
-            return <Avatar image={avatar} />
+            return (
+              <Avatar
+                key={`${reply?.message_id}-${reply?.id}-${reply?.profile?.id}-${avatar}`}
+                image={avatar}
+              />
+            )
           })}
           <button
             className='squeak-other-replies'
@@ -80,7 +92,8 @@ const Expanded = ({}) => {
   const replies = question.replies?.slice(1)
   const { resolvedBy, questionAuthorId } = question
   return replies.map((reply) => {
-    const replyAuthorMetadata = reply?.profile?.metadata[0]
+    const replyAuthorMetadata =
+      reply?.profile?.profiles_readonly?.[0] || reply?.profile?.metadata?.[0]
 
     const badgeText = getBadge(
       questionAuthorId,
@@ -147,15 +160,12 @@ export default function Question({ onSubmit, onResolve, apiHost, ...other }) {
 
   const getQuestion = async () => {
     const permalink = window.location.pathname
-    const response = await fetch(
-      `${apiHost}/api/question?organizationId=${organizationId}&permalink=${permalink}`
-    )
+    const { response, data: question } = await get(apiHost, '/api/question', {
+      organizationId,
+      permalink
+    })
 
-    if (response.status !== 200) {
-      return null
-    }
-
-    const question = await response.json()
+    if (response.status !== 200) return null
 
     return question
   }

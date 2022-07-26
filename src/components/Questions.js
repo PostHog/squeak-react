@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useOrg } from '../hooks/useOrg'
+import { get, post } from '../lib/api'
 import Question from './Question'
 import QuestionForm from './QuestionForm'
 
@@ -20,7 +21,7 @@ const Topics = ({ handleTopicChange, activeTopic }) => {
         </li>
         {topics.map(({ label }) => {
           return (
-            <li>
+            <li key={label}>
               <button
                 className={activeTopic === label ? 'squeak-active-topic' : ''}
                 onClick={() => handleTopicChange(label)}
@@ -42,25 +43,25 @@ export default function Questions({
   const [activeTopic, setActiveTopic] = useState(null)
   const { organizationId, apiHost } = useOrg()
   const [questions, setQuestions] = useState([])
+
   const getQuestions = async (topic) => {
-    const response = await fetch(`${apiHost}/api/questions`, {
-      method: 'GET',
-      body: JSON.stringify({
+    const { response, data: questions } = await post(
+      apiHost,
+      `/api/questions`,
+      {
         organizationId,
         slug,
         published: true,
         perPage: 100,
         topic
-      })
-    })
+      }
+    )
 
     if (response.status !== 200) {
       return []
     }
 
-    const { questions } = await response.json()
-
-    return questions
+    return questions.questions
   }
 
   useEffect(() => {

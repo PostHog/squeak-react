@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react'
-import { useClient } from 'react-supabase'
 import { useOrg } from '../hooks/useOrg'
 import { useUser } from '../hooks/useUser'
+import { doDelete, patch, post } from '../lib/api'
 
 export const Context = createContext({})
 export const Provider = ({
@@ -11,7 +11,6 @@ export const Provider = ({
   onSubmit,
   ...other
 }) => {
-  const supabase = useClient()
   const { organizationId, apiHost } = useOrg()
   const user = useUser()
   const [replies, setReplies] = useState([])
@@ -19,16 +18,13 @@ export const Provider = ({
   const [resolved, setResolved] = useState(question?.resolved)
   const [firstReply] = replies
   const questionAuthorId = firstReply?.profile?.id || null
+
   const handleResolve = async (resolved, replyId = null) => {
-    await fetch(`${apiHost}/api/question/resolve`, {
-      method: 'POST',
-      body: JSON.stringify({
-        token: supabase.auth?.session()?.access_token,
-        messageId: question?.id,
-        replyId,
-        organizationId,
-        resolved
-      })
+    await post(apiHost, '/api/question/resolve', {
+      messageId: question?.id,
+      replyId,
+      organizationId,
+      resolved
     })
     setResolved(resolved)
     setResolvedBy(replyId)
@@ -38,18 +34,15 @@ export const Provider = ({
   }
 
   const handleReplyDelete = async (id) => {
-    await supabase
-      .from('squeak_replies')
-      .delete()
-      .match({ id, organization_id: organizationId })
+    await doDelete(apiHost, `/api/replies/${id}`, { organizationId })
     setReplies(replies.filter((reply) => id !== reply.id))
   }
 
   const handlePublish = async (id, published) => {
-    await supabase
-      .from('squeak_replies')
-      .update({ published })
-      .match({ id, organization_id: organizationId })
+    await patch(apiHost, `/api/replies/${id}`, {
+      organization_id: organizationId,
+      published
+    })
     const newReplies = [...replies]
     newReplies.some((reply) => {
       if (reply.id === id) {
@@ -66,7 +59,7 @@ export const Provider = ({
         (reply) => reply.published || (!reply.published && user?.isModerator)
       )
     )
-  }, [other.replies, user])
+  }, [other.replies, user?.id])
 
   useEffect(() => {
     setResolved(question.resolved)

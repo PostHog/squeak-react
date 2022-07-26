@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { useClient } from 'react-supabase'
 import { useOrg } from '../hooks/useOrg'
 import { useUser } from '../hooks/useUser'
+import { post } from '../lib/api'
 import { Approval } from './Approval'
 import Authentication from './Authentication'
 import Avatar from './Avatar'
@@ -109,33 +110,27 @@ export default function ({ formType = 'question', messageID, onSubmit }) {
     )
 
   const insertReply = async ({ body, messageID }) => {
-    return fetch(`${apiHost}/api/reply`, {
-      method: 'POST',
-      body: JSON.stringify({
-        body,
-        organizationId,
-        messageId: messageID,
-        token: supabase.auth.session()?.access_token
-      })
-    }).then((res) => res.json())
+    const { data } = await post(apiHost, '/api/reply', {
+      body,
+      organizationId,
+      messageId: messageID
+    })
+    return data
   }
 
   const insertMessage = async ({ subject, body, userID }) => {
-    return fetch(`${apiHost}/api/question`, {
-      method: 'POST',
-      body: JSON.stringify({
-        subject,
-        body,
-        organizationId,
-        token: supabase.auth.session()?.access_token,
-        slug: window.location.pathname.replace(/\/$/, '')
-      })
-    }).then((res) => res.json())
+    const { data } = await post(apiHost, '/api/question', {
+      subject,
+      body,
+      organizationId,
+      slug: window.location.pathname.replace(/\/$/, '')
+    })
+    return data
   }
 
   const handleMessageSubmit = async (values) => {
     setLoading(true)
-    const userID = supabase.auth.user()?.id
+    const userID = user.id
     if (userID) {
       let view = null
       if (formType === 'question') {
