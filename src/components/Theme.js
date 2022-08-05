@@ -38,7 +38,7 @@ const Style = createGlobalStyle`
         font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
         border-radius: 2px;
     }
-    
+
     button {
         background: transparent;
         border: solid 1.5px rgba(var(--button-color), .85);
@@ -286,7 +286,7 @@ const Style = createGlobalStyle`
                 padding-top: 1em;
             }
         }
-        
+
         .squeak-reply-buttons-row {
             margin-left: 35px;
         }
@@ -325,7 +325,7 @@ const Style = createGlobalStyle`
         .squeak-avatar-container {
             margin-right: 10px;
         }
-        
+
         > span:last-of-type {
             display: flex;
         }
@@ -359,7 +359,7 @@ const Style = createGlobalStyle`
 
         &:hover {
             border: solid 1.5px rgba(var(--primary-color), .5);
-            
+
             span {
                 color: rgba(var(--primary-color), .7);
 
@@ -522,7 +522,7 @@ const Style = createGlobalStyle`
             width: 25px;
         }
 
-        .squeak-avatar-container { 
+        .squeak-avatar-container {
             svg, img {
                 height: 25px;
                 width: 25px;
@@ -669,7 +669,7 @@ const Style = createGlobalStyle`
         list-style: none;
         padding: 0;
         margin: 0 0 0 0.5rem;
-        
+
         button {
             align-items: center;
             background: none;
@@ -756,7 +756,7 @@ const Style = createGlobalStyle`
         }
     }
 
-   
+
 
     .squeak-resolve-button,
     .squeak-undo-resolved, .squeak-publish-button, .squeak-other-replies {
@@ -825,7 +825,7 @@ const Style = createGlobalStyle`
             font-size: .875em;
         }
     }
-    
+
     .squeak-approval-required {
         padding-bottom: 1rem;
 

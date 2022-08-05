@@ -3,12 +3,14 @@ export default function lightOrDark(color) {
     return 'light'
   }
   let r, g, b, hsp
-  color = color.match(
+  const colorMatch = color.match(
     /^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/
   )
-  r = color[1]
-  g = color[2]
-  b = color[3]
+  if (!colorMatch) return 'light'
+
+  r = parseInt(colorMatch[1])
+  g = parseInt(colorMatch[2])
+  b = parseInt(colorMatch[3])
   hsp = Math.sqrt(0.299 * (r * r) + 0.587 * (g * g) + 0.114 * (b * b))
   return hsp > 127.5 ? 'light' : 'dark'
 }
