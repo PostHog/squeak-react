@@ -27,5 +27,7 @@ export const Provider = ({ children }) => {
       })
   }, [user?.id])
 
-  return <Context.Provider value={user}>{children}</Context.Provider>
+  return (
+    <Context.Provider value={{ user, setUser }}>{children}</Context.Provider>
+  )
 }
