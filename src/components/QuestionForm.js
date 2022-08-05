@@ -164,6 +164,11 @@ export default function ({ formType = 'question', messageID, onSubmit }) {
     }
   }
 
+  const doLogout = async () => {
+    await post(apiHost, '/api/logout')
+    setUser(null)
+  }
+
   return view ? (
     {
       'question-form': (
@@ -215,7 +220,7 @@ export default function ({ formType = 'question', messageID, onSubmit }) {
         <button
           onClick={() => {
             if (user) {
-              supabase.auth.signOut()
+              doLogout()
             } else {
               setView('login')
             }
