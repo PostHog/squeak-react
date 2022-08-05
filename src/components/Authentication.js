@@ -89,20 +89,24 @@ const SignIn = ({
   setMessage,
   handleMessageSubmit,
   formValues,
+  apiHost,
   buttonText
 }) => {
-  const supabase = useClient()
   const [loading, setLoading] = useState(false)
   const handleSubmit = async (values) => {
     setLoading(true)
-    const { error } = await supabase.auth.signIn(values)
+    const { data, error } = await post(apiHost, '/api/login', {
+      email: values.email,
+      password: values.password
+    })
     if (error) {
-      setMessage(error.message)
+      setMessage('Incorrect email/password. Please try again.')
       setLoading(false)
     } else {
       await handleMessageSubmit(formValues)
     }
   }
+
   return (
     <Formik
       validateOnMount
@@ -401,6 +405,7 @@ export default function Authentication({
                     formValues={formValues}
                     handleMessageSubmit={handleMessageSubmit}
                     setMessage={setMessage}
+                    apiHost={apiHost}
                   />
                 ),
                 'sign-up': (
