@@ -3,6 +3,8 @@ import getGravatar from 'gravatar'
 import React, { useEffect, useRef, useState } from 'react'
 import { useClient } from 'react-supabase'
 import { useOrg } from '../hooks/useOrg'
+import { useUser } from '../hooks/useUser'
+import { post } from '../lib/api'
 import Avatar from './Avatar'
 
 const ForgotPassword = ({ setMessage, setParentView, apiHost }) => {
@@ -160,34 +162,28 @@ const SignUp = ({
   apiHost,
   buttonText
 }) => {
-  const supabase = useClient()
-  const [loading, setLoading] = useState(false)
+  const { setUser } = useUser()
   const handleSubmit = async (values) => {
-    setLoading(true)
-    const { error } = await supabase.auth.signUp({
+    const gravatar = getGravatar.url(values.email)
+    const avatar = await fetch(`https:${gravatar}?d=404`).then(
+      (res) => (res.ok && `https:${gravatar}`) || ''
+    )
+
+    const { error, data } = await post(apiHost, '/api/register', {
       email: values.email,
-      password: values.password
+      password: values.password,
+      firstName: values.first_name,
+      lastName: values.last_name,
+      avatar,
+      organizationId
     })
+
+    await handleMessageSubmit(formValues)
+    setUser({ id: data.userId })
+
     if (error) {
       setMessage(error.message)
-    } else {
-      const gravatar = getGravatar.url(values.email)
-      const avatar = await fetch(`https:${gravatar}?d=404`).then(
-        (res) => (res.ok && `https:${gravatar}`) || ''
-      )
-      await fetch(`${apiHost}/api/register`, {
-        method: 'POST',
-        body: JSON.stringify({
-          token: supabase.auth.session()?.access_token,
-          organizationId,
-          firstName: values.first_name,
-          lastName: values.last_name,
-          avatar
-        })
-      })
-      await handleMessageSubmit(formValues)
     }
-    setLoading(false)
   }
   return (
     <Formik
@@ -213,7 +209,7 @@ const SignUp = ({
       }}
       onSubmit={handleSubmit}
     >
-      {({ isValid }) => {
+      {({ isValid, isSubmitting }) => {
         return (
           <Form>
             <div className='squeak-authentication-form-name'>
@@ -254,7 +250,7 @@ const SignUp = ({
               placeholder='Password...'
             />
             <button
-              style={loading || !isValid ? { opacity: '.5' } : {}}
+              style={isSubmitting || !isValid ? { opacity: '.5' } : {}}
               type='submit'
             >
               {buttonText}
@@ -395,7 +391,7 @@ export default function Authentication({
             />
           </div>
           <div className='squeak-authentication-form-wrapper'>
-            {message && <p class='squeak-auth-error'>{message}</p>}
+            {message && <p className='squeak-auth-error'>{message}</p>}
 
             {
               {

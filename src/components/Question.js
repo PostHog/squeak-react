@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+
 import { Provider as QuestionProvider } from '../context/question'
 import { useOrg } from '../hooks/useOrg'
 import { useQuestion } from '../hooks/useQuestion'
@@ -87,31 +88,41 @@ const Collapsed = ({ setExpanded }) => {
   )
 }
 
-const Expanded = ({}) => {
+const Expanded = () => {
   const question = useQuestion()
   const replies = question.replies?.slice(1)
   const { resolvedBy, questionAuthorId } = question
-  return replies.map((reply) => {
-    const replyAuthorMetadata =
-      reply?.profile?.profiles_readonly?.[0] || reply?.profile?.metadata?.[0]
 
-    const badgeText = getBadge(
-      questionAuthorId,
-      reply?.profile?.id,
-      replyAuthorMetadata?.role
-    )
+  return (
+    <>
+      {replies.map((reply) => {
+        const replyAuthorMetadata =
+          reply?.profile?.profiles_readonly?.[0] ||
+          reply?.profile?.metadata?.[0]
 
-    return (
-      <li
-        key={reply.id}
-        className={`${resolvedBy === reply.id ? 'squeak-solution' : ''} ${
-          !reply.published ? 'squeak-reply-unpublished' : ''
-        }`}
-      >
-        <Reply className='squeak-post-reply' {...reply} badgeText={badgeText} />
-      </li>
-    )
-  })
+        const badgeText = getBadge(
+          questionAuthorId,
+          reply?.profile?.id,
+          replyAuthorMetadata?.role
+        )
+
+        return (
+          <li
+            key={reply.id}
+            className={`${resolvedBy === reply.id ? 'squeak-solution' : ''} ${
+              !reply.published ? 'squeak-reply-unpublished' : ''
+            }`}
+          >
+            <Reply
+              className='squeak-post-reply'
+              {...reply}
+              badgeText={badgeText}
+            />
+          </li>
+        )
+      })}
+    </>
+  )
 }
 
 const Replies = ({ expanded, setExpanded }) => {
@@ -153,6 +164,7 @@ export default function Question({ onSubmit, onResolve, apiHost, ...other }) {
   const [question, setQuestion] = useState(other.question)
   const [replies, setReplies] = useState(other.replies || [])
   const [firstReply] = replies
+
   const {
     organizationId,
     config: { permalink_base, permalinks_enabled }
@@ -171,13 +183,13 @@ export default function Question({ onSubmit, onResolve, apiHost, ...other }) {
   }
 
   useEffect(() => {
-    if (!question) {
+    if (!question && permalink_base) {
       getQuestion().then((question) => {
         setQuestion(question?.question)
         setReplies(question?.replies || [])
       })
     }
-  }, [])
+  }, [organizationId, permalink_base])
 
   return question ? (
     <div className='squeak-question-container'>

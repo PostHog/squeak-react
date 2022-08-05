@@ -1,6 +1,6 @@
 import { Field, Form, Formik } from 'formik'
 import React, { useState } from 'react'
-import { useClient } from 'react-supabase'
+
 import { useOrg } from '../hooks/useOrg'
 import { useUser } from '../hooks/useUser'
 import { post } from '../lib/api'
@@ -17,7 +17,7 @@ function QuestionForm({
   loading,
   initialValues
 }) {
-  const user = useUser()
+  const { user } = useUser()
   const handleSubmit = async (values) => {
     onSubmit && (await onSubmit(values))
   }
@@ -94,9 +94,8 @@ function QuestionForm({
 }
 
 export default function ({ formType = 'question', messageID, onSubmit }) {
-  const supabase = useClient()
   const { organizationId, apiHost } = useOrg()
-  const user = useUser()
+  const { user, setUser } = useUser()
   const [formValues, setFormValues] = useState(null)
   const [view, setView] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -130,7 +129,7 @@ export default function ({ formType = 'question', messageID, onSubmit }) {
 
   const handleMessageSubmit = async (values) => {
     setLoading(true)
-    const userID = user.id
+    const userID = user?.id
     if (userID) {
       let view = null
       if (formType === 'question') {
