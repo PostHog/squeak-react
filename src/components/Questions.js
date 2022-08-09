@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useOrg } from '../hooks/useOrg'
-import { get, post } from '../lib/api'
+import { post } from '../lib/api'
 import Question from './Question'
 import QuestionForm from './QuestionForm'
 
