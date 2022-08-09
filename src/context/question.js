@@ -4,11 +4,13 @@ import { useUser } from '../hooks/useUser'
 import { doDelete, patch, post } from '../lib/api'
 
 export const Context = createContext({})
+
 export const Provider = ({
   children,
   question,
   onResolve,
   onSubmit,
+  replies: initialReplies,
   ...other
 }) => {
   const { organizationId, apiHost } = useOrg()
@@ -55,11 +57,11 @@ export const Provider = ({
 
   useEffect(() => {
     setReplies(
-      other.replies.filter(
+      initialReplies.filter(
         (reply) => reply.published || (!reply.published && user?.isModerator)
       )
     )
-  }, [other.replies, user?.id])
+  }, [initialReplies, user?.id])
 
   useEffect(() => {
     setResolved(question.resolved)
