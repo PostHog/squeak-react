@@ -6,7 +6,15 @@ import { Provider as UserProvider } from '../../context/user'
 import Questions from '../Questions'
 import { Theme } from '../Theme'
 
-export const Squeak = ({ apiHost, organizationId, slug, onSubmit }) => {
+export const Squeak = ({
+  apiHost,
+  organizationId,
+  slug,
+  limit,
+  onSubmit,
+  onLoad,
+  topics = true
+}) => {
   const containerRef = useRef()
 
   return (
@@ -15,7 +23,13 @@ export const Squeak = ({ apiHost, organizationId, slug, onSubmit }) => {
         <UserProvider>
           <Theme containerRef={containerRef} />
           <div className='squeak'>
-            <Questions onSubmit={onSubmit} slug={slug} />
+            <Questions
+              onLoad={onLoad}
+              topics={topics}
+              onSubmit={onSubmit}
+              limit={limit}
+              slug={slug}
+            />
           </div>
         </UserProvider>
       </OrgProvider>

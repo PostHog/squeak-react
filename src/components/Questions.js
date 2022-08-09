@@ -4,9 +4,7 @@ import { post } from '../lib/api'
 import Question from './Question'
 import QuestionForm from './QuestionForm'
 
-const Topics = ({ handleTopicChange, activeTopic }) => {
-  const { topics } = useOrg()
-
+const Topics = ({ handleTopicChange, activeTopic, topics }) => {
   return (
     topics &&
     topics.length > 0 && (
@@ -19,7 +17,7 @@ const Topics = ({ handleTopicChange, activeTopic }) => {
             All
           </button>
         </li>
-        {topics.map(({ label }) => {
+        {topics.map((label) => {
           return (
             <li key={label}>
               <button
@@ -38,56 +36,98 @@ const Topics = ({ handleTopicChange, activeTopic }) => {
 
 export default function Questions({
   slug = window.location.pathname.replace(/\/$/, ''),
-  onSubmit
+  limit = 100,
+  onSubmit,
+  onLoad,
+  topics
 }) {
   const [activeTopic, setActiveTopic] = useState(null)
   const { organizationId, apiHost } = useOrg()
   const [questions, setQuestions] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [availableTopics, setAvailableTopics] = useState([])
+  const [count, setCount] = useState(0)
+  const [start, setStart] = useState(0)
 
-  const getQuestions = async (topic) => {
-    const { response, data: questions } = await post(
-      apiHost,
-      `/api/questions`,
-      {
-        organizationId,
-        slug,
-        published: true,
-        perPage: 100,
-        topic
-      }
-    )
+  const getQuestions = async ({ limit, start, topic }) => {
+    const { response, data } = await post(apiHost, `/api/questions`, {
+      organizationId,
+      slug,
+      published: true,
+      perPage: limit,
+      start,
+      topic
+    })
 
     if (response.status !== 200) {
-      return []
+      return { questions: [], count: 0 }
     }
 
-    return questions.questions
+    // returns a structure that looks like: {questions: [{id: 123}], count: 123}
+    return data
+  }
+
+  const getAvailableTopics = (questions) => {
+    const availableTopics = []
+    questions.forEach(({ question: { topics } }) => {
+      topics?.forEach((topic) => {
+        if (!availableTopics.includes(topic)) availableTopics.push(topic)
+      })
+    })
+    return availableTopics
   }
 
   useEffect(() => {
-    getQuestions().then((questions) => {
-      setQuestions(questions)
+    getQuestions({ limit, start }).then((data) => {
+      setQuestions([...questions, ...data.questions])
+      setCount(data.count)
+      setAvailableTopics(getAvailableTopics([...questions, ...data.questions]))
+      onLoad && onLoad()
     })
   }, [])
 
-  const handleSubmit = async (values, formType) => {
-    await getQuestions().then((questions) => {
-      setQuestions(questions)
+  const handleSubmit = async () => {
+    getQuestions({ limit: 1, start: 0 }).then((data) => {
+      setQuestions([...data.questions, ...questions])
+      setCount(data.count)
+      setStart(start + 1)
+      setAvailableTopics(getAvailableTopics([...questions, ...data.questions]))
       onSubmit && onSubmit(values, formType)
     })
   }
 
+  const handleShowMore = () => {
+    getQuestions({ limit, start: start + limit, topic: activeTopic }).then(
+      (data) => {
+        setQuestions([...questions, ...data.questions])
+        setCount(data.count)
+        setStart(start + limit)
+        setAvailableTopics(
+          getAvailableTopics([...questions, ...data.questions])
+        )
+      }
+    )
+  }
+
   const handleTopicChange = (topic) => {
     if (topic === activeTopic) return
-    getQuestions(topic).then((questions) => {
-      setQuestions(questions)
+    getQuestions({ limit, start: 0, topic }).then((data) => {
+      setStart(0)
+      setQuestions(data.questions)
+      setCount(data.count)
       setActiveTopic(topic)
     })
   }
 
   return (
     <>
-      <Topics handleTopicChange={handleTopicChange} activeTopic={activeTopic} />
+      {topics && (
+        <Topics
+          topics={availableTopics}
+          handleTopicChange={handleTopicChange}
+          activeTopic={activeTopic}
+        />
+      )}
       {questions && questions.length > 0 && (
         <>
           <ul className='squeak-questions'>
@@ -100,6 +140,15 @@ export default function Questions({
             })}
           </ul>
         </>
+      )}
+      {start + limit < count && (
+        <button
+          disabled={loading}
+          className='squeak-show-more-questions-button'
+          onClick={handleShowMore}
+        >
+          Show more
+        </button>
       )}
       <QuestionForm
         onSubmit={handleSubmit}
