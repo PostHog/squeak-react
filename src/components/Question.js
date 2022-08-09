@@ -21,12 +21,7 @@ const getBadge = (questionAuthorId, replyAuthorId, replyAuthorRole) => {
 }
 
 const Collapsed = ({ setExpanded }) => {
-  const {
-    replies,
-    resolvedBy,
-    questionAuthorId,
-    id: questionId
-  } = useQuestion()
+  const { replies, resolvedBy, questionAuthorId } = useQuestion()
   const reply =
     replies[replies.findIndex((reply) => reply?.id === resolvedBy)] ||
     replies[replies.length - 1]
