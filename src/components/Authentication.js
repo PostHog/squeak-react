@@ -1,24 +1,17 @@
 import { Field, Form, Formik } from 'formik'
 import getGravatar from 'gravatar'
 import React, { useEffect, useRef, useState } from 'react'
-import { useClient } from 'react-supabase'
 import { useOrg } from '../hooks/useOrg'
 import { useUser } from '../hooks/useUser'
 import { post } from '../lib/api'
 import Avatar from './Avatar'
 
 const ForgotPassword = ({ setMessage, setParentView, apiHost }) => {
-  const supabase = useClient()
   const [loading, setLoading] = useState(false)
   const [emailSent, setEmailSent] = useState(false)
   const handleSubmit = async (values) => {
     setLoading(true)
-    const { error } = await supabase.auth.api.resetPasswordForEmail(
-      values.email,
-      {
-        redirectTo: `${apiHost}/reset-password`
-      }
-    )
+    const { error } = await post(apiHost, '/api/password/forgot')
     if (error) {
       setMessage(error.message)
     } else {
@@ -266,13 +259,13 @@ const SignUp = ({
   )
 }
 
-const ResetPassword = ({ setMessage, setParentView }) => {
-  const supabase = useClient()
+const ResetPassword = ({ setMessage, setParentView, apiHost }) => {
   const [loading, setLoading] = useState(false)
   const resetPassword = useRef()
+
   const handleSubmit = async (values) => {
     setLoading(true)
-    const { error } = await supabase.auth.update({
+    const { error } = await post(apiHost, '/api/password/reset', {
       password: values.password
     })
     if (error) {
@@ -429,6 +422,7 @@ export default function Authentication({
                   <ResetPassword
                     setParentView={setParentView}
                     setMessage={setMessage}
+                    apiHost={apiHost}
                   />
                 )
               }[view]
