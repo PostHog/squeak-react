@@ -42,7 +42,7 @@ export const Provider = ({
 
   const handlePublish = async (id, published) => {
     await patch(apiHost, `/api/replies/${id}`, {
-      organization_id: organizationId,
+      organizationId: organizationId,
       published
     })
     const newReplies = [...replies]

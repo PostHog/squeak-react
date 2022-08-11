@@ -15,7 +15,6 @@ export const Question = ({
   apiKey,
   ...other
 }) => {
-  console.log('rendering main question component updated')
   const containerRef = useRef()
   return (
     <root.div ref={containerRef}>
