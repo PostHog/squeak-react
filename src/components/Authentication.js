@@ -86,6 +86,8 @@ const SignIn = ({
   buttonText
 }) => {
   const [loading, setLoading] = useState(false)
+  const { setUser } = useUser()
+
   const handleSubmit = async (values) => {
     setLoading(true)
     const { data, error } = await post(apiHost, '/api/login', {
@@ -96,6 +98,7 @@ const SignIn = ({
       setMessage('Incorrect email/password. Please try again.')
       setLoading(false)
     } else {
+      setUser({ id: data.id })
       await handleMessageSubmit(formValues)
     }
   }
