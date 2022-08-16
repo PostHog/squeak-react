@@ -10,11 +10,10 @@ export const Provider = ({
   question,
   onResolve,
   onSubmit,
-  replies: initialReplies,
   ...other
 }) => {
   const { organizationId, apiHost } = useOrg()
-  const user = useUser()
+  const { user } = useUser()
   const [replies, setReplies] = useState([])
   const [resolvedBy, setResolvedBy] = useState(question?.resolved_reply_id)
   const [resolved, setResolved] = useState(question?.resolved)
@@ -57,11 +56,11 @@ export const Provider = ({
 
   useEffect(() => {
     setReplies(
-      initialReplies.filter(
+      other.replies.filter(
         (reply) => reply.published || (!reply.published && user?.isModerator)
       )
     )
-  }, [initialReplies, user?.id])
+  }, [other.replies, user?.id])
 
   useEffect(() => {
     setResolved(question.resolved)
