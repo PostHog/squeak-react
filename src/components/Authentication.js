@@ -11,7 +11,10 @@ const ForgotPassword = ({ setMessage, setParentView, apiHost }) => {
   const [emailSent, setEmailSent] = useState(false)
   const handleSubmit = async (values) => {
     setLoading(true)
-    const { error } = await post(apiHost, '/api/password/forgot')
+    const { error } = await post(apiHost, '/api/password/forgot', {
+      email: values.email,
+      redirect: window.location.href
+    })
     if (error) {
       setMessage(error.message)
     } else {
