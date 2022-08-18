@@ -186,6 +186,10 @@ export default function Question({ onSubmit, onResolve, apiHost, ...other }) {
     }
   }, [organizationId, permalink_base])
 
+  useEffect(() => {
+    setQuestion(other.question)
+  }, [other.question])
+
   return question ? (
     <div className='squeak-question-container'>
       <Reply
