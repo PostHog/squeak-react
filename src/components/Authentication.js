@@ -9,11 +9,14 @@ import Avatar from './Avatar'
 const ForgotPassword = ({ setMessage, setParentView, apiHost }) => {
   const [loading, setLoading] = useState(false)
   const [emailSent, setEmailSent] = useState(false)
+  const { organizationId } = useOrg()
+
   const handleSubmit = async (values) => {
     setLoading(true)
     const { error } = await post(apiHost, '/api/password/forgot', {
       email: values.email,
-      redirect: window.location.href
+      redirect: window.location.href,
+      organizationId
     })
     if (error) {
       setMessage(error.message)
