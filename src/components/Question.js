@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
+
 import { Provider as QuestionProvider } from '../context/question'
 import { useOrg } from '../hooks/useOrg'
 import { useQuestion } from '../hooks/useQuestion'
+import { get } from '../lib/api'
 import Avatar from './Avatar'
 import QuestionForm from './QuestionForm'
 import Reply from './Reply'
@@ -25,7 +27,8 @@ const Collapsed = ({ setExpanded }) => {
     replies[replies.length - 1]
   const replyCount = replies.length - 2
   const maxAvatars = Math.min(replyCount, 3)
-  const replyAuthorMetadata = reply?.profile?.metadata[0]
+  const replyAuthorMetadata =
+    reply?.profile?.profiles_readonly?.[0] || reply?.profile?.metadata?.[0]
 
   const badgeText = getBadge(
     questionAuthorId,
@@ -52,7 +55,12 @@ const Collapsed = ({ setExpanded }) => {
       <li>
         <div className='squeak-other-replies-container'>
           {avatars.map((avatar) => {
-            return <Avatar image={avatar} />
+            return (
+              <Avatar
+                key={`${reply?.message_id}-${reply?.id}-${reply?.profile?.id}-${avatar}`}
+                image={avatar}
+              />
+            )
           })}
           <button
             className='squeak-other-replies'
@@ -75,30 +83,41 @@ const Collapsed = ({ setExpanded }) => {
   )
 }
 
-const Expanded = ({}) => {
+const Expanded = () => {
   const question = useQuestion()
   const replies = question.replies?.slice(1)
   const { resolvedBy, questionAuthorId } = question
-  return replies.map((reply) => {
-    const replyAuthorMetadata = reply?.profile?.metadata[0]
 
-    const badgeText = getBadge(
-      questionAuthorId,
-      reply?.profile?.id,
-      replyAuthorMetadata?.role
-    )
+  return (
+    <>
+      {replies.map((reply) => {
+        const replyAuthorMetadata =
+          reply?.profile?.profiles_readonly?.[0] ||
+          reply?.profile?.metadata?.[0]
 
-    return (
-      <li
-        key={reply.id}
-        className={`${resolvedBy === reply.id ? 'squeak-solution' : ''} ${
-          !reply.published ? 'squeak-reply-unpublished' : ''
-        }`}
-      >
-        <Reply className='squeak-post-reply' {...reply} badgeText={badgeText} />
-      </li>
-    )
-  })
+        const badgeText = getBadge(
+          questionAuthorId,
+          reply?.profile?.id,
+          replyAuthorMetadata?.role
+        )
+
+        return (
+          <li
+            key={reply.id}
+            className={`${resolvedBy === reply.id ? 'squeak-solution' : ''} ${
+              !reply.published ? 'squeak-reply-unpublished' : ''
+            }`}
+          >
+            <Reply
+              className='squeak-post-reply'
+              {...reply}
+              badgeText={badgeText}
+            />
+          </li>
+        )
+      })}
+    </>
+  )
 }
 
 const Replies = ({ expanded, setExpanded }) => {
@@ -140,6 +159,7 @@ export default function Question({ onSubmit, onResolve, apiHost, ...other }) {
   const [question, setQuestion] = useState(other.question)
   const [replies, setReplies] = useState(other.replies || [])
   const [firstReply] = replies
+
   const {
     organizationId,
     config: { permalink_base, permalinks_enabled }
@@ -147,27 +167,24 @@ export default function Question({ onSubmit, onResolve, apiHost, ...other }) {
 
   const getQuestion = async () => {
     const permalink = window.location.pathname
-    const response = await fetch(
-      `${apiHost}/api/question?organizationId=${organizationId}&permalink=${permalink}`
-    )
+    const { response, data: question } = await get(apiHost, '/api/question', {
+      organizationId,
+      permalink
+    })
 
-    if (response.status !== 200) {
-      return null
-    }
-
-    const question = await response.json()
+    if (response.status !== 200) return null
 
     return question
   }
 
   useEffect(() => {
-    if (!question) {
+    if (!question && permalink_base) {
       getQuestion().then((question) => {
         setQuestion(question?.question)
         setReplies(question?.replies || [])
       })
     }
-  }, [])
+  }, [organizationId, permalink_base])
 
   return question ? (
     <div className='squeak-question-container'>

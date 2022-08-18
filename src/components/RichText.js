@@ -149,7 +149,7 @@ export default function RichText({ initialValue = '', setFieldValue }) {
         required
         id='question'
         placeholder='Type more details...'
-        maxLength='2000'
+        maxLength={2000}
       />
       <div className='squeak-form-richtext-buttons-container'>
         <ul className='squeak-form-richtext-buttons'>
@@ -168,7 +168,12 @@ export default function RichText({ initialValue = '', setFieldValue }) {
           })}
         </ul>
         <div className='squeak-markdown-logo'>
-          <a href="https://www.markdownguide.org/cheat-sheet/" target="_blank" rel="noopener" title="Supports Markdown syntax">
+          <a
+            href='https://www.markdownguide.org/cheat-sheet/'
+            target='_blank'
+            rel='noopener'
+            title='Supports Markdown syntax'
+          >
             <MarkdownLogo />
           </a>
         </div>

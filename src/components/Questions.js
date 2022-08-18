@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useOrg } from '../hooks/useOrg'
+import { post } from '../lib/api'
 import Question from './Question'
 import QuestionForm from './QuestionForm'
 
@@ -18,7 +19,7 @@ const Topics = ({ handleTopicChange, activeTopic, topics }) => {
         </li>
         {topics.map((label) => {
           return (
-            <li>
+            <li key={label}>
               <button
                 className={activeTopic === label ? 'squeak-active-topic' : ''}
                 onClick={() => handleTopicChange(label)}
@@ -43,30 +44,26 @@ export default function Questions({
   const [activeTopic, setActiveTopic] = useState(null)
   const { organizationId, apiHost } = useOrg()
   const [questions, setQuestions] = useState([])
-  const [count, setCount] = useState(0)
-  const [start, setStart] = useState(0)
   const [loading, setLoading] = useState(false)
   const [availableTopics, setAvailableTopics] = useState([])
+  const [count, setCount] = useState(0)
+  const [start, setStart] = useState(0)
+
   const getQuestions = async ({ limit, start, topic }) => {
-    setLoading(true)
-    const response = await fetch(`${apiHost}/api/questions`, {
-      method: 'POST',
-      body: JSON.stringify({
-        organizationId,
-        slug,
-        published: true,
-        perPage: limit,
-        start,
-        topic
-      })
+    const { response, data } = await post(apiHost, `/api/questions`, {
+      organizationId,
+      slug,
+      published: true,
+      perPage: limit,
+      start,
+      topic
     })
 
     if (response.status !== 200) {
       return { questions: [], count: 0 }
     }
 
-    const data = await response.json()
-    setLoading(false)
+    // returns a structure that looks like: {questions: [{id: 123}], count: 123}
     return data
   }
 
@@ -90,7 +87,7 @@ export default function Questions({
   }, [])
 
   const handleSubmit = async () => {
-    await getQuestions({ limit: 1, start: 0 }).then((data) => {
+    getQuestions({ limit: 1, start: 0 }).then((data) => {
       setQuestions([...data.questions, ...questions])
       setCount(data.count)
       setStart(start + 1)

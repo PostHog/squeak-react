@@ -1,41 +1,33 @@
 import React, { createContext, useEffect, useState } from 'react'
-import { useAuthStateChange, useClient } from 'react-supabase'
 import { useOrg } from '../hooks/useOrg'
+import { get } from '../lib/api'
 
 export const Context = createContext(undefined)
 export const Provider = ({ children }) => {
-  const supabase = useClient()
-  const [user, setUser] = useState(supabase.auth.user())
-  const { organizationId } = useOrg()
+  const [user, setUser] = useState(null)
+  const { organizationId, apiHost } = useOrg()
 
-  const getProfile = async (user) => {
-    const { data } = await supabase
-      .from('squeak_profiles_readonly')
-      .select(
-        'squeak_profiles!profiles_readonly_profile_id_fkey!inner(avatar, first_name, last_name, id, metadata:squeak_profiles_readonly(role))'
-      )
-      .match({ user_id: user?.id, organization_id: organizationId })
-      .single()
-
-    return data?.squeak_profiles
+  function getSession() {
+    return get(apiHost, '/api/user', { organizationId })
   }
 
-  useAuthStateChange(async (e, session) => {
-    setUser(session?.user)
-  })
-
   useEffect(() => {
-    if (user && !user?.profile) {
-      getProfile(user).then((profile) => {
-        const userMetadata = profile?.metadata[0]
-        const isModerator =
-          userMetadata?.role === 'admin' || userMetadata?.role === 'moderator'
-        if (profile) {
-          setUser({ ...user, profile, isModerator })
+    getSession()
+      .then(({ data, error }) => {
+        if (error) {
+          console.error('ERROR', data.error)
+        } else {
+          const role = data.profile?.role
+          const isModerator = role === 'admin' || role === 'moderator'
+          setUser({ ...data, isModerator })
         }
       })
-    }
-  }, [user])
+      .catch((err) => {
+        console.log('error getting session', err)
+      })
+  }, [user?.id])
 
-  return <Context.Provider value={user}>{children}</Context.Provider>
+  return (
+    <Context.Provider value={{ user, setUser }}>{children}</Context.Provider>
+  )
 }

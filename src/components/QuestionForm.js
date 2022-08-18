@@ -1,8 +1,9 @@
 import { Field, Form, Formik } from 'formik'
 import React, { useState } from 'react'
-import { useClient } from 'react-supabase'
+
 import { useOrg } from '../hooks/useOrg'
 import { useUser } from '../hooks/useUser'
+import { post } from '../lib/api'
 import { Approval } from './Approval'
 import Authentication from './Authentication'
 import Avatar from './Avatar'
@@ -16,7 +17,7 @@ function QuestionForm({
   loading,
   initialValues
 }) {
-  const user = useUser()
+  const { user } = useUser()
   const handleSubmit = async (values) => {
     onSubmit && (await onSubmit(values))
   }
@@ -93,9 +94,8 @@ function QuestionForm({
 }
 
 export default function ({ formType = 'question', messageID, onSubmit }) {
-  const supabase = useClient()
   const { organizationId, apiHost } = useOrg()
-  const user = useUser()
+  const { user, setUser } = useUser()
   const [formValues, setFormValues] = useState(null)
   const [view, setView] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -109,33 +109,27 @@ export default function ({ formType = 'question', messageID, onSubmit }) {
     )
 
   const insertReply = async ({ body, messageID }) => {
-    return fetch(`${apiHost}/api/reply`, {
-      method: 'POST',
-      body: JSON.stringify({
-        body,
-        organizationId,
-        messageId: messageID,
-        token: supabase.auth.session()?.access_token
-      })
-    }).then((res) => res.json())
+    const { data } = await post(apiHost, '/api/reply', {
+      body,
+      organizationId,
+      messageId: messageID
+    })
+    return data
   }
 
   const insertMessage = async ({ subject, body, userID }) => {
-    return fetch(`${apiHost}/api/question`, {
-      method: 'POST',
-      body: JSON.stringify({
-        subject,
-        body,
-        organizationId,
-        token: supabase.auth.session()?.access_token,
-        slug: window.location.pathname.replace(/\/$/, '')
-      })
-    }).then((res) => res.json())
+    const { data } = await post(apiHost, '/api/question', {
+      subject,
+      body,
+      organizationId,
+      slug: window.location.pathname.replace(/\/$/, '')
+    })
+    return data
   }
 
   const handleMessageSubmit = async (values) => {
     setLoading(true)
-    const userID = supabase.auth.user()?.id
+    const userID = user?.id
     if (userID) {
       let view = null
       if (formType === 'question') {
@@ -168,6 +162,11 @@ export default function ({ formType = 'question', messageID, onSubmit }) {
       setView('auth')
       setLoading(false)
     }
+  }
+
+  const doLogout = async () => {
+    await post(apiHost, '/api/logout')
+    setUser(null)
   }
 
   return view ? (
@@ -221,7 +220,7 @@ export default function ({ formType = 'question', messageID, onSubmit }) {
         <button
           onClick={() => {
             if (user) {
-              supabase.auth.signOut()
+              doLogout()
             } else {
               setView('login')
             }

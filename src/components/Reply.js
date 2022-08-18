@@ -26,7 +26,7 @@ export default function Reply({
     handleReplyDelete
   } = question
   const [confirmDelete, setConfirmDelete] = useState(false)
-  const user = useUser()
+  const { user } = useUser()
   const isModerator = user?.isModerator
   const isAuthor = user?.profile?.id === questionAuthorId
   const handleDelete = (e) => {
