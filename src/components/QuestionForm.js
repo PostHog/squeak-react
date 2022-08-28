@@ -20,7 +20,16 @@ function QuestionForm({
 }) {
   const { user } = useUser()
   const handleSubmit = async (values) => {
-    onSubmit && (await onSubmit({ ...values, email: user?.email }, formType))
+    onSubmit &&
+      (await onSubmit(
+        {
+          ...values,
+          email: user?.email,
+          firstName: user?.profile?.first_name,
+          lastName: user?.profile?.last_name
+        },
+        formType
+      ))
   }
   return (
     <div className='squeak-form-frame'>
