@@ -86,7 +86,7 @@ export default function Questions({
     })
   }, [])
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (values, formType) => {
     getQuestions({ limit: 1, start: 0 }).then((data) => {
       setQuestions([...data.questions, ...questions])
       setCount(data.count)

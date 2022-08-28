@@ -15,11 +15,12 @@ function QuestionForm({
   onSubmit,
   subject = true,
   loading,
-  initialValues
+  initialValues,
+  formType
 }) {
   const { user } = useUser()
   const handleSubmit = async (values) => {
-    onSubmit && (await onSubmit(values))
+    onSubmit && (await onSubmit({ ...values, email: user?.email }, formType))
   }
   return (
     <div className='squeak-form-frame'>
