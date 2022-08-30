@@ -166,7 +166,8 @@ const SignUp = ({
   formValues,
   organizationId,
   apiHost,
-  buttonText
+  buttonText,
+  onSignUp
 }) => {
   const { setUser } = useUser()
   const handleSubmit = async (values) => {
@@ -185,6 +186,12 @@ const SignUp = ({
     })
 
     await handleMessageSubmit(formValues)
+    onSignUp &&
+      onSignUp({
+        email: values.email,
+        firstName: values.first_name,
+        lastName: values.last_name
+      })
     setUser({ id: data.userId })
 
     if (error) {
@@ -338,7 +345,8 @@ export default function Authentication({
   setParentView,
   initialView = 'sign-in',
   buttonText = { login: 'Login', signUp: 'Sign up' },
-  banner
+  banner,
+  onSignUp
 }) {
   const { organizationId, apiHost } = useOrg()
   const [view, setView] = useState(initialView)
@@ -418,6 +426,7 @@ export default function Authentication({
                     setMessage={setMessage}
                     organizationId={organizationId}
                     apiHost={apiHost}
+                    onSignUp={onSignUp}
                   />
                 ),
                 'forgot-password': (

@@ -13,7 +13,8 @@ export const Squeak = ({
   limit,
   onSubmit,
   onLoad,
-  topics = true
+  topics = true,
+  onSignUp
 }) => {
   const containerRef = useRef()
 
@@ -24,6 +25,7 @@ export const Squeak = ({
           <Theme containerRef={containerRef} />
           <div className='squeak'>
             <Questions
+              onSignUp={onSignUp}
               onLoad={onLoad}
               topics={topics}
               onSubmit={onSubmit}

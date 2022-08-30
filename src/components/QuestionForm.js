@@ -103,7 +103,12 @@ function QuestionForm({
   )
 }
 
-export default function ({ formType = 'question', messageID, onSubmit }) {
+export default function ({
+  formType = 'question',
+  messageID,
+  onSubmit,
+  onSignUp
+}) {
   const { organizationId, apiHost } = useOrg()
   const { user, setUser } = useUser()
   const [formValues, setFormValues] = useState(null)
@@ -203,6 +208,7 @@ export default function ({ formType = 'question', messageID, onSubmit }) {
           formValues={formValues}
           handleMessageSubmit={handleMessageSubmit}
           loading={loading}
+          onSignUp={onSignUp}
         />
       ),
       login: (
@@ -211,6 +217,7 @@ export default function ({ formType = 'question', messageID, onSubmit }) {
           formValues={formValues}
           handleMessageSubmit={() => setView(null)}
           loading={loading}
+          onSignUp={onSignUp}
         />
       ),
       approval: <Approval handleConfirm={() => setView(null)} />

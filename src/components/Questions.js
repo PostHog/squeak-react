@@ -39,7 +39,8 @@ export default function Questions({
   limit = 100,
   onSubmit,
   onLoad,
-  topics
+  topics,
+  onSignUp
 }) {
   const [activeTopic, setActiveTopic] = useState(null)
   const { organizationId, apiHost } = useOrg()
@@ -151,6 +152,7 @@ export default function Questions({
         </button>
       )}
       <QuestionForm
+        onSignUp={onSignUp}
         onSubmit={handleSubmit}
         organizationId={organizationId}
         formType='question'
