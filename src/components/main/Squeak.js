@@ -14,7 +14,8 @@ export const Squeak = ({
   onSubmit,
   onLoad,
   topics = true,
-  onSignUp
+  onSignUp,
+  topic
 }) => {
   const containerRef = useRef()
 
@@ -31,6 +32,7 @@ export const Squeak = ({
               onSubmit={onSubmit}
               limit={limit}
               slug={slug}
+              topic={topic}
             />
           </div>
         </UserProvider>

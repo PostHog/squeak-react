@@ -40,9 +40,10 @@ export default function Questions({
   onSubmit,
   onLoad,
   topics,
-  onSignUp
+  onSignUp,
+  topic
 }) {
-  const [activeTopic, setActiveTopic] = useState(null)
+  const [activeTopic, setActiveTopic] = useState(topic)
   const { organizationId, apiHost } = useOrg()
   const [questions, setQuestions] = useState([])
   const [loading, setLoading] = useState(false)
@@ -79,7 +80,7 @@ export default function Questions({
   }
 
   useEffect(() => {
-    getQuestions({ limit, start }).then((data) => {
+    getQuestions({ limit, start, topic: activeTopic }).then((data) => {
       setQuestions([...questions, ...data.questions])
       setCount(data.count)
       setAvailableTopics(getAvailableTopics([...questions, ...data.questions]))
