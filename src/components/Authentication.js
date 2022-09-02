@@ -89,7 +89,8 @@ const SignIn = ({
   handleMessageSubmit,
   formValues,
   apiHost,
-  buttonText
+  buttonText,
+  organizationId
 }) => {
   const [loading, setLoading] = useState(false)
   const { setUser } = useUser()
@@ -98,7 +99,8 @@ const SignIn = ({
     setLoading(true)
     const { data, error } = await post(apiHost, '/api/login', {
       email: values.email,
-      password: values.password
+      password: values.password,
+      organizationId
     })
     if (error) {
       setMessage('Incorrect email/password. Please try again.')
@@ -416,6 +418,7 @@ export default function Authentication({
                     handleMessageSubmit={handleMessageSubmit}
                     setMessage={setMessage}
                     apiHost={apiHost}
+                    organizationId={organizationId}
                   />
                 ),
                 'sign-up': (
