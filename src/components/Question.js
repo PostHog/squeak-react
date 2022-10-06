@@ -62,6 +62,7 @@ const Collapsed = ({ setExpanded }) => {
               />
             )
           })}
+
           <button
             className='squeak-other-replies'
             onClick={() => setExpanded(true)}
