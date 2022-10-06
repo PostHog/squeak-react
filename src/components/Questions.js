@@ -130,6 +130,7 @@ export default function Questions({
           activeTopic={activeTopic}
         />
       )}
+
       {questions && questions.length > 0 && (
         <>
           <ul className='squeak-questions'>
@@ -143,6 +144,7 @@ export default function Questions({
           </ul>
         </>
       )}
+
       {start + limit < count && (
         <button
           disabled={loading}
@@ -152,6 +154,7 @@ export default function Questions({
           Show more
         </button>
       )}
+
       <QuestionForm
         onSignUp={onSignUp}
         onSubmit={handleSubmit}
