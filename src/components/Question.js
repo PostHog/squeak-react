@@ -157,8 +157,8 @@ const Replies = ({ expanded, setExpanded }) => {
 
 export default function Question({ onSubmit, onResolve, apiHost, ...other }) {
   const [expanded, setExpanded] = useState(false)
-  const [question, setQuestion] = useState(other.question)
-  const [replies, setReplies] = useState(other.question.replies || [])
+  const [question, setQuestion] = useState(other?.question)
+  const [replies, setReplies] = useState(other?.question?.replies || [])
   const [firstReply] = replies
 
   const {
@@ -188,8 +188,8 @@ export default function Question({ onSubmit, onResolve, apiHost, ...other }) {
   }, [organizationId, permalink_base])
 
   useEffect(() => {
-    setQuestion(other.question)
-  }, [other.question])
+    setQuestion(other?.question)
+  }, [other?.question])
 
   return question ? (
     <div className='squeak-question-container'>
