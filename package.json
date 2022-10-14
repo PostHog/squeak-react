@@ -1,13 +1,18 @@
 {
   "name": "squeak-react",
-  "version": "3.0.7",
+  "version": "3.0.8",
   "description": "Squeak react",
   "author": "smallbrownbike",
   "license": "MIT",
   "repository": "PostHog/squeak-react",
   "main": "lib/index.js",
   "module": "es/index.js",
-  "files": ["css", "es", "lib", "umd"],
+  "files": [
+    "css",
+    "es",
+    "lib",
+    "umd"
+  ],
   "scripts": {
     "build": "nwb build-react-component",
     "clean": "nwb clean-module && nwb clean-demo",
@@ -41,5 +46,7 @@
     "react-dom": "^17.0.2"
   },
   "homepage": "",
-  "keywords": ["react-component"]
+  "keywords": [
+    "react-component"
+  ]
 }
