@@ -107,7 +107,7 @@ const SignIn = ({
       setLoading(false)
     } else {
       setUser({ id: data.id })
-      await handleMessageSubmit(formValues)
+      await handleMessageSubmit(formValues || { email: values.email })
     }
   }
 
@@ -187,7 +187,7 @@ const SignUp = ({
       organizationId
     })
 
-    await handleMessageSubmit(formValues)
+    await handleMessageSubmit(formValues || { email: values.email })
     onSignUp &&
       onSignUp({
         email: values.email,
