@@ -15,14 +15,15 @@ export const Squeak = ({
   onLoad,
   topics = true,
   onSignUp,
-  topic
+  topic,
+  profileLink
 }) => {
   const containerRef = useRef()
 
   return (
     <root.div ref={containerRef}>
       <OrgProvider value={{ organizationId, apiHost }}>
-        <UserProvider>
+        <UserProvider value={{ profileLink }}>
           <Theme containerRef={containerRef} />
           <div className='squeak'>
             <Questions

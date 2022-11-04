@@ -3,7 +3,7 @@ import { useOrg } from '../hooks/useOrg'
 import { get } from '../lib/api'
 
 export const Context = createContext(undefined)
-export const Provider = ({ children }) => {
+export const Provider = ({ value, children }) => {
   const [user, setUser] = useState(null)
   const { organizationId, apiHost } = useOrg()
 
@@ -19,7 +19,12 @@ export const Provider = ({ children }) => {
         } else {
           const role = data.profile?.role
           const isModerator = role === 'admin' || role === 'moderator'
-          setUser({ ...data, isModerator })
+          const profileLink = value?.profileLink && value.profileLink(data)
+          setUser({
+            ...data,
+            isModerator,
+            ...(profileLink ? { profileLink } : {})
+          })
         }
       })
       .catch((err) => {
