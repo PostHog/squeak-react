@@ -5,13 +5,7 @@ import { Squeak } from '../../src/components/main/Squeak'
 
 ReactDOM.render(
   <div style={{ maxWidth: 450 }}>
-    <Squeak
-      profileLink={(user) =>
-        user ? `/community/profiles/${user?.profile?.id}` : ''
-      }
-      apiHost='https://squeak.cloud'
-      organizationId='a898bcf2-c5b9-4039-82a0-a00220a8c626'
-    />
+    <Squeak apiHost='http://localhost:3001' organizationId='YOUR_ORG_ID' />
   </div>,
   document.getElementById('demo')
 )
