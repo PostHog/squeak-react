@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useQuestion } from '../hooks/useQuestion'
 import { useUser } from '../hooks/useUser'
+import { useOrg } from '../hooks/useOrg'
 import Avatar from './Avatar'
 import Days from './Days'
 import Markdown from './Markdown'
@@ -27,6 +28,7 @@ export default function Reply({
   } = question
   const [confirmDelete, setConfirmDelete] = useState(false)
   const { user } = useUser()
+  const { profileLink } = useOrg()
   const isModerator = user?.isModerator
   const isAuthor = user?.profile?.id === questionAuthorId
   const handleDelete = (e) => {
@@ -45,8 +47,8 @@ export default function Reply({
   return (
     <div {...other} onClick={handleContainerClick}>
       <div className='squeak-post-author'>
-        {user?.profileLink ? (
-          <a className='squeak-profile-link' href={user?.profileLink}>
+        {profileLink ? (
+          <a className='squeak-profile-link' href={profileLink(profile)}>
             <Avatar image={profile?.avatar} />
             <strong className='squeak-author-name'>
               {profile?.first_name || 'Anonymous'}

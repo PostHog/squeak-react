@@ -2,7 +2,10 @@ import React, { createContext, useEffect, useState } from 'react'
 import { get, post } from '../lib/api'
 
 export const Context = createContext(undefined)
-export const Provider = ({ value: { apiHost, organizationId }, children }) => {
+export const Provider = ({
+  value: { apiHost, organizationId, profileLink },
+  children
+}) => {
   const [config, setConfig] = useState({})
 
   const getConfig = async () => {
@@ -17,7 +20,7 @@ export const Provider = ({ value: { apiHost, organizationId }, children }) => {
   }, [])
 
   return (
-    <Context.Provider value={{ apiHost, organizationId, config }}>
+    <Context.Provider value={{ apiHost, organizationId, config, profileLink }}>
       {children}
     </Context.Provider>
   )

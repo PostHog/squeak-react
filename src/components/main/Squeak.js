@@ -22,8 +22,8 @@ export const Squeak = ({
 
   return (
     <root.div ref={containerRef}>
-      <OrgProvider value={{ organizationId, apiHost }}>
-        <UserProvider value={{ profileLink }}>
+      <OrgProvider value={{ organizationId, apiHost, profileLink }}>
+        <UserProvider>
           <Theme containerRef={containerRef} />
           <div className='squeak'>
             <Questions
