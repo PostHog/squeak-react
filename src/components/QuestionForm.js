@@ -19,6 +19,7 @@ function QuestionForm({
   formType
 }) {
   const { user } = useUser()
+  const { profileLink } = useOrg()
   const handleSubmit = async (values) => {
     onSubmit &&
       (await onSubmit(
@@ -55,7 +56,10 @@ function QuestionForm({
         {({ setFieldValue, isValid }) => {
           return (
             <Form className='squeak-form'>
-              <Avatar image={user?.profile?.avatar} />
+              <Avatar
+                url={user?.profile && profileLink && profileLink(user?.profile)}
+                image={user?.profile?.avatar}
+              />
 
               <div className=''>
                 <div class='squeak-inputs-wrapper'>
@@ -109,7 +113,7 @@ export default function ({
   onSubmit,
   onSignUp
 }) {
-  const { organizationId, apiHost } = useOrg()
+  const { organizationId, apiHost, profileLink } = useOrg()
   const { user, setUser } = useUser()
   const [formValues, setFormValues] = useState(null)
   const [view, setView] = useState(null)
@@ -224,7 +228,10 @@ export default function ({
     }[view]
   ) : (
     <div className='squeak-reply-buttons'>
-      <Avatar image={user?.profile?.avatar} />
+      <Avatar
+        url={user?.profile && profileLink && profileLink(user?.profile)}
+        image={user?.profile?.avatar}
+      />
       <button
         className={
           formType === 'reply' ? 'squeak-reply-skeleton' : 'squeak-ask-button'
