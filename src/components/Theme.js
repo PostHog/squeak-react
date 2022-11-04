@@ -869,6 +869,13 @@ const Style = createGlobalStyle`
             }
         }
     }
+    .squeak-profile-link {
+        color: inherit;
+        font-size: var(--base-font-size);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+    }
 }
 `
 
