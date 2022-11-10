@@ -1,3 +1,5 @@
+> ### **This package has been moved to the [PostHog/squeak](https://github.com/PostHog/squeak/tree/master/packages/squeak-react) repo**. Please submit any issues or PRs there.
+
 # squeak-react
 
 > Squeak react
